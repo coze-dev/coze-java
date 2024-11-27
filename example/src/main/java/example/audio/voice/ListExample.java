@@ -11,7 +11,7 @@ import java.util.Iterator;
 public class ListExample {
 
     public static void main(String[] args) {
-        String token = System.getenv("TOKEN");
+        String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
 

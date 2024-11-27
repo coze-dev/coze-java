@@ -3,8 +3,6 @@ package com.coze.openapi.service.auth;
 import com.coze.openapi.client.auth.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Struct;
-
 public class DeviceOAuthClient extends OAuthClient{
 
     public DeviceOAuthClient(String clientID) {
@@ -15,17 +13,17 @@ public class DeviceOAuthClient extends OAuthClient{
         super(null, clientID, baseURL);
     }
 
-    public DeviceAuthResp getOauthURL(){
+    public DeviceAuthResp getDeviceCode(){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
         DeviceAuthResp resp = execute(this.api.DeviceAuth(req));
-        resp.setVerificationUri(resp.getVerificationUri() + "?user_code=" + resp.getUserCode());
+        resp.setVerificationUrl(resp.getVerificationUrl() + "?user_code=" + resp.getUserCode());
         return resp;
     }
 
-    public DeviceAuthResp getOauthURL(@NotNull String workspaceID){
+    public DeviceAuthResp getDeviceCode(@NotNull String workspaceID){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
         DeviceAuthResp resp = execute(this.api.DeviceAuth(workspaceID, req));
-        resp.setVerificationUri(resp.getVerificationUri() + "?user_code=" + resp.getUserCode());
+        resp.setVerificationUrl(resp.getVerificationUrl() + "?user_code=" + resp.getUserCode());
         return resp;
     }
 
@@ -33,12 +31,15 @@ public class DeviceOAuthClient extends OAuthClient{
         GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
         builder.clientID(this.clientID).
                 grantType(GrantType.DeviceCode.getValue()).deviceCode(deviceCode);
-        GetAccessTokenResp resp = super.getAccessToken(null, builder.build());
-        return resp;
+        return super.getAccessToken(null, builder.build());
     }
 
     protected GetAccessTokenResp getAccessToken(String code, String redirectURI) {
         return super.getAccessToken(GrantType.AuthorizationCode, code, this.clientSecret, redirectURI);
+    }
+
+    public GetAccessTokenResp refreshToken(String refreshToken){
+        return super.refreshAccessToken(refreshToken, this.clientSecret, null);
     }
 
 

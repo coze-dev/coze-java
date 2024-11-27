@@ -10,9 +10,10 @@ import com.coze.openapi.service.auth.TokenAuth;
 public class CreateBotExample {
 
     public static void main(String[] args) {
-        String token = System.getenv("TOKEN");
+        String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
+        String spaceID = System.getenv("SPACE_ID");
 
         CreateBotReq.CreateBotReqBuilder builder = CreateBotReq.builder();
         BotPromptInfo promptInfo = new BotPromptInfo();
@@ -20,7 +21,7 @@ public class CreateBotExample {
         BotOnboardingInfo onboardingInfo = new BotOnboardingInfo();
         onboardingInfo.setPrologue("这是一个 bot");
         onboardingInfo.setSuggestedQuestions(null);
-        builder.spaceID(System.getenv("SPACE_ID"))
+        builder.spaceID(spaceID)
                .description("这是一个测试 bot")
                .name("test bot")
                .promptInfo(promptInfo)

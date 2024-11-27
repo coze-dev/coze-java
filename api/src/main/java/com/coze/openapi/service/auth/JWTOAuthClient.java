@@ -11,6 +11,8 @@ import java.util.Map;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
+
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.security.spec.PKCS8EncodedKeySpec;
 
 public class JWTOAuthClient extends OAuthClient{
+    @Getter
     private final Integer ttl;
     private final PrivateKey privateKey;
     private final String publicKey;
@@ -27,7 +30,7 @@ public class JWTOAuthClient extends OAuthClient{
         super(null, clientID);
         this.privateKey = parsePrivateKey(privateKey);
         this.publicKey = publicKey;
-        this.ttl = 3600;
+        this.ttl = 900;
     }
 
     public JWTOAuthClient(String clientID, String privateKey, String publicKey, Integer ttl)  throws Exception{
@@ -41,7 +44,7 @@ public class JWTOAuthClient extends OAuthClient{
         super(null, clientID, baseURL);
         this.privateKey = parsePrivateKey(privateKey);
         this.publicKey = publicKey;
-        this.ttl = 3600;
+        this.ttl = 900;
     }
 
     public JWTOAuthClient(String clientID, String privateKey, String publicKey, Integer ttl, String baseURL) throws Exception {

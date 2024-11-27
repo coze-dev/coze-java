@@ -39,7 +39,7 @@ public class CozeAPI {
     private final String baseURL;
     private final ExecutorService executorService;
     private final Auth auth;
-    private final WorkspaceService workspceApi;
+    private final WorkspaceService workspaceApi;
     private final BotService botApi;
     private final ConversationService conversationApi;
     private final FileService fileApi;
@@ -56,7 +56,25 @@ public class CozeAPI {
         Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
 
         this.executorService = client.dispatcher().executorService();
-        this.workspceApi = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
+        this.workspaceApi = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
+        this.botApi = new BotService(retrofit.create(BotAPI.class));
+        this.conversationApi = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
+        this.fileApi = new FileService(retrofit.create(FileAPI.class));
+        this.knowledgeApi = new KnowledgeService(retrofit.create(DocumentAPI.class));
+        this.workflowApi = new WorkflowService(retrofit.create(WorkflowRunAPI.class));
+        this.chatApi = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
+        this.audioApi = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
+    }
+
+    public CozeAPI(Auth auth, String baseURL) {
+        this.auth = auth;
+        this.baseURL = baseURL;
+        ObjectMapper mapper = Utils.defaultObjectMapper();
+        OkHttpClient client = defaultClient(Duration.ofMillis(300000));
+        Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
+
+        this.executorService = client.dispatcher().executorService();
+        this.workspaceApi = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
         this.botApi = new BotService(retrofit.create(BotAPI.class));
         this.conversationApi = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
         this.fileApi = new FileService(retrofit.create(FileAPI.class));
@@ -86,7 +104,7 @@ public class CozeAPI {
     }
 
     public WorkspaceService workspaces() {
-        return this.workspceApi;
+        return this.workspaceApi;
     }
 
     public BotService bots() {

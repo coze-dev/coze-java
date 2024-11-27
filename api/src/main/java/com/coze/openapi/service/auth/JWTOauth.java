@@ -16,29 +16,15 @@ import lombok.NonNull;
 public class JWTOauth extends Auth {
 
     private Integer ttl;
-    @NonNull
-    private PrivateKey privateKey;
-    @NonNull
-    private String publicKey;
     private String sessionName;
     private Scope scope;
     @NonNull
     private JWTOAuthClient jwtClient;
 
-    public JWTOauth(JWTOAuthClient client, PrivateKey privateKey, String publicKey) {
+    public JWTOauth(JWTOAuthClient client) {
         Objects.requireNonNull(client, "client must not be null");
         this.jwtClient = client;
-        this.ttl = 3600;
-        this.privateKey = privateKey;
-        this.publicKey = publicKey;
-    }
-
-    public JWTOauth(JWTOAuthClient client, PrivateKey privateKey, String publicKey, Integer ttl) {
-        Objects.requireNonNull(client, "client must not be null");
-        this.jwtClient = client;
-        this.ttl = ttl;
-        this.privateKey = privateKey;
-        this.publicKey = publicKey;
+        this.ttl = client.getTtl();
     }
 
     @Override

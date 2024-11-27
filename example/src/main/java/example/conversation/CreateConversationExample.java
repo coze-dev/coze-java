@@ -16,7 +16,7 @@ import java.util.Map;
 public class CreateConversationExample {
 
     public static void main(String[] args) {
-        String token = System.getenv("TOKEN");
+        String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
         Map<String, String> metaData = new HashMap<>();

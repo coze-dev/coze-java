@@ -15,14 +15,13 @@ public class WebOAuthClient extends OAuthClient {
         super(clientSecret, clientID, baseURL);
     }
 
-    @Override
-    public String getOauthURL(@NotNull String redirectURI, String state) {
+
+    public String getOAuthURL(@NotNull String redirectURI, String state) {
         return super.getOauthURL(redirectURI, state);
     }
 
-    @Override
-    public String getOauthURL(@NotNull String redirectURI, String state, @NotNull String workspaceID) {
-        return super.getOauthURL(redirectURI, state, workspaceID);
+    public String getOAuthURL(@NotNull String redirectURI, String state, @NotNull String workspaceID) {
+        return super.getOauthURL(redirectURI, null, workspaceID);
     }
 
     public GetAccessTokenResp getAccessToken(String code, String redirectURI) {

@@ -13,10 +13,7 @@ public abstract class Auth {
 
     protected boolean needRefresh(){
         // accessToken 为空代表第一次请求,需要刷新token
-        if (accessToken ==null || System.currentTimeMillis() / 1000 > expiresIn) {
-            return true;
-        }
-        return false;
+        return accessToken == null || System.currentTimeMillis() / 1000 > expiresIn;
     }
 
     /**

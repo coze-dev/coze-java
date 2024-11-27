@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SubmitToolOutputExample {
 
     public static void main(String[] args) {
-        String token = System.getenv("TOKEN");
+        String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
         String botID = System.getenv("BOT_ID");

@@ -9,7 +9,7 @@ import com.coze.openapi.service.auth.TokenAuth;
 public class MessageDeleteExample {
 
     public static void main(String[] args) {
-        String token = System.getenv("TOKEN");
+        String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
         String conversationID = System.getenv("CONVERSATION_ID");
@@ -20,12 +20,14 @@ public class MessageDeleteExample {
                                                    .messageID(msgID)
                                                    .build();
         Message message = coze.conversations().message().retrieve(req);
+        System.out.println(message);
 
         try {
             DeleteMessageReq.DeleteMessageReqBuilder builder = DeleteMessageReq.builder();
             builder.conversationID(conversationID)
                    .messageID(msgID);
             Message resp = coze.conversations().message().delete(builder.build());
+            System.out.println(resp);
         } catch (Exception e) {
             e.printStackTrace();
         }

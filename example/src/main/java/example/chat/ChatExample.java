@@ -17,8 +17,9 @@ import java.util.List;
 
 public class ChatExample {
 
+    // 非流式接口的聊天，需要先创建聊天，然后轮询聊天结果
     public static void main(String[] args) {
-        String token = System.getenv("TOKEN");
+        String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
         String botID = System.getenv("BOT_ID");
@@ -35,10 +36,9 @@ public class ChatExample {
                              .messages(Arrays.asList(Message.buildUserQuestionText("你好")))
                              .build();
 
+        // 创建聊天
         Chat resp = coze.chats().create(req);
-        System.out.println("=============== chat ===============");
         System.out.println(resp);
-        System.out.println("=============== chat ===============");
         String chatID = resp.getId();
 
         Integer count = 1;
@@ -50,18 +50,14 @@ public class ChatExample {
                 e.printStackTrace();
             }
             resp = coze.chats().retrieve(RetrieveChatReq.of(conversationID, chatID));
-            System.out.println("=============== retrieved chat ===============");
             System.out.println(resp);
-            System.out.println("=============== retrieved chat ===============");
             if (ChatStatus.COMPLETED.equals(resp.getStatus())) {
-                System.out.println("=============== chat completed ===============");
                 break;
             }
             if (count >= 2) {
-                System.out.println("=============== cancel chat ===============");
+                // 如果聊天长时间没有完成，可以取消聊天
                 Chat cancelResp = coze.chats().cancel(CancelChatReq.of(conversationID, chatID));
                 System.out.println(cancelResp);
-                System.out.println("=============== cancel chat ===============");
 
 
                 resp = coze.chats().retrieve(RetrieveChatReq.of(conversationID, chatID));
@@ -71,10 +67,7 @@ public class ChatExample {
         }
 
         List<Message> msg = coze.chats().message().listAll(ListAllMessageReq.of(conversationID, chatID));
-        count = 0;
         for (Message message : msg) {
-            count++;
-            System.out.println("=============== " + count + " ===============");
             System.out.println(message);
         }
     }

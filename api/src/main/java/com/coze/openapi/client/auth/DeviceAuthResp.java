@@ -20,7 +20,7 @@ public class DeviceAuthResp {
     private String userCode;
 
     @JsonProperty("verification_uri")
-    private String verificationUri;
+    private String verificationUrl;
 
     @JsonProperty("expires_in")
     private int expiresIn;
