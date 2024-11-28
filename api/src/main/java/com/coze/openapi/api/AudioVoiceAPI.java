@@ -22,7 +22,7 @@ public interface AudioVoiceAPI {
         @Part("voice_name") RequestBody voiceName,
         @Part("audio_format") RequestBody audioFormat,
         @Part("language") RequestBody language,
-        @Part("voice_id") RequestBody voiceId,
+        @Part("voice_id") RequestBody voiceID,
         @Part("preview_text") RequestBody previewText,
         @Part("text") RequestBody text
     );

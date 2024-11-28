@@ -1,50 +1,78 @@
 package com.coze.openapi.service.auth;
 
 import com.coze.openapi.client.auth.*;
+import com.coze.openapi.client.exception.CozeAuthException;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.TimeUnit;
 
 public class DeviceOAuthClient extends OAuthClient{
 
     public DeviceOAuthClient(String clientID) {
-        super(null, clientID);
+        super(clientID, null);
     }
 
     public DeviceOAuthClient(String clientID, String baseURL) {
-        super(null, clientID, baseURL);
+        super(clientID, null, baseURL);
     }
 
-    public DeviceAuthResp getDeviceCode(){
+    public DeviceAuthCode getDeviceCode(){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
-        DeviceAuthResp resp = execute(this.api.DeviceAuth(req));
-        resp.setVerificationUrl(resp.getVerificationUrl() + "?user_code=" + resp.getUserCode());
+        DeviceAuthCode resp = execute(this.api.DeviceAuth(req));
+        resp.setVerificationURL(resp.getVerificationURI() + "?user_code=" + resp.getUserCode());
         return resp;
     }
 
-    public DeviceAuthResp getDeviceCode(@NotNull String workspaceID){
+    public DeviceAuthCode getDeviceCode(@NotNull String workspaceID){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
-        DeviceAuthResp resp = execute(this.api.DeviceAuth(workspaceID, req));
-        resp.setVerificationUrl(resp.getVerificationUrl() + "?user_code=" + resp.getUserCode());
+        DeviceAuthCode resp = execute(this.api.DeviceAuth(workspaceID, req));
+        resp.setVerificationURL(resp.getVerificationURI() + "?user_code=" + resp.getUserCode());
         return resp;
     }
 
-    public GetAccessTokenResp getAccessToken(String deviceCode) {
+    public OAuthToken getAccessToken(String deviceCode) throws Exception {
+        return getAccessToken(deviceCode, false);
+    }
+
+    public OAuthToken getAccessToken(String deviceCode, boolean poll) throws Exception{
         GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
         builder.clientID(this.clientID).
                 grantType(GrantType.DeviceCode.getValue()).deviceCode(deviceCode);
-        return super.getAccessToken(null, builder.build());
-    }
+        if (!poll){
+            return super.getAccessToken(null, builder.build());
+        }
+        int interval = 5;
+        while (true){
+            try{
+                return super.getAccessToken(null, builder.build());
+            }catch (CozeAuthException e){
+                int sleepTime = 5;
+                switch (e.getCode()){
+                    case AuthorizationPending:
+                        break;
+                    case SlowDown:
+                        sleepTime = interval;
+                        if (interval < 30){
+                            interval+=5;
+                        }
+                        break;
+                    default:
+                        throw e;
+                    }
+                try {
+                    TimeUnit.SECONDS.sleep(sleepTime);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt(); // 恢复中断状态
+                    throw ie;
+                }
+                }
 
-    protected GetAccessTokenResp getAccessToken(String code, String redirectURI) {
-        return super.getAccessToken(GrantType.AuthorizationCode, code, this.clientSecret, redirectURI);
-    }
-
-    public GetAccessTokenResp refreshToken(String refreshToken){
-        return super.refreshAccessToken(refreshToken, this.clientSecret, null);
-    }
+            }
+        }
 
 
     @Override
-    public GetAccessTokenResp refreshToken(String refreshToken, String redirectURI) {
-        return super.refreshAccessToken(refreshToken, this.clientSecret, redirectURI);
+    public OAuthToken refreshToken(String refreshToken) {
+        return super.refreshAccessToken(refreshToken, this.clientSecret);
     }
 }

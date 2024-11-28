@@ -12,7 +12,7 @@ public class Workspace {
     private String name;
     
     @JsonProperty("icon_url")
-    private String iconUrl;  
+    private String iconUrl;
     
     @JsonProperty("role_type")
     private WorkspaceRoleType roleType;

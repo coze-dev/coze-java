@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetAccessTokenResp {
+public class OAuthToken {
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("expires_in")

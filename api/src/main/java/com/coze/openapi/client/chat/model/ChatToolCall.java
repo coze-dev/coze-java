@@ -16,6 +16,10 @@ public class ChatToolCall {
      */
     @JsonProperty("id")
     private String id;
+    public String getID(){
+        return id;
+    }
+
 
     /**
      * The type of tool, with the enum value of function.

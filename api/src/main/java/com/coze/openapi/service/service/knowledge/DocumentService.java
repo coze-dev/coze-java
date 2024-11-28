@@ -45,7 +45,7 @@ public class DocumentService {
         // 获取当前页数据
         ListDocumentResp resp = Utils.execute(api.ListDocument(req));
         // 生成分页器
-        DocumentPagination pagination = new DocumentPagination(api, req.getDatasetID(), req.getSize());
+        DocumentPage pagination = new DocumentPage(api, req.getDatasetID(), req.getSize());
         // 构建当前页数据
         Boolean hasMore = resp.getDocumentInfos().size() == req.getSize();
 

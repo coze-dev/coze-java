@@ -21,7 +21,7 @@ public class MessageListExample {
             ListMessageReq.ListMessageReqBuilder builder = ListMessageReq.builder();
             builder.conversationID(conversationID).limit(pageSize);
 
-            PageResult<Message> resp = coze.conversations().message().list(builder.build());
+            PageResult<Message> resp = coze.conversations().messages().list(builder.build());
             Iterator<Message> iterator = resp.getIterator();
             while (iterator.hasNext()) {
                 Message message = iterator.next();

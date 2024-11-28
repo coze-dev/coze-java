@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DeviceAuthResp {
+public class DeviceAuthCode {
     @JsonProperty("device_code")
     private String deviceCode;
 
@@ -20,7 +20,10 @@ public class DeviceAuthResp {
     private String userCode;
 
     @JsonProperty("verification_uri")
-    private String verificationUrl;
+    private String verificationURI;
+
+    @JsonProperty("verification_url")
+    private String verificationURL;
 
     @JsonProperty("expires_in")
     private int expiresIn;

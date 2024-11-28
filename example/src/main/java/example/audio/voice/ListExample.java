@@ -15,7 +15,7 @@ public class ListExample {
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
 
-        PageResult<Voice> resp = coze.audio().voice().list(ListVoiceReq.builder().pageSize(1).build());
+        PageResult<Voice> resp = coze.audio().voices().list(ListVoiceReq.builder().pageSize(1).build());
         Iterator<Voice> iterator = resp.getIterator();
         while (iterator.hasNext()) {
             Voice voice = iterator.next();

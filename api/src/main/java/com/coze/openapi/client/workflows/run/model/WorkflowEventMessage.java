@@ -31,7 +31,7 @@ public class WorkflowEventMessage {
      * The message ID of this message within the node, starting at 0, for example, the 5th message of the message node.
      */
     @JsonProperty("node_seq_id")
-    private String nodeSeqId;
+    private String nodeSeqID;
 
     /**
      * Whether the current message is the last data packet for this node.

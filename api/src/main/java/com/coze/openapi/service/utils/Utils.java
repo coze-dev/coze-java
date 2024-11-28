@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.Single;
 import retrofit2.HttpException;
 import retrofit2.Response;
+
+import java.security.SecureRandom;
+
 public class Utils {
     public static final String LOG_HEADER = "x-tt-logid";
     private static final ObjectMapper mapper = defaultObjectMapper();
@@ -45,5 +48,19 @@ public class Utils {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to parse object from JSON string", e);
         }
+    }
+
+    public static String genRandomSign(int length) {
+        byte[] bytes = new byte[length / 2];
+        new SecureRandom().nextBytes(bytes);
+        return bytesToHex(bytes);
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
     }
 }

@@ -21,7 +21,7 @@ public class MessageExample {
                .content("message count")
                .contentType(MessageContentType.TEXT);
         try {
-            Message resp = coze.conversations().message().create(builder.build());
+            Message resp = coze.conversations().messages().create(builder.build());
             System.out.println(resp);
         } catch (Exception e) {
             e.printStackTrace();

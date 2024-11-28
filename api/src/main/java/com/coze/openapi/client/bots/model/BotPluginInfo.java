@@ -22,7 +22,7 @@ public class BotPluginInfo {
     private String description;
 
     @JsonProperty("icon_url")
-    private String iconUrl;
+    private String iconURL;
 
     @JsonProperty("api_info_list")
     private List<BotPluginAPIInfo> apiInfoList;

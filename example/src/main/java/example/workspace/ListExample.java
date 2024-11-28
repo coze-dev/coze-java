@@ -5,8 +5,6 @@ import com.coze.openapi.client.workspace.Workspace;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
-import java.util.Iterator;
-
 public class ListExample {
 
     public static void main(String[] args) {
@@ -16,13 +14,13 @@ public class ListExample {
 
         try {
             Integer i = 1;
-            PageResult<Workspace> resp = coze.workspaces().listWorkspaces(i, 2);
+            PageResult<Workspace> resp = coze.workspaces().list(i, 2);
             while (resp.getHasMore()) {
                 for (Workspace workspace : resp.getItems()) {
                     System.out.println(workspace);
                 }
                 i++;
-                resp = coze.workspaces().listWorkspaces(i, 2);
+                resp = coze.workspaces().list(i, 2);
             }
         } catch (Exception e) {
             e.printStackTrace();

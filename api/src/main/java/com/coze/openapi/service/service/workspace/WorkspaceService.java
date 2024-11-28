@@ -16,12 +16,12 @@ public class WorkspaceService {
         this.workspaceAPI = workspaceAPI;
     }
 
-    public PageResult<Workspace> listWorkspaces(Integer pageNum, Integer pageSize) {
+    public PageResult<Workspace> list(Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? 1 : pageNum;
         // 获取当前页数据
         BaseResponse<ListWorkspaceResp> resp = Utils.execute(workspaceAPI.ListWorkspaces(pageNum, pageSize));
         // 生成分页器
-        WorkspacePagination pagination = new WorkspacePagination(workspaceAPI, pageSize);
+        WorkspacePage pagination = new WorkspacePage(workspaceAPI, pageSize);
         // 构建当前页数据
         Boolean hasMore = resp.getData().getWorkspaces().size() == pageSize;
 

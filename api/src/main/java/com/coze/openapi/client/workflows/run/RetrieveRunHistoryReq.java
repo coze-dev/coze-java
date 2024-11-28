@@ -12,7 +12,7 @@ import lombok.NonNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetRunHistoryReq {
+public class RetrieveRunHistoryReq {
     @NonNull
     @JsonProperty("execute_id")
     private String executeID;
@@ -20,7 +20,7 @@ public class GetRunHistoryReq {
     @JsonProperty("workflow_id")
     private String workflowID;
 
-    public static GetRunHistoryReq of(String workflowID, String executeID) {
-        return GetRunHistoryReq.builder().executeID(executeID).workflowID(workflowID).build();
+    public static RetrieveRunHistoryReq of(String workflowID, String executeID) {
+        return RetrieveRunHistoryReq.builder().executeID(executeID).workflowID(workflowID).build();
     }
 }

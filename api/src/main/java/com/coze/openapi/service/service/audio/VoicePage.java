@@ -4,15 +4,15 @@ import com.coze.openapi.api.AudioVoiceAPI;
 import com.coze.openapi.client.audio.voices.ListVoiceResp;
 import com.coze.openapi.client.audio.voices.model.Voice;
 import com.coze.openapi.client.common.pagination.PageResponse;
-import com.coze.openapi.client.common.pagination.PaginationBase;
+import com.coze.openapi.client.common.pagination.PageBase;
 import com.coze.openapi.service.utils.Utils;
 
-public class VoicePagination extends PaginationBase<Voice>{
+public class VoicePage extends PageBase<Voice> {
     private final AudioVoiceAPI api;
     private final int pageSize;
     private final Boolean filterSystemVoice;
 
-    public VoicePagination(AudioVoiceAPI api, Integer pageSize, Boolean filterSystemVoice) {
+    public VoicePage(AudioVoiceAPI api, Integer pageSize, Boolean filterSystemVoice) {
         this.api = api;
         if (pageSize != null) {
             this.pageSize = pageSize;

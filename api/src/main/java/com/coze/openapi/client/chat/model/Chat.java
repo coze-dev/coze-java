@@ -19,18 +19,21 @@ public class Chat {
      */
     @JsonProperty("id")
     private String id;
+    public String getID(){
+        return id;
+    }
 
     /**
      * The ID of the conversation.
      */
     @JsonProperty("conversation_id")
-    private String conversationId;
+    private String conversationID;
 
     /**
      * The ID of the bot.
      */
     @JsonProperty("bot_id")
-    private String botId;
+    private String botID;
 
     /**
      * Indicates the create time of the chat. The value format is Unix timestamp in seconds.

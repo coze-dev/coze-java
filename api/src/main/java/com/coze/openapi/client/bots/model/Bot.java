@@ -20,7 +20,7 @@ public class Bot {
     private String description;
 
     @JsonProperty("icon_url")
-    private String iconUrl;
+    private String iconURL;
 
     @JsonProperty("create_time")
     private Long createTime;

@@ -34,9 +34,9 @@ public class VoiceService {
         if (req.getLanguage() != null) {
             language = RequestBody.create(req.getLanguage().getValue(), MediaType.parse("text/plain"));
         }
-        RequestBody voiceId = null;
-        if (req.getVoiceId() != null) {
-            voiceId = RequestBody.create(req.getVoiceId(), MediaType.parse("text/plain"));
+        RequestBody voiceID = null;
+        if (req.getVoiceID() != null) {
+            voiceID = RequestBody.create(req.getVoiceID(), MediaType.parse("text/plain"));
         }
         RequestBody previewText = null;
         if (req.getPreviewText() != null) {
@@ -50,7 +50,7 @@ public class VoiceService {
         RequestBody fileBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), fileBody);
 
-        return Utils.execute(api.cloneVoice(filePart, voiceName, audioFormat, language, voiceId, previewText, text)).getData();
+        return Utils.execute(api.cloneVoice(filePart, voiceName, audioFormat, language, voiceID, previewText, text)).getData();
     }
 
      public PageResult<Voice> list(@NotNull ListVoiceReq req) {
@@ -59,7 +59,7 @@ public class VoiceService {
         }
         ListVoiceResp resp = Utils.execute(api.listVoice(req.getFilterSystemVoice(), req.getPageNum(), req.getPageSize())).getData();
         // 生成分页器
-        VoicePagination pagination = new VoicePagination(api,req.getPageSize(), req.getFilterSystemVoice());
+        VoicePage pagination = new VoicePage(api,req.getPageSize(), req.getFilterSystemVoice());
 
         Boolean hasMore = resp.getVoiceList().size() == req.getPageSize();
         // 构建当前页数据

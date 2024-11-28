@@ -42,7 +42,7 @@ public class MessageService {
         }
         GetMessageListResp resp = Utils.execute(api.GetMessageList(req.getConversationID(), req));
         // 生成分页器
-        MessagePagination pagination = new MessagePagination(api,req.getConversationID(), req);
+        MessagePage pagination = new MessagePage(api,req.getConversationID(), req);
         // 构建当前页数据
         PageResponse<Message> pageResponse = PageResponse.<Message>builder()
             .hasMore(resp.isHasMore())

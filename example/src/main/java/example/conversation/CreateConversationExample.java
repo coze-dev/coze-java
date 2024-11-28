@@ -38,7 +38,7 @@ public class CreateConversationExample {
         CreateConversationResp resp = coze.conversations().create(builder.build());
         System.out.println(resp);
 
-        String conversationID = resp.getId();
+        String conversationID = resp.getID();
         System.out.println("=============== get conversation ===============");
         GetConversationResp getResp = coze.conversations().retrieve(GetConversationReq.of(conversationID));
         System.out.println(getResp);

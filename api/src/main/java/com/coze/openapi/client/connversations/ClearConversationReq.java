@@ -18,9 +18,9 @@ public class ClearConversationReq {
      */
     @NonNull
     @JsonProperty("conversation_id")
-    private String conversationId;
+    private String conversationID;
 
-    public static ClearConversationReq of(String conversationId) {
-        return ClearConversationReq.builder().conversationId(conversationId).build();
+    public static ClearConversationReq of(String conversationID) {
+        return ClearConversationReq.builder().conversationID(conversationID).build();
     }
 }

@@ -16,13 +16,13 @@ public class CreateRoomResp {
      * 房间 id
      */
     @JsonProperty("room_id")
-    private String roomId;
+    private String roomID;
 
     /**
      * app_id
      */
     @JsonProperty("app_id")
-    private String appId;
+    private String appID;
 
     /**
      * token

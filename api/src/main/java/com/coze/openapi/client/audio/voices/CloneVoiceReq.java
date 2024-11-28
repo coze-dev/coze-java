@@ -27,7 +27,7 @@ public class CloneVoiceReq {
     @JsonProperty("language")
     private LanguageCode language;
     @JsonProperty("voice_id")
-    private String voiceId;
+    private String voiceID;
     @JsonProperty("preview_text")
     private String previewText;
     private String text;

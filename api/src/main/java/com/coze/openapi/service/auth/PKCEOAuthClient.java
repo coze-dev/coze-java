@@ -1,13 +1,15 @@
 package com.coze.openapi.service.auth;
 
 import com.coze.openapi.client.auth.GetAccessTokenReq;
-import com.coze.openapi.client.auth.GetAccessTokenResp;
+import com.coze.openapi.client.auth.OAuthToken;
 import com.coze.openapi.client.auth.GrantType;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+import com.coze.openapi.client.auth.PKCEAuthParam;
+import com.coze.openapi.service.utils.Utils;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,43 +27,47 @@ public class PKCEOAuthClient extends OAuthClient{
         }
     }
 
+    private static final int codeVerifierLen = 32;
+
     public PKCEOAuthClient(String clientID) {
-        super(null, clientID);
+        super(clientID, null);
     }
 
     public PKCEOAuthClient(String clientID, String baseURL) {
-        super(null, clientID, baseURL);
+        super(clientID, null, baseURL);
     }
 
-    public String getOauthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge) {
-        return super.getOauthURL(redirectURI, state, codeChallenge, CodeChallengeMethod.Plain.getValue());
+    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state) {
+        return genOAuthURL(redirectURI, state,  CodeChallengeMethod.Plain);
     }
 
-    public String getOauthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull String workspaceID) {
-        return super.getOauthURL(redirectURI, state, codeChallenge, CodeChallengeMethod.Plain.getValue(), workspaceID);
+    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state, @NotNull String workspaceID) {
+        return genOAuthURL(redirectURI, state, CodeChallengeMethod.Plain, workspaceID);
     }
 
-    public String getOauthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull CodeChallengeMethod codeChallengeMethod) {
+    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod) {
+        String codeVerifier = Utils.genRandomSign(codeVerifierLen);
+        String url = super.getOAuthURL(redirectURI, state, getCode(codeVerifier,codeChallengeMethod), codeChallengeMethod.getValue());
+        return new PKCEAuthParam(codeVerifier, url);
+    }
+
+    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod, @NotNull String workspaceID) {
+        String codeVerifier = Utils.genRandomSign(codeVerifierLen);
+        String url = super.getOAuthURL(redirectURI, state, getCode(codeVerifier,codeChallengeMethod), codeChallengeMethod.getValue());
+        return new PKCEAuthParam(codeVerifier, url);
+    }
+    
+    private String getCode(@NotNull String codeVerifier, @NotNull CodeChallengeMethod codeChallengeMethod){
         String code = "";
         try{
-            code = "plain".equals(codeChallengeMethod.getValue())  ?codeChallenge:genS256CodeChallenge(codeChallenge);
+            code = "plain".equals(codeChallengeMethod.getValue()) ?codeVerifier:genS256CodeChallenge(codeVerifier);
         } catch (NoSuchAlgorithmException e) {
-            code = codeChallenge;
+            code = codeVerifier;
         }
-        return super.getOauthURL(redirectURI, state, code, codeChallengeMethod.getValue());
+        return code;
     }
 
-    public String getOauthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull CodeChallengeMethod codeChallengeMethod, @NotNull String workspaceID) {
-        String code = "";
-        try{
-            code = "plain".equals(codeChallengeMethod.getValue())  ?codeChallenge:genS256CodeChallenge(codeChallenge);
-        } catch (NoSuchAlgorithmException e) {
-            code = codeChallenge;
-        }
-        return super.getOauthURL(redirectURI, state, code, codeChallengeMethod.getValue(), workspaceID);
-    }
-
-    public GetAccessTokenResp getAccessToken(@NotNull String code, @NotNull String redirectURI, @Nullable String codeVerifier) {
+    public OAuthToken getAccessToken(@NotNull String code, @NotNull String redirectURI, @Nullable String codeVerifier) {
         GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
         builder.clientID(this.clientID).
                 grantType(GrantType.AuthorizationCode.getValue()).
@@ -71,8 +77,8 @@ public class PKCEOAuthClient extends OAuthClient{
 
 
     @Override
-    public GetAccessTokenResp refreshToken(String refreshToken, String redirectURI) {
-        return super.refreshAccessToken(refreshToken, redirectURI);
+    public OAuthToken refreshToken(String refreshToken) {
+        return super.refreshAccessToken(refreshToken);
     }
 
     public static String genS256CodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {

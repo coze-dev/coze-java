@@ -17,31 +17,31 @@ import retrofit2.Call;
 
 public class ChatService {
 
-    private final ChatAPI chatApi;
-    private final ChatMessageService chatMessageApi;
+    private final ChatAPI chatAPI;
+    private final ChatMessageService chatMessageAPI;
 
-    public ChatService(ChatAPI chatApi, ChatMessageAPI chatMessageApi) {
-        this.chatApi = chatApi;
-        this.chatMessageApi = new ChatMessageService(chatMessageApi);
+    public ChatService(ChatAPI chatAPI, ChatMessageAPI chatMessageAPI) {
+        this.chatAPI = chatAPI;
+        this.chatMessageAPI = new ChatMessageService(chatMessageAPI);
     }
 
     public ChatMessageService message() {
-        return this.chatMessageApi;
+        return this.chatMessageAPI;
     }
 
     public Chat create(ChatReq req) {
         req.disableStream();
         String conversationID = req.getConversationID();
         req.clearBeforeReq();
-        return Utils.execute(chatApi.chat(conversationID, req)).getData();
+        return Utils.execute(chatAPI.chat(conversationID, req)).getData();
     }
 
     public Chat retrieve(RetrieveChatReq req) {
-        return Utils.execute(chatApi.retrieveChat(req.getConversationID(), req.getChatID())).getData();
+        return Utils.execute(chatAPI.retrieveChat(req.getConversationID(), req.getChatID())).getData();
     }
 
     public Chat cancel(CancelChatReq req) {
-        return Utils.execute(chatApi.cancelChat(req)).getData();
+        return Utils.execute(chatAPI.cancelChat(req)).getData();
     }
 
     public Chat submitToolOutputs(SubmitToolOutputsReq req) {
@@ -49,7 +49,7 @@ public class ChatService {
         String conversationID = req.getConversationID();
         String chatID = req.getChatID();
         req.clearBeforeReq();
-        return Utils.execute(chatApi.submitToolOutputs(conversationID, chatID, req)).getData();
+        return Utils.execute(chatAPI.submitToolOutputs(conversationID, chatID, req)).getData();
     }
 
     public Flowable<ChatEvent> streamSubmitToolOutputs(SubmitToolOutputsReq req) {
@@ -57,14 +57,14 @@ public class ChatService {
         String conversationID = req.getConversationID();
         String chatID = req.getChatID();
         req.clearBeforeReq();
-        return stream(chatApi.streamSubmitToolOutputs(conversationID, chatID, req));
+        return stream(chatAPI.streamSubmitToolOutputs(conversationID, chatID, req));
     }
 
-    public Flowable<ChatEvent> streamChat(ChatReq req) {
+    public Flowable<ChatEvent> stream(ChatReq req) {
         req.enableStream();
         String conversationID = req.getConversationID();
         req.clearBeforeReq();
-        return stream(chatApi.streamChat(conversationID, req));
+        return stream(chatAPI.stream(conversationID, req));
     }
     
 

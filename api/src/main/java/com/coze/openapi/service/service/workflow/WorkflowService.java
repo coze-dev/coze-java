@@ -1,15 +1,16 @@
 package com.coze.openapi.service.service.workflow;
 
 import com.coze.openapi.api.WorkflowRunAPI;
+import com.coze.openapi.api.WorkflowRunHistoryAPI;
 
 public class WorkflowService {
-    private final WorkflowRunService workflowRunService;
+    private final WorkflowRunService runService;
 
-    public WorkflowService(WorkflowRunAPI api) {
-        this.workflowRunService = new WorkflowRunService(api);
+    public WorkflowService(WorkflowRunAPI api, WorkflowRunHistoryAPI historyAPI) {
+        this.runService = new WorkflowRunService(api, historyAPI);
     }
 
-    public WorkflowRunService run(){
-        return workflowRunService;
+    public WorkflowRunService runs(){
+        return runService;
     }
 }

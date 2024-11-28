@@ -13,7 +13,7 @@ public class AuthenticationInterceptor implements Interceptor{
     private final Auth auth;
 
     AuthenticationInterceptor(Auth auth) {
-        Objects.requireNonNull(auth, "OpenAI token required");
+        Objects.requireNonNull(auth, "Auth required");
         this.auth = auth;
     }
 

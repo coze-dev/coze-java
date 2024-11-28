@@ -5,18 +5,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.coze.openapi.api.AudioRoomAPI;
-import com.coze.openapi.api.AudioSpeechAPI;
-import com.coze.openapi.api.AudioVoiceAPI;
-import com.coze.openapi.api.BotAPI;
-import com.coze.openapi.api.ChatAPI;
-import com.coze.openapi.api.ChatMessageAPI;
-import com.coze.openapi.api.ConversationAPI;
-import com.coze.openapi.api.FileAPI;
-import com.coze.openapi.api.DocumentAPI;
-import com.coze.openapi.api.ConversationMessageAPI;
-import com.coze.openapi.api.WorkflowRunAPI;
-import com.coze.openapi.api.WorkspaceAPI;
+import com.coze.openapi.api.*;
 import com.coze.openapi.service.service.bots.BotService;
 import com.coze.openapi.service.service.chat.ChatService;
 import com.coze.openapi.service.service.conversation.ConversationService;
@@ -39,31 +28,31 @@ public class CozeAPI {
     private final String baseURL;
     private final ExecutorService executorService;
     private final Auth auth;
-    private final WorkspaceService workspaceApi;
-    private final BotService botApi;
-    private final ConversationService conversationApi;
-    private final FileService fileApi;
-    private final KnowledgeService knowledgeApi;
-    private final WorkflowService workflowApi;
-    private final ChatService chatApi;
-    private final AudioService audioApi;
+    private final WorkspaceService workspaceAPI;
+    private final BotService botAPI;
+    private final ConversationService conversationAPI;
+    private final FileService fileAPI;
+    private final KnowledgeService knowledgeAPI;
+    private final WorkflowService workflowAPI;
+    private final ChatService chatAPI;
+    private final AudioService audioAPI;
 
     public CozeAPI(Auth auth) {
         this.auth = auth;
-        this.baseURL = Consts.COZE_CN_BASE_URL;
+        this.baseURL = Consts.COZE_COM_BASE_URL;
         ObjectMapper mapper = Utils.defaultObjectMapper();
         OkHttpClient client = defaultClient(Duration.ofMillis(300000));
         Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
 
         this.executorService = client.dispatcher().executorService();
-        this.workspaceApi = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
-        this.botApi = new BotService(retrofit.create(BotAPI.class));
-        this.conversationApi = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
-        this.fileApi = new FileService(retrofit.create(FileAPI.class));
-        this.knowledgeApi = new KnowledgeService(retrofit.create(DocumentAPI.class));
-        this.workflowApi = new WorkflowService(retrofit.create(WorkflowRunAPI.class));
-        this.chatApi = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
-        this.audioApi = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
+        this.workspaceAPI = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
+        this.botAPI = new BotService(retrofit.create(BotAPI.class));
+        this.conversationAPI = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
+        this.fileAPI = new FileService(retrofit.create(FileAPI.class));
+        this.knowledgeAPI = new KnowledgeService(retrofit.create(DocumentAPI.class));
+        this.workflowAPI = new WorkflowService(retrofit.create(WorkflowRunAPI.class), retrofit.create(WorkflowRunHistoryAPI.class));
+        this.chatAPI = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
+        this.audioAPI = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
     }
 
     public CozeAPI(Auth auth, String baseURL) {
@@ -74,14 +63,14 @@ public class CozeAPI {
         Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
 
         this.executorService = client.dispatcher().executorService();
-        this.workspaceApi = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
-        this.botApi = new BotService(retrofit.create(BotAPI.class));
-        this.conversationApi = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
-        this.fileApi = new FileService(retrofit.create(FileAPI.class));
-        this.knowledgeApi = new KnowledgeService(retrofit.create(DocumentAPI.class));
-        this.workflowApi = new WorkflowService(retrofit.create(WorkflowRunAPI.class));
-        this.chatApi = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
-        this.audioApi = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
+        this.workspaceAPI = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
+        this.botAPI = new BotService(retrofit.create(BotAPI.class));
+        this.conversationAPI = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
+        this.fileAPI = new FileService(retrofit.create(FileAPI.class));
+        this.knowledgeAPI = new KnowledgeService(retrofit.create(DocumentAPI.class));
+        this.workflowAPI = new WorkflowService(retrofit.create(WorkflowRunAPI.class), retrofit.create(WorkflowRunHistoryAPI.class));
+        this.chatAPI = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
+        this.audioAPI = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
     }
 
    
@@ -99,40 +88,40 @@ public class CozeAPI {
                 .baseUrl(baseURL)
                 .client(client)
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
-                .addCallAdapterFactory(ApiResponseCallAdapterFactory.create()) 
+                .addCallAdapterFactory(APIResponseCallAdapterFactory.create()) 
                 .build();
     }
 
     public WorkspaceService workspaces() {
-        return this.workspaceApi;
+        return this.workspaceAPI;
     }
 
     public BotService bots() {
-        return this.botApi;
+        return this.botAPI;
     }   
 
     public ConversationService conversations() {
-        return this.conversationApi;
+        return this.conversationAPI;
     }   
 
     public FileService files() {
-        return this.fileApi;
+        return this.fileAPI;
     }
 
     public KnowledgeService knowledge() {
-        return this.knowledgeApi;
+        return this.knowledgeAPI;
     }
 
     public WorkflowService workflows() {
-        return this.workflowApi;
+        return this.workflowAPI;
     }
 
-    public ChatService chats() {
-        return this.chatApi;
+    public ChatService chat() {
+        return this.chatAPI;
     }
 
     public AudioService audio() {
-        return this.audioApi;
+        return this.audioAPI;
     }
 
     public void shutdownExecutor() {

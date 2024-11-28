@@ -35,7 +35,7 @@ public class BotService {
         // 获取当前页数据
         BaseResponse<ListBotResp> resp = Utils.execute(api.ListBots(req.getSpaceID(), pageNum, pageSize));
         // 生成分页器
-        BotPagination pagination = new BotPagination(api, pageSize, req.getSpaceID());
+        BotPage pagination = new BotPage(api, pageSize, req.getSpaceID());
         // 构建当前页数据
         Boolean hasMore = resp.getData().getBots().size() == pageSize;
 
@@ -52,6 +52,7 @@ public class BotService {
             .hasMore(hasMore)
             .build();
     }
+
 
     public Bot retrieve(@NotNull String botID) {
         return Utils.execute(api.GetBotInfo(botID)).getData();

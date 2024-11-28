@@ -32,6 +32,10 @@ public class MessageObjectString {
                 .build();
     }
 
+    public static MessageObjectString buildImage(String fileUrl) {
+        return buildImage(null, fileUrl);
+    }
+
     public static MessageObjectString buildImage(String fileID, String fileUrl) {
         if (fileID == null && fileUrl == null) {
             throw new IllegalArgumentException("file_id or file_url must be specified");

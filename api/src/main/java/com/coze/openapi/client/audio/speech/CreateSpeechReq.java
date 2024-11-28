@@ -3,11 +3,7 @@ package com.coze.openapi.client.audio.speech;
 import com.coze.openapi.client.audio.common.AudioFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
 @Builder
@@ -19,7 +15,7 @@ public class CreateSpeechReq {
     private String input;
     @NonNull
     @JsonProperty("voice_id")
-    private String voiceId;
+    private String voiceID;
     @Builder.Default
     @JsonProperty("response_format")
     private AudioFormat responseFormat = AudioFormat.MP3;

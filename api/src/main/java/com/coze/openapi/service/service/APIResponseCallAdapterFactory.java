@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
+public class APIResponseCallAdapterFactory extends CallAdapter.Factory {
     @Override
     public CallAdapter<?, ?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
         if (getRawType(returnType) != Single.class) {
@@ -22,10 +22,10 @@ public class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
             }
         }
         Type responseType = getParameterUpperBound(0, (ParameterizedType) returnType);
-        return new ApiResponseCallAdapter<>(responseType);
+        return new APIResponseCallAdapter<>(responseType);
     }
 
-    public static ApiResponseCallAdapterFactory create() {
-        return new ApiResponseCallAdapterFactory();
+    public static APIResponseCallAdapterFactory create() {
+        return new APIResponseCallAdapterFactory();
     }
 }

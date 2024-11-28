@@ -2,18 +2,18 @@ package com.coze.openapi.service.service.knowledge;
 
 import com.coze.openapi.api.DocumentAPI;
 import com.coze.openapi.client.common.pagination.PageResponse;
-import com.coze.openapi.client.common.pagination.PaginationBase;
+import com.coze.openapi.client.common.pagination.PageBase;
 import com.coze.openapi.client.knowledge.document.ListDocumentReq;
 import com.coze.openapi.client.knowledge.document.ListDocumentResp;
 import com.coze.openapi.client.knowledge.document.model.Document;
 import com.coze.openapi.service.utils.Utils;
 
-public class DocumentPagination extends PaginationBase<Document>{
+public class DocumentPage extends PageBase<Document> {
     private final DocumentAPI api;
     private final Long dataSetID;
     private final Integer pageSize;
 
-    public DocumentPagination(DocumentAPI api, Long dataSetID, Integer pageSize) {
+    public DocumentPage(DocumentAPI api, Long dataSetID, Integer pageSize) {
         this.api = api;
         this.dataSetID = dataSetID;
         if (pageSize != null) {

@@ -10,8 +10,8 @@ https://www.coze.com/docs/developer_guides/oauth_device_code. For the cn environ
 accessed at https://www.coze.cn/docs/developer_guides/oauth_device_code.
 After the creation is completed, the client ID can be obtained.
 * */
-import com.coze.openapi.client.auth.DeviceAuthResp;
-import com.coze.openapi.client.auth.GetAccessTokenResp;
+import com.coze.openapi.client.auth.DeviceAuthCode;
+import com.coze.openapi.client.auth.OAuthToken;
 import com.coze.openapi.client.exception.CozeAuthException;
 import com.coze.openapi.service.auth.DeviceOAuthClient;
 import com.coze.openapi.service.auth.TokenAuth;
@@ -47,12 +47,12 @@ public class DevicesOAuthExample {
         First, make a call to obtain 'getDeviceCode'
         */
 
-        DeviceAuthResp codeResp = oauth.getDeviceCode();
+        DeviceAuthCode codeResp = oauth.getDeviceCode();
 
         /*
          * The space permissions for which the Access Token is granted can be specified. As following codes:
          * */
-        DeviceAuthResp wCodeResp = oauth.getDeviceCode("workspaceID");
+        DeviceAuthCode wCodeResp = oauth.getDeviceCode("workspaceID");
 
 
         /*
@@ -61,7 +61,8 @@ public class DevicesOAuthExample {
         open codeResp.getVerificationUri
         * */
 
-        System.out.println("Please open url: " + codeResp.getVerificationUrl());
+        System.out.println("Please open url: " + codeResp.getVerificationURL());
+
 
 
         /*
@@ -70,7 +71,7 @@ public class DevicesOAuthExample {
         codes. The developers only need to invoke getAccessToken.
         * */
         try {
-            GetAccessTokenResp resp = oauth.getAccessToken(codeResp.getDeviceCode());
+            OAuthToken resp = oauth.getAccessToken(codeResp.getDeviceCode());
             System.out.println(resp);
 
 

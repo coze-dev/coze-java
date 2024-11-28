@@ -21,7 +21,7 @@ public class MessageModifyExample {
                                                    .conversationID(conversationID)
                                                    .messageID(msgID)
                                                    .build();
-        Message message = coze.conversations().message().retrieve(req);
+        Message message = coze.conversations().messages().retrieve(req);
         System.out.println(message);
 
         // 修改消息
@@ -30,7 +30,7 @@ public class MessageModifyExample {
             builder.conversationID(conversationID).messageID(msgID)
                    .content(String.format("modified message content:%s", message.getContent()))
                    .contentType(MessageContentType.TEXT);
-            Message resp = coze.conversations().message().update(builder.build());
+            Message resp = coze.conversations().messages().update(builder.build());
             System.out.println(resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +43,7 @@ public class MessageModifyExample {
         }
         
         // 获取修改后的消息
-        message = coze.conversations().message().retrieve(req);
+        message = coze.conversations().messages().retrieve(req);
         System.out.println(message);
     }
 } 

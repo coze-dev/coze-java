@@ -1,9 +1,7 @@
 package example.workflow;
 
-import com.coze.openapi.client.workflows.run.ResumeRunReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowReq;
 import com.coze.openapi.client.workflows.run.model.WorkflowEvent;
-import com.coze.openapi.client.workflows.run.model.WorkflowEventType;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -25,7 +23,7 @@ public class RunworkExample {
         RunWorkflowReq.RunWorkflowReqBuilder builder = RunWorkflowReq.builder();
         builder.workflowID(wid).parameters(data);
 
-        Flowable<WorkflowEvent> flowable = coze.workflows().run().stream(builder.build());
+        Flowable<WorkflowEvent> flowable = coze.workflows().runs().stream(builder.build());
         flowable.subscribe(workflowEvent -> {
             System.out.println("=============== workflow event ===============");
             System.out.println(workflowEvent);

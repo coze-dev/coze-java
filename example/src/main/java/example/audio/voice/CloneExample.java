@@ -20,11 +20,11 @@ public class CloneExample {
                                          .voiceName("ggq test")
                                          .audioFormat(AudioFormat.M4A)
                                          .language(LanguageCode.ZH)
-                                         .voiceId("7433805584002154522")
+                                         .voiceID("7433805584002154522")
                                          .text("音色克隆测试")
                                          .previewText("这是我的声音，你也来试一试吧")
                                          .build();
-        CloneVoiceResp resp = coze.audio().voice().clone(req);
+        CloneVoiceResp resp = coze.audio().voices().clone(req);
         System.out.println("=============== clone voice ===============");
         System.out.println(resp);
         System.out.println("=============== clone voice ===============");

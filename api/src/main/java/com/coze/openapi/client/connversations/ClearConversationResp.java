@@ -18,5 +18,5 @@ public class ClearConversationResp {
     /**
      * The ID of the conversation.
      */
-    private String conversationId;
+    private String conversationID;
 }

@@ -15,7 +15,7 @@ public class DeleteExample {
         Long did = Long.parseLong(System.getenv("DOCUMENT_ID"));
 
         try {
-            coze.knowledge().document().delete(DeleteDocumentReq.builder().documentIDs(Arrays.asList(did)).build());
+            coze.knowledge().documents().delete(DeleteDocumentReq.builder().documentIDs(Arrays.asList(did)).build());
         } catch (Exception e) {
             e.printStackTrace();
         }

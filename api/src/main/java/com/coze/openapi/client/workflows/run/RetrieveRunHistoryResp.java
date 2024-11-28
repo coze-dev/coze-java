@@ -12,6 +12,6 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class GetRunHistoryResp extends BaseResponse<List<WorkflowRunHistory>> {
+public class RetrieveRunHistoryResp extends BaseResponse<List<WorkflowRunHistory>> {
    
 }

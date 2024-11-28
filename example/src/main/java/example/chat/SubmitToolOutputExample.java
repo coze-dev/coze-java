@@ -34,7 +34,7 @@ public class SubmitToolOutputExample {
 
         CreateConversationResp conversationResp = coze.conversations().create(CreateConversationReq.builder()
                 .messages(Arrays.asList(msg)).build());
-        String conversationID = conversationResp.getId();
+        String conversationID = conversationResp.getID();
 
         ChatReq req = ChatReq.builder()
                              .conversationID(conversationID)
@@ -44,7 +44,7 @@ public class SubmitToolOutputExample {
                              .build();
 
         AtomicReference<ChatEvent> pluginEventRef = new AtomicReference<>();
-        Flowable<ChatEvent> resp = coze.chats().streamChat(req);
+        Flowable<ChatEvent> resp = coze.chat().stream(req);
         resp.blockingForEach(event -> {
             if (ChatEventType.CONVERSATION_CHAT_REQUIRES_ACTION.equals(event.getEvent())) {
                 pluginEventRef.set(event);
@@ -63,17 +63,17 @@ public class SubmitToolOutputExample {
 
         List<ToolOutput> toolOutputs = new ArrayList<>();
         for (ChatToolCall callInfo : pluginEvent.getChat().getRequiredAction().getSubmitToolOutputs().getToolCalls()) {
-            String callID = callInfo.getId();
+            String callID = callInfo.getID();
             toolOutputs.add(ToolOutput.of(callID, "18 度到 21 度"));
         }
 
         SubmitToolOutputsReq toolReq = SubmitToolOutputsReq.builder()
-                .chatID(pluginEvent.getChat().getId())
+                .chatID(pluginEvent.getChat().getID())
                 .conversationID(conversationID)
                 .toolOutputs(toolOutputs)
                 .build();
 
-        Chat resp2 = coze.chats().submitToolOutputs(toolReq);
+        Chat resp2 = coze.chat().submitToolOutputs(toolReq);
         System.out.println("=============== submit tool outputs ===============");
         System.out.println(resp2);
         System.out.println("=============== submit tool outputs ===============");

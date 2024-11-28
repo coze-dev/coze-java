@@ -12,13 +12,13 @@ public class CreateExample {
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
         String botID = System.getenv("BOT_ID");
-        String voiceId = System.getenv("VOICE_ID");
+        String voiceID = System.getenv("VOICE_ID");
 
         CreateRoomReq req = CreateRoomReq.builder()
                                          .botID(botID)
-                                         .voiceID(voiceId)
+                                         .voiceID(voiceID)
                                          .build();
-        CreateRoomResp resp = coze.audio().room().createRoom(req);
+        CreateRoomResp resp = coze.audio().rooms().create(req);
         System.out.println("=============== create room ===============");
         System.out.println(resp);
         System.out.println("=============== create room ===============");

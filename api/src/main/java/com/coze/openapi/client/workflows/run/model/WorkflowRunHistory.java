@@ -15,7 +15,7 @@ public class WorkflowRunHistory {
      * The ID of execute.
      */
     @JsonProperty("execute_id")
-    private String executeId;
+    private String executeID;
 
     /**
      * Execute status:
@@ -30,14 +30,14 @@ public class WorkflowRunHistory {
      * The Bot ID specified when executing the workflow. Returns 0 if no Bot ID was specified.
      */
     @JsonProperty("bot_id")
-    private String botId;
+    private String botID;
 
     /**
      * The release connector ID of the agent. By default, only the Agent as API connector is
      * displayed, and the connector ID is 1024.
      */
     @JsonProperty("connector_id")
-    private String connectorId;
+    private String connectorID;
 
     /**
      * User ID, the user_id specified by the ext field when executing the workflow. If not

@@ -28,7 +28,7 @@ public class StreamChatExample {
                              .messages(Arrays.asList(Message.buildUserQuestionText("你好")))
                              .build();
 
-        Flowable<ChatEvent> resp = coze.chats().streamChat(req);
+        Flowable<ChatEvent> resp = coze.chat().stream(req);
         resp.blockingForEach(event -> {
             if (ChatEventType.CONVERSATION_MESSAGE_DELTA.equals(event.getEvent())) {
                 System.out.print(event.getMessage().getContent());

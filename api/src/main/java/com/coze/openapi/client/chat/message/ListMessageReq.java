@@ -12,7 +12,7 @@ import lombok.NonNull;
 @Getter
 @Builder
 @NoArgsConstructor
-public class ListAllMessageReq {
+public class ListMessageReq {
     @NonNull
     @JsonProperty("conversation_id")
     private String conversationID;
@@ -20,13 +20,13 @@ public class ListAllMessageReq {
     @JsonProperty("chat_id")
     private String chatID;
 
-    private ListAllMessageReq(String conversationID, String chatID) {
+    private ListMessageReq(String conversationID, String chatID) {
         this.conversationID = conversationID;
         this.chatID = chatID;
     }
 
-    public static ListAllMessageReq of(String conversationID, String chatID) {
-        return ListAllMessageReq.builder()
+    public static ListMessageReq of(String conversationID, String chatID) {
+        return ListMessageReq.builder()
             .conversationID(conversationID)
             .chatID(chatID)
             .build();

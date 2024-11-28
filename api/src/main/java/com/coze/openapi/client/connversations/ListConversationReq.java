@@ -18,7 +18,7 @@ public class ListConversationReq {
      */
     @NonNull
     @JsonProperty("bot_id")
-    private String botId;
+    private String botID;
 
     /**
      * The page number.

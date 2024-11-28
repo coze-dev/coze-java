@@ -15,7 +15,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateConversationResp {
     @JsonProperty("id")
-    private String id;  
+    private String id;
+
+    public String getID(){
+        return id;
+    }
 
     @JsonProperty("created_at")
     private Integer createdAt;

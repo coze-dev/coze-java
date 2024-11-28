@@ -22,7 +22,7 @@ public interface ChatAPI {
 
     @POST("/v3/chat")
     @Streaming
-    Call<ResponseBody> streamChat(@Query("conversation_id") String conversationID, @Body ChatReq req);
+    Call<ResponseBody> stream(@Query("conversation_id") String conversationID, @Body ChatReq req);
 
     @GET("/v3/chat/retrieve")
     Single<BaseResponse<Chat>> retrieveChat(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID);

@@ -3,7 +3,7 @@ package example.chat;
 import com.coze.openapi.client.chat.CancelChatReq;
 import com.coze.openapi.client.chat.ChatReq;
 import com.coze.openapi.client.chat.RetrieveChatReq;
-import com.coze.openapi.client.chat.message.ListAllMessageReq;
+import com.coze.openapi.client.chat.message.ListMessageReq;
 import com.coze.openapi.client.chat.model.Chat;
 import com.coze.openapi.client.chat.model.ChatStatus;
 import com.coze.openapi.client.connversations.CreateConversationReq;
@@ -13,6 +13,7 @@ import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ChatExample {
@@ -26,8 +27,8 @@ public class ChatExample {
         String uid = System.getenv("USER_ID");
 
         CreateConversationResp conversationResp = coze.conversations().create(CreateConversationReq.builder()
-                .messages(Arrays.asList(Message.buildUserQuestionText("你好"))).build());
-        String conversationID = conversationResp.getId();
+                .messages(Collections.singletonList(Message.buildUserQuestionText("你好"))).build());
+        String conversationID = conversationResp.getID();
 
         ChatReq req = ChatReq.builder()
                              .conversationID(conversationID)
@@ -37,9 +38,9 @@ public class ChatExample {
                              .build();
 
         // 创建聊天
-        Chat resp = coze.chats().create(req);
+        Chat resp = coze.chat().create(req);
         System.out.println(resp);
-        String chatID = resp.getId();
+        String chatID = resp.getID();
 
         Integer count = 1;
         while (true) {
@@ -49,24 +50,24 @@ public class ChatExample {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            resp = coze.chats().retrieve(RetrieveChatReq.of(conversationID, chatID));
+            resp = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID));
             System.out.println(resp);
             if (ChatStatus.COMPLETED.equals(resp.getStatus())) {
                 break;
             }
             if (count >= 2) {
                 // 如果聊天长时间没有完成，可以取消聊天
-                Chat cancelResp = coze.chats().cancel(CancelChatReq.of(conversationID, chatID));
+                Chat cancelResp = coze.chat().cancel(CancelChatReq.of(conversationID, chatID));
                 System.out.println(cancelResp);
 
 
-                resp = coze.chats().retrieve(RetrieveChatReq.of(conversationID, chatID));
+                resp = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID));
                 System.out.println(resp);
                 break;
             }
         }
 
-        List<Message> msg = coze.chats().message().listAll(ListAllMessageReq.of(conversationID, chatID));
+        List<Message> msg = coze.chat().message().list(ListMessageReq.of(conversationID, chatID));
         for (Message message : msg) {
             System.out.println(message);
         }

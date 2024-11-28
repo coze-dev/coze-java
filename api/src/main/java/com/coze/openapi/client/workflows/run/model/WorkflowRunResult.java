@@ -27,5 +27,5 @@ public class WorkflowRunResult {
      * Asynchronous Execution Result API to obtain the final execution result of the workflow.
      */
     @JsonProperty("execute_id")
-    private String executeId;
+    private String executeID;
 } 

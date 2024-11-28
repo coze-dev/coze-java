@@ -37,7 +37,6 @@ public class TokenAuthExample {
         * */
         CozeAPI coze = new CozeAPI(new TokenAuth(cozeAPIToken), cozeAPIBase);
 
-
     }
 
 }

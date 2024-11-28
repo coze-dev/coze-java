@@ -5,21 +5,21 @@ import com.coze.openapi.client.bots.ListBotResp;
 import com.coze.openapi.client.bots.model.SimpleBot;
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.common.pagination.PageResponse;
-import com.coze.openapi.client.common.pagination.PaginationBase;
+import com.coze.openapi.client.common.pagination.PageBase;
 import com.coze.openapi.service.utils.Utils;
 
-public class BotPagination extends PaginationBase<SimpleBot>{
+public class BotPage extends PageBase<SimpleBot> {
     private final BotAPI api;
     private final int pageSize ;
     private final String spaceID;
 
-    public BotPagination(BotAPI api, String spaceID) {
+    public BotPage(BotAPI api, String spaceID) {
         this.api = api;
         this.pageSize = 20;
         this.spaceID = spaceID;
     }
 
-    public BotPagination(BotAPI api, int pageSize, String spaceID) {
+    public BotPage(BotAPI api, int pageSize, String spaceID) {
         this.api = api;
         this.pageSize = pageSize;
         this.spaceID = spaceID;

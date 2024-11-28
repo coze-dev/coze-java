@@ -36,16 +36,16 @@ public class ConversationService {
     }
 
     public ClearConversationResp clear(ClearConversationReq req) {
-        return Utils.execute(api.ClearConversation(req.getConversationId())).getData();
+        return Utils.execute(api.ClearConversation(req.getConversationID())).getData();
     }
 
     public PageResult<Conversation> list(@NotNull ListConversationReq req) {
-        if (req == null || req.getBotId() == null) {
+        if (req == null || req.getBotID() == null) {
             throw new IllegalArgumentException("botID is required");
         }
-        ListConversationResp resp = Utils.execute(api.ListConversation(req.getBotId(), req.getPageNum(), req.getPageSize())).getData();
+        ListConversationResp resp = Utils.execute(api.ListConversation(req.getBotID(), req.getPageNum(), req.getPageSize())).getData();
         // 生成分页器
-        ConversationPagination pagination = new ConversationPagination(api,req.getBotId(), req.getPageSize());
+        ConversationPage pagination = new ConversationPage(api,req.getBotID(), req.getPageSize());
         // 构建当前页数据
         PageResponse<Conversation> pageResponse = PageResponse.<Conversation>builder()
             .hasMore(resp.isHasMore())
@@ -62,7 +62,7 @@ public class ConversationService {
             .build();
     }
 
-    public MessageService message() {
+    public MessageService messages() {
         return messageApi;
     }
 }

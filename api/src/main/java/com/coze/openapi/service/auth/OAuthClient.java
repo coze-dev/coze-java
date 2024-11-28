@@ -2,7 +2,7 @@ package com.coze.openapi.service.auth;
 
 import com.coze.openapi.api.CozeAuthAPI;
 import com.coze.openapi.client.auth.GetAccessTokenReq;
-import com.coze.openapi.client.auth.GetAccessTokenResp;
+import com.coze.openapi.client.auth.OAuthToken;
 import com.coze.openapi.client.auth.GrantType;
 import com.coze.openapi.client.exception.CozeError;
 import com.coze.openapi.client.exception.CozeAuthException;
@@ -41,10 +41,10 @@ public abstract class OAuthClient {
     protected final ExecutorService executorService;
     private static final ObjectMapper mapper = Utils.defaultObjectMapper();
 
-    protected OAuthClient(String clientSecret, String clientID) {
+    protected OAuthClient(String clientID, String clientSecret) {
         this.clientSecret = clientSecret;
         this.clientID = clientID;
-        this.baseURL = COZE_CN_BASE_URL;
+        this.baseURL = COZE_COM_BASE_URL;
 
         ObjectMapper mapper = Utils.defaultObjectMapper();
         OkHttpClient client = defaultClient(Duration.ofMillis(3000));
@@ -55,7 +55,7 @@ public abstract class OAuthClient {
     }
 
 
-    protected OAuthClient(String clientSecret, String clientID, String baseURL) {
+    protected OAuthClient(String clientID, String clientSecret, String baseURL) {
         this.clientSecret = clientSecret;
         this.clientID = clientID;
         this.baseURL = baseURL;
@@ -68,23 +68,23 @@ public abstract class OAuthClient {
         this.executorService = client.dispatcher().executorService();
     }
 
-    protected String getOauthURL(@NotNull String redirectURI, String state) {
-        return this.getOauthUrl(redirectURI, state, null, null, null);
+    protected String getOAuthURL(@NotNull String redirectURI, String state) {
+        return this._getOAuthURL(redirectURI, state, null, null, null);
     }
 
-    protected String getOauthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge) {
-        return this.getOauthUrl(redirectURI, state, codeChallenge, null, null);
+    protected String getOAuthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge) {
+        return this._getOAuthURL(redirectURI, state, codeChallenge, null, null);
     }
 
-    protected String getOauthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull String codeChallengeMethod) {
-        return this.getOauthUrl(redirectURI, state, codeChallenge, codeChallengeMethod, null);
+    protected String getOAuthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull String codeChallengeMethod) {
+        return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, null);
     }
 
-    protected String getOauthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull String codeChallengeMethod, @NotNull String workspaceID) {
-        return this.getOauthUrl(redirectURI, state, codeChallenge, codeChallengeMethod, workspaceID);
+    protected String getOAuthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull String codeChallengeMethod, @NotNull String workspaceID) {
+        return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, workspaceID);
     }
 
-    private String getOauthUrl(
+    private String _getOAuthURL(
             String redirectUri,
             String state,
             String codeChallenge,
@@ -148,15 +148,15 @@ public abstract class OAuthClient {
         return "https://api.coze.cn";
     }
 
-    protected GetAccessTokenResp getAccessToken(GrantType type, String code, String clientSecret, String redirectURI) {
+    protected OAuthToken getAccessToken(GrantType type, String code, String clientSecret, String redirectURI) {
         return request(code, clientSecret, type, null, redirectURI);
     }
 
-    protected GetAccessTokenResp getAccessToken(GrantType type, String clientSecret, String redirectURI) {
+    protected OAuthToken getAccessToken(GrantType type, String clientSecret, String redirectURI) {
         return request(null, clientSecret, type, null, redirectURI);
     }
 
-    protected GetAccessTokenResp getAccessToken(String secret, GetAccessTokenReq req) {
+    protected OAuthToken getAccessToken(String secret, GetAccessTokenReq req) {
         Map<String, String> headers = new HashMap<>();
         if (secret != null){
             headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
@@ -164,12 +164,12 @@ public abstract class OAuthClient {
         return execute(this.api.OauthAccessToken(headers, req));
     }
 
-    protected GetAccessTokenResp refreshAccessToken(String refreshToken, String clientSecret, String redirectURI) {
-        return request(null, clientSecret, GrantType.RefreshToken, refreshToken, redirectURI);
+    protected OAuthToken refreshAccessToken(String refreshToken, String clientSecret) {
+        return request(null, clientSecret, GrantType.RefreshToken, refreshToken, null);
     }
 
-    protected GetAccessTokenResp refreshAccessToken(String refreshToken, String redirectURI) {
-        return request(null, null, GrantType.RefreshToken, refreshToken, redirectURI);
+    protected OAuthToken refreshAccessToken(String refreshToken) {
+        return request(null, null, GrantType.RefreshToken, refreshToken, null);
     }
 
     public void shutdownExecutor() {
@@ -178,7 +178,7 @@ public abstract class OAuthClient {
     }
 
 
-    private GetAccessTokenResp request(String code, String secret, GrantType grantType, String refreshToken, String redirectURI){
+    private OAuthToken request(String code, String secret, GrantType grantType, String refreshToken, String redirectURI){
         GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
         builder.clientID(this.clientID).
                 grantType(grantType.getValue()).
@@ -215,6 +215,6 @@ public abstract class OAuthClient {
         }
     }
 
-    public abstract GetAccessTokenResp refreshToken(String refreshToken, String redirectURI);
+    public abstract OAuthToken refreshToken(String refreshToken);
 
 }

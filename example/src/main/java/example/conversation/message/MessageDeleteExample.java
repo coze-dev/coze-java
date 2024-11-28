@@ -19,14 +19,14 @@ public class MessageDeleteExample {
                                                    .conversationID(conversationID)
                                                    .messageID(msgID)
                                                    .build();
-        Message message = coze.conversations().message().retrieve(req);
+        Message message = coze.conversations().messages().retrieve(req);
         System.out.println(message);
 
         try {
             DeleteMessageReq.DeleteMessageReqBuilder builder = DeleteMessageReq.builder();
             builder.conversationID(conversationID)
                    .messageID(msgID);
-            Message resp = coze.conversations().message().delete(builder.build());
+            Message resp = coze.conversations().messages().delete(builder.build());
             System.out.println(resp);
         } catch (Exception e) {
             e.printStackTrace();

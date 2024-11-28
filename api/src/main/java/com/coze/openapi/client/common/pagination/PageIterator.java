@@ -6,12 +6,12 @@ import java.util.NoSuchElementException;
 import com.coze.openapi.client.exception.CozeApiExcetion;
 
 public class PageIterator<T> implements Iterator<T> {
-    private final PaginationBase<T> paginationBase;
+    private final PageBase<T> pageBase;
     private Iterator<T> currentIterator;
     private PageResponse<T> currentPage;
     
-    public PageIterator(PaginationBase<T> paginationBase, PageResponse<T> firstPage) {
-        this.paginationBase = paginationBase;
+    public PageIterator(PageBase<T> pageBase, PageResponse<T> firstPage) {
+        this.pageBase = pageBase;
         this.currentPage = firstPage;
         this.currentIterator = firstPage.getData().iterator();
     }
@@ -23,7 +23,7 @@ public class PageIterator<T> implements Iterator<T> {
         }
         if (currentPage.isHasMore()) {
             try {
-                currentPage = paginationBase.fetchNextPage(currentPage.getNextCursor());
+                currentPage = pageBase.fetchNextPage(currentPage.getNextCursor());
                 currentIterator = currentPage.getData().iterator();
                 return currentIterator.hasNext();
             } catch (CozeApiExcetion e) {

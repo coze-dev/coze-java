@@ -20,7 +20,7 @@ public class ListExample {
 
         Integer count = 0;
         try {
-            PageResult<Document> resp = coze.knowledge().document().list(req);
+            PageResult<Document> resp = coze.knowledge().documents().list(req);
             Iterator<Document> iterator = resp.getIterator();
             while (iterator.hasNext()) {
                 count++;

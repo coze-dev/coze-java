@@ -22,7 +22,7 @@ public class FileExample {
         }
 
         //*** 获取文件 ***//
-        FileInfo retrievedInfo = coze.files().retrieve(fileInfo.getId());
+        FileInfo retrievedInfo = coze.files().retrieve(fileInfo.getID());
         System.out.println(retrievedInfo);
     }
 } 

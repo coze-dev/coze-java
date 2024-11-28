@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Document {
     @JsonProperty("document_id")
-    private String documentId;
+    private String documentID;
 
     @JsonProperty("char_count")
     private int charCount;

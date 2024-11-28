@@ -12,6 +12,9 @@ public class FileInfo {
     // The ID of the uploaded file.
     @JsonProperty("id")
     private String id;
+    public String getID() {
+        return id;
+    }
 
     // The total byte size of the file.
     @JsonProperty("bytes")

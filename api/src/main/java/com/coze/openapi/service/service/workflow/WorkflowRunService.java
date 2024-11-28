@@ -1,8 +1,7 @@
 package com.coze.openapi.service.service.workflow;
 
 import com.coze.openapi.api.WorkflowRunAPI;
-import com.coze.openapi.client.workflows.run.GetRunHistoryReq;
-import com.coze.openapi.client.workflows.run.GetRunHistoryResp;
+import com.coze.openapi.api.WorkflowRunHistoryAPI;
 import com.coze.openapi.client.workflows.run.ResumeRunReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowResp;
@@ -16,30 +15,34 @@ import retrofit2.Call;
 
 public class WorkflowRunService {
     
-    private final WorkflowRunAPI workflowRunApi;
+    private final WorkflowRunAPI workflowRunAPI;
 
-    public WorkflowRunService(WorkflowRunAPI workflowRunApi) {
-        this.workflowRunApi = workflowRunApi;
+    private final WorkflowRunHistoryService historyService;
+
+    public WorkflowRunService(WorkflowRunAPI runAPI, WorkflowRunHistoryAPI historyService) {
+        this.workflowRunAPI = runAPI;
+        this.historyService = new WorkflowRunHistoryService(historyService);
     }
 
     public RunWorkflowResp run(RunWorkflowReq req) {
-        return Utils.execute(workflowRunApi.runWorkflow(req));
+        return Utils.execute(workflowRunAPI.runWorkflow(req));
     }
 
     public Flowable<WorkflowEvent> stream(RunWorkflowReq req) {
-        return stream(workflowRunApi.streamRun(req));
+        return stream(workflowRunAPI.stream(req));
     }
 
-    public Flowable<WorkflowEvent> resumeRun(ResumeRunReq req) {
-        return stream(workflowRunApi.resumeRun(req));
+    public Flowable<WorkflowEvent> resume(ResumeRunReq req) {
+        return stream(workflowRunAPI.resume(req));
     }
 
-    public GetRunHistoryResp getRunHistory(GetRunHistoryReq req) {
-        return Utils.execute(workflowRunApi.getRunHistory(req.getWorkflowID(), req.getExecuteID()));
-    }
 
     public static Flowable<WorkflowEvent> stream(Call<ResponseBody> apiCall) {
         return Flowable.create(emitter -> apiCall.enqueue(new EventCallback(emitter)), BackpressureStrategy.BUFFER);
+    }
+
+    public WorkflowRunHistoryService history(){
+        return historyService;
     }
     
 }

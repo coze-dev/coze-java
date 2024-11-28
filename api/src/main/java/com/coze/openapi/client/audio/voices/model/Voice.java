@@ -14,7 +14,7 @@ public class Voice {
      * The id of voice.
      */
     @JsonProperty("voice_id")
-    private String voiceId;
+    private String voiceID;
 
     /**
      * The name of voice.

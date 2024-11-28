@@ -3,13 +3,13 @@ package com.coze.openapi.service.service.conversation;
 import com.coze.openapi.api.ConversationMessageAPI;
 import com.coze.openapi.client.common.Sort;
 import com.coze.openapi.client.common.pagination.PageResponse;
-import com.coze.openapi.client.common.pagination.PaginationBase;
+import com.coze.openapi.client.common.pagination.PageBase;
 import com.coze.openapi.client.connversations.message.ListMessageReq;
 import com.coze.openapi.client.connversations.message.GetMessageListResp;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.service.utils.Utils;
 
-public class MessagePagination extends PaginationBase<Message>{
+public class MessagePage extends PageBase<Message> {
     private final ConversationMessageAPI api;
     private final String conversationID;
     private final String chatID;
@@ -18,7 +18,7 @@ public class MessagePagination extends PaginationBase<Message>{
     private final String beforeID;
     private final Sort sort;
 
-    public MessagePagination(ConversationMessageAPI api, String conversationID, ListMessageReq req) {
+    public MessagePage(ConversationMessageAPI api, String conversationID, ListMessageReq req) {
         this.api = api;
         this.conversationID = conversationID;
         this.chatID = req.getChatID();

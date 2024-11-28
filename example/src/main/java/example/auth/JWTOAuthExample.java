@@ -12,11 +12,10 @@ This example is about how to use the service jwt oauth process to acquire user a
 # After the creation is completed, the client ID, private key, and public key id, can be obtained.
 # For the client secret and public key id, users need to keep it securely to avoid leakage.
 * */
-import com.coze.openapi.client.auth.GetAccessTokenResp;
+import com.coze.openapi.client.auth.OAuthToken;
 import com.coze.openapi.client.auth.scope.Scope;
-import com.coze.openapi.client.exception.CozeAuthException;
 import com.coze.openapi.service.auth.JWTOAuthClient;
-import com.coze.openapi.service.auth.JWTOauth;
+import com.coze.openapi.service.auth.JWTOAuth;
 import com.coze.openapi.service.config.Consts;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -26,7 +25,7 @@ import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class JWTsOauthExample {
+public class JWTOAuthExample {
 
     public static void main(String[] args) {
 
@@ -34,12 +33,17 @@ public class JWTsOauthExample {
         // please use base_url to configure the api endpoint to access
         String cozeAPIBase = System.getenv("COZE_API_BASE");
         if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
-            cozeAPIBase = Consts.COZE_COM_BASE_URL;
+            cozeAPIBase = "api.coze.cn";
         }
-        String jwtOauthClientId = System.getenv("COZE_JWT_OAUTH_CLIENT_ID");
-        String jwtOauthPrivateKey = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY");
-        String jwtOauthPrivateKeyFilePath = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY_FILE_PATH");
-        String jwtOauthPublicKeyId = System.getenv("COZE_JWT_OAUTH_PUBLIC_KEY_ID");
+//        String jwtOauthClientID = System.getenv("COZE_JWT_OAUTH_CLIENT_ID");
+//        String jwtOauthPrivateKey = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY");
+//        String jwtOauthPrivateKeyFilePath = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY_FILE_PATH");
+//        String jwtOauthPublicKeyID = System.getenv("COZE_JWT_OAUTH_PUBLIC_KEY_ID");
+
+        String jwtOauthClientID = "1145762491196";
+        String jwtOauthPrivateKey = "";
+        String jwtOauthPrivateKeyFilePath = "/Users/bytedance/Downloads/private_key.pem";
+        String jwtOauthPublicKeyID = "d8w-KTHQm60eA6cKtoa4S1dMdPPLNBkRTyxIZkB45T8";
 
         JWTOAuthClient oauth = null;
         try {
@@ -58,14 +62,14 @@ public class JWTsOauthExample {
         set up to 24 hours at most.
         * */
         try {
-            oauth = new JWTOAuthClient(jwtOauthClientId, jwtOauthPrivateKey, jwtOauthPublicKeyId, cozeAPIBase);
+            oauth = new JWTOAuthClient(jwtOauthClientID, jwtOauthPrivateKey, jwtOauthPublicKeyID, cozeAPIBase);
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
 
         try {
-            GetAccessTokenResp resp = oauth.getAccessToken();
+            OAuthToken resp = oauth.getAccessToken();
             System.out.println(resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,12 +78,7 @@ public class JWTsOauthExample {
         The jwt oauth process does not support refreshing tokens. When the token expires,
         just directly call get_access_token to generate a new token.
         * */
-        CozeAPI coze = new CozeAPI(new JWTOauth(oauth));
+        CozeAPI coze = new CozeAPI(new JWTOAuth(oauth));
         // you can also specify the scope and session for it
-
-        JWTOauth jwtOauth = JWTOauth.builder().
-                scope(Scope.buildBotChat(Arrays.asList("botID"), Arrays.asList("permissions"))).
-                sessionName("sessionName").build();
-        CozeAPI cozes = new CozeAPI(jwtOauth);
     }
 } 

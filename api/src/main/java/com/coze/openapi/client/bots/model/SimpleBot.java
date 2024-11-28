@@ -19,7 +19,7 @@ public class SimpleBot {
     private String description;
 
     @JsonProperty("icon_url")
-    private String iconUrl;
+    private String iconURL;
 
     @JsonProperty("publish_time")
     private String publishTime;

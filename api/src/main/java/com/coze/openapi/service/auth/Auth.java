@@ -1,6 +1,6 @@
 package com.coze.openapi.service.auth;
 
-import com.coze.openapi.client.auth.GetAccessTokenResp;
+import com.coze.openapi.client.auth.OAuthToken;
 
 public abstract class Auth {    
 
@@ -8,7 +8,6 @@ public abstract class Auth {
     protected String refreshToken;
     protected long expiresIn;
     protected OAuthClient client;
-    protected String redirectURI;
 
 
     protected boolean needRefresh(){
@@ -33,7 +32,7 @@ public abstract class Auth {
             return accessToken;
         }
 
-        GetAccessTokenResp resp = this.client.refreshToken(this.refreshToken, this.redirectURI);
+        OAuthToken resp = this.client.refreshToken(this.refreshToken);
         this.accessToken = resp.getAccessToken();
         this.refreshToken = resp.getRefreshToken();
         this.expiresIn = resp.getExpiresIn();

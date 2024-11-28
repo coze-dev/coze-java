@@ -16,14 +16,14 @@ accessed at https://www.coze.cn/docs/developer_guides/oauth_pkce.
 After the creation is completed, the client ID can be obtained.
 * */
 
-import com.coze.openapi.client.auth.GetAccessTokenResp;
-import com.coze.openapi.service.auth.PKCEOAuth;
+import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.PKCEAuthParam;
 import com.coze.openapi.service.auth.PKCEOAuthClient;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.config.Consts;
 import com.coze.openapi.service.service.CozeAPI;
 
-public class PKCEOauthExample {
+public class PKCEOAuthExample {
 
     public static void main(String[] args) {
         String redirectURI = System.getenv("COZE_PKCE_OAUTH_REDIRECT_URI");
@@ -44,14 +44,14 @@ public class PKCEOauthExample {
         # In the SDK, we have wrapped up the code_challenge process of PKCE. Developers only need
         # to select the code_challenge_method.
         * */
-        String codeChallenge = "code_verifier";
-        String oauthURL = oauth.getOauthURL(redirectURI, "state", codeChallenge, PKCEOAuthClient.CodeChallengeMethod.S256);
+        String codeVerifier = "code_verifier";
+        PKCEAuthParam oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
         System.out.println(oauthURL);
 
         /*
          * The space permissions for which the Access Token is granted can be specified. As following codes:
          * */
-        oauthURL = oauth.getOauthURL(redirectURI, "state", codeChallenge, PKCEOAuthClient.CodeChallengeMethod.S256, "workspaceID");
+        oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256, "workspaceID");
         System.out.println(oauthURL);
         
         /*
@@ -67,15 +67,13 @@ public class PKCEOauthExample {
         After obtaining the code after redirection, the interface to exchange the code for a
         token can be invoked to generate the coze access_token of the authorized user.
         * */
-        GetAccessTokenResp resp = oauth.getAccessToken(code, redirectURI, codeChallenge);
+        OAuthToken resp = oauth.getAccessToken(code, redirectURI, "");
         System.out.println(resp);
 
         // use the access token to init Coze client
         CozeAPI coze = new CozeAPI(new TokenAuth(resp.getAccessToken()), cozeAPIBase);
         // When the token expires, you can also refresh and re-obtain the token
-        resp = oauth.refreshToken(resp.getRefreshToken(), redirectURI);
+        resp = oauth.refreshToken(resp.getRefreshToken());
 
-        // you can also use PKCEOAuth to init CozeAPI, it will automatically refresh access token when it expires
-        coze = new CozeAPI(new PKCEOAuth(oauth, code, redirectURI, codeChallenge), cozeAPIBase);
     }
 } 

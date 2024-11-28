@@ -13,19 +13,17 @@ public class CreateExample {
         String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI(authCli);
-        String saveFilePath = "";
-        String voiceID = "";
+        String saveFilePath = System.getenv("SAVE_FILE_PATH");
+        String voiceID = System.getenv("VOICE_ID");
         String content = "快来试一试吧";
 
         CreateSpeechReq req = CreateSpeechReq.builder()
                                              .input(content)
-                                             .voiceId(voiceID)
+                                             .voiceID(voiceID)
                                              .build();
 
-        FileResponse resp = coze.audio().speech().create(req);
-        System.out.println("=============== create speech ===============");
+        FileResponse resp = coze.audio().speeches().create(req);
         System.out.println(resp);
-        System.out.println("=============== create speech ===============");
         try {
             resp.writeToFile(saveFilePath);
         } catch (IOException e) {

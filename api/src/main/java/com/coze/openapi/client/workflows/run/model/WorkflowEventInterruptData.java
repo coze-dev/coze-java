@@ -15,7 +15,7 @@ public class WorkflowEventInterruptData {
      * The workflow interruption event ID, which should be passed back when resuming the workflow.
      */
     @JsonProperty("event_id")
-    private String eventId;
+    private String eventID;
 
     /**
      * The type of workflow interruption, which should be passed back when resuming the workflow.

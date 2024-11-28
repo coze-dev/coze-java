@@ -17,7 +17,7 @@ public class ToolOutput {
      */
     @NonNull
     @JsonProperty("tool_call_id")
-    private String toolCallId;
+    private String toolCallID;
 
     /**
      * The execution result of the tool.
@@ -26,7 +26,7 @@ public class ToolOutput {
     @JsonProperty("output")
     private String output;
 
-    public static ToolOutput of(String toolCallId, String output){
-        return ToolOutput.builder().toolCallId(toolCallId).output(output).build();
+    public static ToolOutput of(String toolCallID, String output){
+        return ToolOutput.builder().toolCallID(toolCallID).output(output).build();
     }
 }

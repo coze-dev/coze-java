@@ -25,7 +25,7 @@ public interface ConversationAPI {
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversations")
-    Single<BaseResponse<ListConversationResp>> ListConversation(@Query("bot_id") String botId, @Query("page_num") Integer pageNum, @Query("page_size") Integer pageSize);
+    Single<BaseResponse<ListConversationResp>> ListConversation(@Query("bot_id") String botID, @Query("page_num") Integer pageNum, @Query("page_size") Integer pageSize);
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversations/{conversation_id}/clear")

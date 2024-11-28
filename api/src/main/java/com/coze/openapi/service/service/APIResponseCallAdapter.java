@@ -10,11 +10,11 @@ import retrofit2.CallAdapter;
 
 import java.lang.reflect.Type;
 
-public class ApiResponseCallAdapter<R> implements CallAdapter<R, Single<?>> {
+public class APIResponseCallAdapter<R> implements CallAdapter<R, Single<?>> {
     private static final String logHeader = "x-tt-logid";
     private final Type responseType;
 
-    public ApiResponseCallAdapter(Type responseType) {
+    public APIResponseCallAdapter(Type responseType) {
         this.responseType = responseType;
     }
 
