@@ -161,7 +161,7 @@ public abstract class OAuthClient {
         if (secret != null){
             headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
         }
-        return execute(this.api.OauthAccessToken(headers, req));
+        return execute(this.api.retrieve(headers, req));
     }
 
     protected OAuthToken refreshAccessToken(String refreshToken, String clientSecret) {
@@ -191,7 +191,7 @@ public abstract class OAuthClient {
         if (secret != null){
             headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
         }
-        return execute(this.api.OauthAccessToken(headers, req));
+        return execute(this.api.retrieve(headers, req));
     }
 
     protected static <T> T execute(Single<T> apiCall) {

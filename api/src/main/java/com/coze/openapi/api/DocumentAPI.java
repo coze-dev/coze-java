@@ -6,7 +6,7 @@ import com.coze.openapi.client.knowledge.document.CreateDocumentResp;
 import com.coze.openapi.client.knowledge.document.DeleteDocumentReq;
 import com.coze.openapi.client.knowledge.document.ListDocumentReq;
 import com.coze.openapi.client.knowledge.document.ListDocumentResp;
-import com.coze.openapi.client.knowledge.document.ModifyDocumentReq;
+import com.coze.openapi.client.knowledge.document.UpdateDocumentReq;
 
 import io.reactivex.Single;
 import retrofit2.http.Body;
@@ -21,7 +21,7 @@ public interface DocumentAPI {
 
     @POST("/open_api/knowledge/document/update")
     @Headers({"Content-Type: application/json","Agw-Js-Conv: str"})
-    Single<BaseResponse<Void>> UpdateDocument(@Body ModifyDocumentReq req);
+    Single<BaseResponse<Void>> UpdateDocument(@Body UpdateDocumentReq req);
 
     @POST("/open_api/knowledge/document/delete")
     @Headers({"Content-Type: application/json","Agw-Js-Conv: str"})

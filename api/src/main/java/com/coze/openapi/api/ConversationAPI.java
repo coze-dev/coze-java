@@ -17,17 +17,17 @@ import retrofit2.http.Query;
 public interface ConversationAPI {
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/create")
-    Single<BaseResponse<CreateConversationResp>> CreateConversation(@Body CreateConversationReq req);
+    Single<BaseResponse<CreateConversationResp>> create(@Body CreateConversationReq req);
     
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/retrieve")
-    Single<BaseResponse<GetConversationResp>> RetrieveConversation(@Query("conversation_id")String id);
+    Single<BaseResponse<GetConversationResp>> retrieve(@Query("conversation_id")String id);
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversations")
-    Single<BaseResponse<ListConversationResp>> ListConversation(@Query("bot_id") String botID, @Query("page_num") Integer pageNum, @Query("page_size") Integer pageSize);
+    Single<BaseResponse<ListConversationResp>> list(@Query("bot_id") String botID, @Query("page_num") Integer pageNum, @Query("page_size") Integer pageSize);
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversations/{conversation_id}/clear")
-    Single<BaseResponse<ClearConversationResp>> ClearConversation(@Path("conversation_id") String conversationID);
+    Single<BaseResponse<ClearConversationResp>> clear(@Path("conversation_id") String conversationID);
 }

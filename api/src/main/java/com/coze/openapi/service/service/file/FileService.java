@@ -22,11 +22,11 @@ public class FileService {
         RequestBody requestFile = RequestBody.create(file, MediaType.parse("multipart/form-data"));
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        return Utils.execute(api.uploadFile(body)).getData();
+        return Utils.execute(api.upload(body)).getData();
     }
 
     public FileInfo retrieve(String fileID) {
-        return Utils.execute(api.retrieveFile(fileID)).getData();
+        return Utils.execute(api.retrieve(fileID)).getData();
     }   
 
 }

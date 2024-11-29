@@ -17,7 +17,7 @@ import io.reactivex.Single;
 public interface AudioVoiceAPI {
     @Multipart
     @POST("/v1/audio/voices/clone")
-    Single<BaseResponse<CloneVoiceResp>> cloneVoice(
+    Single<BaseResponse<CloneVoiceResp>> clone(
         @Part MultipartBody.Part file,
         @Part("voice_name") RequestBody voiceName,
         @Part("audio_format") RequestBody audioFormat,
@@ -28,7 +28,7 @@ public interface AudioVoiceAPI {
     );
 
     @GET("/v1/audio/voices")
-    Single<BaseResponse<ListVoiceResp>> listVoice(
+    Single<BaseResponse<ListVoiceResp>> list(
         @Query("filter_system_voice") Boolean filterSystemVoice,
         @Query("page_num") Integer pageNum,
         @Query("page_size") Integer pageSize

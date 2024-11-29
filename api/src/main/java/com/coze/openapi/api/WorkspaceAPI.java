@@ -12,5 +12,5 @@ public interface WorkspaceAPI {
 
     @Headers({"Content-Type: application/json"})
     @GET("/v1/workspaces")
-    Single<BaseResponse<ListWorkspaceResp>> ListWorkspaces(@Query("page_num") Integer page, @Query("page_size") Integer pageSize );
+    Single<BaseResponse<ListWorkspaceResp>> list(@Query("page_num") Integer page, @Query("page_size") Integer pageSize );
 }

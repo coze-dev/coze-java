@@ -9,5 +9,5 @@ import retrofit2.http.POST;
 
 public interface AudioSpeechAPI {
     @POST("/v1/audio/speech")
-    Single<ResponseBody> createSpeech(@Body CreateSpeechReq request);
+    Single<ResponseBody> create(@Body CreateSpeechReq request);
 }

@@ -17,6 +17,6 @@ public class ChatMessageService {
     }
 
      public List<Message> list(ListMessageReq req) {
-        return Utils.execute(chatMessageApi.listMessage(req.getConversationID(), req.getChatID())).getData();
+        return Utils.execute(chatMessageApi.list(req.getConversationID(), req.getChatID())).getData();
     }
 }

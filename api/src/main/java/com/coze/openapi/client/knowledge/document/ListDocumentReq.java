@@ -20,7 +20,13 @@ public class ListDocumentReq {
     @JsonProperty("dataset_id")
     private Long datasetID;
     @JsonProperty("page")
-    private Integer page;
+    @Builder.Default
+    private Integer page = 1;
     @JsonProperty("size")
-    private Integer size;
+    @Builder.Default
+    private Integer size = 10;
+
+    public static ListDocumentReq of(Long datasetID, Integer page, Integer size) {
+        return ListDocumentReq.builder().datasetID(datasetID).page(page).size(size).build();
+    }
 }

@@ -12,5 +12,5 @@ import retrofit2.http.Query;
 public interface ChatMessageAPI {
 
      @GET("/v3/chat/message/list")
-    Single<BaseResponse<List<Message>>> listMessage(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID);
+    Single<BaseResponse<List<Message>>> list(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID);
 } 

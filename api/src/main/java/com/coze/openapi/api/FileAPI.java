@@ -15,9 +15,9 @@ import retrofit2.http.Query;
 public interface FileAPI {
     @Multipart
     @POST("/v1/files/upload")
-    Single<BaseResponse<FileInfo>> uploadFile(@Part MultipartBody.Part file);
+    Single<BaseResponse<FileInfo>> upload(@Part MultipartBody.Part file);
 
     
     @GET("/v1/files/retrieve")
-    Single<BaseResponse<FileInfo>> retrieveFile(@Query("file_id") String fileID);
+    Single<BaseResponse<FileInfo>> retrieve(@Query("file_id") String fileID);
 }

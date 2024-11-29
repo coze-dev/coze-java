@@ -18,22 +18,22 @@ import retrofit2.http.Query;
 public interface ConversationMessageAPI {
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/message/create")
-    Single<BaseResponse<Message>> CreateMessage(@Query("conversation_id")String conversationID, @Body CreateMessageReq req);
+    Single<BaseResponse<Message>> create(@Query("conversation_id")String conversationID, @Body CreateMessageReq req);
 
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/message/list")
-    Single<GetMessageListResp> GetMessageList(@Query("conversation_id") String conversationID, @Body ListMessageReq req);
+    Single<GetMessageListResp> list(@Query("conversation_id") String conversationID, @Body ListMessageReq req);
         
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/message/retrieve")
-    Single<BaseResponse<Message>> RetrieveConversation(@Query("conversation_id")String conversationID, @Query("message_id")String messageID);
+    Single<BaseResponse<Message>> retrieve(@Query("conversation_id")String conversationID, @Query("message_id")String messageID);
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/message/modify")
-    Single<UpdateMessageResp> UpdateMessage(@Query("conversation_id")String conversationID, @Query("message_id")String messageID, @Body UpdateMessageReq req);
+    Single<UpdateMessageResp> update(@Query("conversation_id")String conversationID, @Query("message_id")String messageID, @Body UpdateMessageReq req);
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/message/delete")
-    Single<BaseResponse<Message>> DeleteMessage(@Query("conversation_id")String conversationID, @Query("message_id")String messageID);
+    Single<BaseResponse<Message>> delete(@Query("conversation_id")String conversationID, @Query("message_id")String messageID);
 }

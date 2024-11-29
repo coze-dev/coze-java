@@ -10,5 +10,5 @@ import retrofit2.http.POST;
 
 public interface AudioRoomAPI {
     @POST("/v1/audio/rooms")
-    Single<BaseResponse<CreateRoomResp>> createRoom(@Body CreateRoomReq request);
+    Single<BaseResponse<CreateRoomResp>> create(@Body CreateRoomReq request);
 }

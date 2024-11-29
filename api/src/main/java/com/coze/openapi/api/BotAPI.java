@@ -17,17 +17,17 @@ import retrofit2.http.Body;
 
 public interface BotAPI {
     @GET("/v1/space/published_bots_list")
-    Single<BaseResponse<ListBotResp>> ListBots(@Query("space_id") String spaceID, @Query("page_index") Integer page, @Query("page_size") Integer pageSize);
+    Single<BaseResponse<ListBotResp>> list(@Query("space_id") String spaceID, @Query("page_index") Integer page, @Query("page_size") Integer pageSize);
 
     @GET("/v1/bot/get_online_info")
-    Single<BaseResponse<Bot>> GetBotInfo(@Query("bot_id") String botID);
+    Single<BaseResponse<Bot>> retrieve(@Query("bot_id") String botID);
 
     @POST("/v1/bot/create")
-    Single<BaseResponse<CreateBotResp>> CreateBot(@Body CreateBotReq req);
+    Single<BaseResponse<CreateBotResp>> create(@Body CreateBotReq req);
 
     @POST("/v1/bot/update") 
-    Single<BaseResponse<Void>> UpdateBot(@Body UpdateBotReq req);
+    Single<BaseResponse<Void>> update(@Body UpdateBotReq req);
 
     @POST("/v1/bot/publish")
-    Single<BaseResponse<PublishBotResp>> PublishBot(@Body PublishBotReq req);
+    Single<BaseResponse<PublishBotResp>> publish(@Body PublishBotReq req);
 } 

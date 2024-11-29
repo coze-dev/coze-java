@@ -12,7 +12,6 @@ public class WorkflowRunHistoryService {
         this.workflowRunHistoryAPI = workflowRunAPI;
     }
 
-    // history.retrive
     public RetrieveRunHistoryResp retrieve(RetrieveRunHistoryReq req) {
         return Utils.execute(workflowRunHistoryAPI.retrieve(req.getWorkflowID(), req.getExecuteID()));
     }

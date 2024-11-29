@@ -25,7 +25,7 @@ public class WorkflowRunService {
     }
 
     public RunWorkflowResp run(RunWorkflowReq req) {
-        return Utils.execute(workflowRunAPI.runWorkflow(req));
+        return Utils.execute(workflowRunAPI.run(req));
     }
 
     public Flowable<WorkflowEvent> stream(RunWorkflowReq req) {

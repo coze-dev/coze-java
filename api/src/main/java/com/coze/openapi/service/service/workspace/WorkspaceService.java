@@ -2,9 +2,12 @@ package com.coze.openapi.service.service.workspace;
 
 import com.coze.openapi.api.WorkspaceAPI;
 import com.coze.openapi.client.common.BaseResponse;
-import com.coze.openapi.client.common.pagination.PageIterator;
+import com.coze.openapi.client.common.pagination.PageFetcher;
+import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
+import com.coze.openapi.client.common.pagination.PageRequest;
 import com.coze.openapi.client.common.pagination.PageResponse;
 import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.workspace.ListWorkspaceReq;
 import com.coze.openapi.client.workspace.ListWorkspaceResp;
 import com.coze.openapi.client.workspace.Workspace;
 import com.coze.openapi.service.utils.Utils;
@@ -16,26 +19,45 @@ public class WorkspaceService {
         this.workspaceAPI = workspaceAPI;
     }
 
-    public PageResult<Workspace> list(Integer pageNum, Integer pageSize) {
-        pageNum = pageNum == null ? 1 : pageNum;
-        // 获取当前页数据
-        BaseResponse<ListWorkspaceResp> resp = Utils.execute(workspaceAPI.ListWorkspaces(pageNum, pageSize));
-        // 生成分页器
-        WorkspacePage pagination = new WorkspacePage(workspaceAPI, pageSize);
-        // 构建当前页数据
-        Boolean hasMore = resp.getData().getWorkspaces().size() == pageSize;
+    public PageResult<Workspace> list(ListWorkspaceReq req) {
+        if (req == null) {
+            throw new IllegalArgumentException("req is required");
+        }
 
-        PageResponse<Workspace> pageResponse = PageResponse.<Workspace>builder()
-            .hasMore(hasMore)
-            .nextCursor(String.valueOf(pageNum + 1))
-            .data(resp.getData().getWorkspaces())
+        Integer pageNum = req.getPageNum();
+        Integer pageSize = req.getPageSize();
+
+        // create paginator
+        PageFetcher<Workspace> pageFetcher = request -> {
+            BaseResponse<ListWorkspaceResp> resp = Utils.execute(
+                workspaceAPI.list(request.getPageNum(), request.getPageSize())
+            );
+            
+            return PageResponse.<Workspace>builder()
+                .hasMore(resp.getData().getWorkspaces().size() == request.getPageSize())
+                .data(resp.getData().getWorkspaces())
+                .pageNum(request.getPageNum())
+                .pageSize(request.getPageSize())
+                .total(resp.getData().getTotalCount())
+                .build();
+        };
+
+        // create paginator
+        PageNumBasedPaginator<Workspace> paginator = new PageNumBasedPaginator<>(pageFetcher, pageSize);
+
+        // get data from current page
+        PageRequest initialRequest = PageRequest.builder()
+            .pageNum(pageNum)
+            .pageSize(pageSize)
             .build();
+        
+        PageResponse<Workspace> firstPage = pageFetcher.fetch(initialRequest);
 
         return PageResult.<Workspace>builder()
-            .total(resp.getData().getTotalCount())
-            .items(resp.getData().getWorkspaces())
-            .iterator(new PageIterator<>(pagination, pageResponse))
-            .hasMore(hasMore)
+            .total(firstPage.getTotal())
+            .items(firstPage.getData())
+            .iterator(paginator)
+            .hasMore(firstPage.isHasMore())
             .build();
     }
 }

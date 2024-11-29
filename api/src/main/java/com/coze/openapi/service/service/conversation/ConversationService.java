@@ -8,7 +8,6 @@ import com.coze.openapi.client.connversations.GetConversationResp;
 import com.coze.openapi.client.connversations.ListConversationReq;
 import com.coze.openapi.client.connversations.ListConversationResp;
 import com.coze.openapi.client.connversations.model.Conversation;
-import com.coze.openapi.client.common.pagination.PageIterator;
 import com.coze.openapi.client.common.pagination.PageResponse;
 import com.coze.openapi.client.common.pagination.PageResult;
 import com.coze.openapi.client.connversations.ClearConversationReq;
@@ -17,6 +16,9 @@ import com.coze.openapi.client.connversations.CreateConversationReq;
 import com.coze.openapi.client.connversations.CreateConversationResp;
 import com.coze.openapi.client.connversations.GetConversationReq;
 import com.coze.openapi.service.utils.Utils;
+import com.coze.openapi.client.common.pagination.PageFetcher;
+import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
+import com.coze.openapi.client.common.pagination.PageRequest;
 
 public class ConversationService {
     private final ConversationAPI api;
@@ -28,37 +30,53 @@ public class ConversationService {
     }
 
     public GetConversationResp retrieve(GetConversationReq req) {
-        return Utils.execute(api.RetrieveConversation(req.getConversationID())).getData();
+        return Utils.execute(api.retrieve(req.getConversationID())).getData();
     }
 
     public CreateConversationResp create(CreateConversationReq req) {
-        return Utils.execute(api.CreateConversation(req)).getData();
+        return Utils.execute(api.create(req)).getData();
     }
 
     public ClearConversationResp clear(ClearConversationReq req) {
-        return Utils.execute(api.ClearConversation(req.getConversationID())).getData();
+        return Utils.execute(api.clear(req.getConversationID())).getData();
     }
 
     public PageResult<Conversation> list(@NotNull ListConversationReq req) {
         if (req == null || req.getBotID() == null) {
             throw new IllegalArgumentException("botID is required");
         }
-        ListConversationResp resp = Utils.execute(api.ListConversation(req.getBotID(), req.getPageNum(), req.getPageSize())).getData();
-        // 生成分页器
-        ConversationPage pagination = new ConversationPage(api,req.getBotID(), req.getPageSize());
-        // 构建当前页数据
-        PageResponse<Conversation> pageResponse = PageResponse.<Conversation>builder()
-            .hasMore(resp.isHasMore())
-            .nextCursor(String.valueOf(req.getPageNum() + 1))
-            .data(resp.getConversations())
-            .build();
 
+        Integer pageNum = req.getPageNum();
+        Integer pageSize = req.getPageSize();
+        String botID = req.getBotID();
+
+        // 创建分页获取器
+        PageFetcher<Conversation> pageFetcher = request -> {
+            ListConversationResp resp = Utils.execute(api.list(botID, request.getPageNum(), request.getPageSize())).getData();
+            
+            return PageResponse.<Conversation>builder()
+                .hasMore(resp.isHasMore())
+                .data(resp.getConversations())
+                .pageNum(request.getPageNum())
+                .pageSize(request.getPageSize())
+                .build();
+        };
+
+        // 创建分页器
+        PageNumBasedPaginator<Conversation> paginator = new PageNumBasedPaginator<>(pageFetcher, pageSize);
+
+        // 获取当前页数据
+        PageRequest initialRequest = PageRequest.builder()
+            .pageNum(pageNum)
+            .pageSize(pageSize)
+            .build();
+        
+        PageResponse<Conversation> firstPage = pageFetcher.fetch(initialRequest);
 
         return PageResult.<Conversation>builder()
-            .items(resp.getConversations())
-            .iterator(new PageIterator<>(pagination, pageResponse))
-            .hasMore(resp.isHasMore())
-            .nextCursor(String.valueOf(req.getPageNum() + 1))
+            .items(firstPage.getData())
+            .iterator(paginator)
+            .hasMore(firstPage.isHasMore())
             .build();
     }
 

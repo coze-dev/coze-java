@@ -13,6 +13,6 @@ public class SpeechService {
     }
 
     public FileResponse create(CreateSpeechReq req) {
-        return new FileResponse(Utils.execute(api.createSpeech(req)));
+        return new FileResponse(Utils.execute(api.create(req)));
     }
 }

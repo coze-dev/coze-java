@@ -37,11 +37,11 @@ public class ChatService {
     }
 
     public Chat retrieve(RetrieveChatReq req) {
-        return Utils.execute(chatAPI.retrieveChat(req.getConversationID(), req.getChatID())).getData();
+        return Utils.execute(chatAPI.retrieve(req.getConversationID(), req.getChatID())).getData();
     }
 
     public Chat cancel(CancelChatReq req) {
-        return Utils.execute(chatAPI.cancelChat(req)).getData();
+        return Utils.execute(chatAPI.cancel(req)).getData();
     }
 
     public Chat submitToolOutputs(SubmitToolOutputsReq req) {

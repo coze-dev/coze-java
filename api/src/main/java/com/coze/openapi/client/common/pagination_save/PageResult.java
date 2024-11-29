@@ -1,6 +1,5 @@
-package com.coze.openapi.client.common.pagination;
+package com.coze.openapi.client.common.pagination_save;
 
-import java.util.Iterator;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,8 +14,7 @@ import lombok.NoArgsConstructor;
 public class PageResult<T> {
     private Integer total;
     private List<T> items;
-    private Iterator<T> iterator;
+    private PageIterator<T> iterator;
     private Boolean hasMore;
     private String nextCursor;
 }
-        

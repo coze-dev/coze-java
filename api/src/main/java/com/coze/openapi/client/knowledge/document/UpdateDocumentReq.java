@@ -15,7 +15,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ModifyDocumentReq {
+public class UpdateDocumentReq {
     @NonNull
     @JsonProperty("document_id")
     private Long documentID;

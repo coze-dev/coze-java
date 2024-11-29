@@ -10,7 +10,9 @@ import com.coze.openapi.client.audio.voices.CloneVoiceResp;
 import com.coze.openapi.client.audio.voices.ListVoiceReq;
 import com.coze.openapi.client.audio.voices.ListVoiceResp;
 import com.coze.openapi.client.audio.voices.model.Voice;
-import com.coze.openapi.client.common.pagination.PageIterator;
+import com.coze.openapi.client.common.pagination.PageFetcher;
+import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
+import com.coze.openapi.client.common.pagination.PageRequest;
 import com.coze.openapi.client.common.pagination.PageResponse;
 import com.coze.openapi.client.common.pagination.PageResult;
 import com.coze.openapi.service.utils.Utils;
@@ -50,30 +52,45 @@ public class VoiceService {
         RequestBody fileBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), fileBody);
 
-        return Utils.execute(api.cloneVoice(filePart, voiceName, audioFormat, language, voiceID, previewText, text)).getData();
+        return Utils.execute(api.clone(filePart, voiceName, audioFormat, language, voiceID, previewText, text)).getData();
     }
 
      public PageResult<Voice> list(@NotNull ListVoiceReq req) {
         if (req == null) {
             throw new IllegalArgumentException("req is required");
         }
-        ListVoiceResp resp = Utils.execute(api.listVoice(req.getFilterSystemVoice(), req.getPageNum(), req.getPageSize())).getData();
-        // 生成分页器
-        VoicePage pagination = new VoicePage(api,req.getPageSize(), req.getFilterSystemVoice());
 
-        Boolean hasMore = resp.getVoiceList().size() == req.getPageSize();
-        // 构建当前页数据
-        PageResponse<Voice> pageResponse = PageResponse.<Voice>builder()
-            .hasMore(hasMore)
-            .nextCursor(String.valueOf(req.getPageNum() + 1))
-            .data(resp.getVoiceList())
+        Integer pageNum = req.getPageNum();
+        Integer pageSize = req.getPageSize();
+        Boolean filterSystemVoice = req.getFilterSystemVoice();
+
+        // 创建分页获取器
+        PageFetcher<Voice> pageFetcher = request -> {
+            ListVoiceResp resp = Utils.execute(api.list(filterSystemVoice, request.getPageNum(), request.getPageSize())).getData();
+            
+            return PageResponse.<Voice>builder()
+                .hasMore(resp.getVoiceList().size() == request.getPageSize())
+                .data(resp.getVoiceList())
+                .pageNum(request.getPageNum())
+                .pageSize(request.getPageSize())
+                .build();
+        };
+
+        // 创建分页器
+        PageNumBasedPaginator<Voice> paginator = new PageNumBasedPaginator<>(pageFetcher, pageSize);
+
+        // 获取当前页数据
+        PageRequest initialRequest = PageRequest.builder()
+            .pageNum(pageNum)
+            .pageSize(pageSize)
             .build();
+        
+        PageResponse<Voice> currentPage = pageFetcher.fetch(initialRequest);
 
         return PageResult.<Voice>builder()
-            .items(resp.getVoiceList())
-            .iterator(new PageIterator<>(pagination, pageResponse))
-            .hasMore(hasMore)
-            .nextCursor(String.valueOf(req.getPageNum() + 1))
+            .items(currentPage.getData())
+            .iterator(paginator)
+            .hasMore(currentPage.isHasMore())
             .build();
     }
 }

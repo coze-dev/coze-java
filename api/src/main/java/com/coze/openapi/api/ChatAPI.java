@@ -25,10 +25,10 @@ public interface ChatAPI {
     Call<ResponseBody> stream(@Query("conversation_id") String conversationID, @Body ChatReq req);
 
     @GET("/v3/chat/retrieve")
-    Single<BaseResponse<Chat>> retrieveChat(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID);
+    Single<BaseResponse<Chat>> retrieve(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID);
     
     @POST("/v3/chat/cancel")
-    Single<BaseResponse<Chat>> cancelChat(@Body CancelChatReq req);
+    Single<BaseResponse<Chat>> cancel(@Body CancelChatReq req);
 
     @POST("/v3/chat/submit_tool_outputs")
     @Streaming

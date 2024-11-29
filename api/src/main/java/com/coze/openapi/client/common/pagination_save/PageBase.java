@@ -1,4 +1,4 @@
-package com.coze.openapi.client.common.pagination;
+package com.coze.openapi.client.common.pagination_save;
 
 import java.util.Iterator;
 public abstract class PageBase<T> {

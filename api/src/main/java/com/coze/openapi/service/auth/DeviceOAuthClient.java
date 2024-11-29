@@ -18,14 +18,14 @@ public class DeviceOAuthClient extends OAuthClient{
 
     public DeviceAuthCode getDeviceCode(){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
-        DeviceAuthCode resp = execute(this.api.DeviceAuth(req));
+        DeviceAuthCode resp = execute(this.api.device(req));
         resp.setVerificationURL(resp.getVerificationURI() + "?user_code=" + resp.getUserCode());
         return resp;
     }
 
     public DeviceAuthCode getDeviceCode(@NotNull String workspaceID){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
-        DeviceAuthCode resp = execute(this.api.DeviceAuth(workspaceID, req));
+        DeviceAuthCode resp = execute(this.api.device(workspaceID, req));
         resp.setVerificationURL(resp.getVerificationURI() + "?user_code=" + resp.getUserCode());
         return resp;
     }

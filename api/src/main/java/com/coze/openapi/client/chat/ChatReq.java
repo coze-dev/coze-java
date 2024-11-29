@@ -30,7 +30,7 @@ public class ChatReq {
     @JsonProperty("user_id")
     private String userID;
 
-    @JsonProperty("messages")
+    @JsonProperty("additional_messages")
     private List<Message> messages;
 
     @JsonProperty("stream")

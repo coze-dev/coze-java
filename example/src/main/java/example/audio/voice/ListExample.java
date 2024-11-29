@@ -5,17 +5,21 @@ import com.coze.openapi.client.audio.voices.model.Voice;
 import com.coze.openapi.client.common.pagination.PageResult;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
+import com.coze.openapi.service.config.Consts;
 
 import java.util.Iterator;
 
 public class ListExample {
 
     public static void main(String[] args) {
-        String token = System.getenv("COZE_API_TOKEN");
+        String token = "pat_Ijv9yat9V4GWIYkmufrBEWbGUX72IV5yUXSl5bcZ4LWJWXntiivUFver4nDqRDeD";
         TokenAuth authCli = new TokenAuth(token);
-        CozeAPI coze = new CozeAPI(authCli);
+        CozeAPI coze = new CozeAPI(authCli, Consts.COZE_CN_BASE_URL);
+        // String token = System.getenv("COZE_API_TOKEN");
+        // TokenAuth authCli = new TokenAuth(token);
+        // CozeAPI coze = new CozeAPI(authCli);
 
-        PageResult<Voice> resp = coze.audio().voices().list(ListVoiceReq.builder().pageSize(1).build());
+        PageResult<Voice> resp = coze.audio().voices().list(ListVoiceReq.builder().pageSize(10).build());
         Iterator<Voice> iterator = resp.getIterator();
         while (iterator.hasNext()) {
             Voice voice = iterator.next();

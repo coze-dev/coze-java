@@ -13,6 +13,6 @@ public class RoomService {
     }
 
     public CreateRoomResp create(CreateRoomReq req) {
-        return Utils.execute(roomApi.createRoom(req)).getData();
+        return Utils.execute(roomApi.create(req)).getData();
     }
 }

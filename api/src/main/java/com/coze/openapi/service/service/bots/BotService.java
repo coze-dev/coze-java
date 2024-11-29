@@ -8,9 +8,11 @@ import com.coze.openapi.api.BotAPI;
 import com.coze.openapi.client.bots.model.Bot;
 import com.coze.openapi.client.bots.model.SimpleBot;
 import com.coze.openapi.client.common.BaseResponse;
-import com.coze.openapi.client.common.pagination.PageIterator;
 import com.coze.openapi.client.common.pagination.PageResponse;
 import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageFetcher;
+import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
+import com.coze.openapi.client.common.pagination.PageRequest;
 import com.coze.openapi.client.bots.CreateBotReq;
 import com.coze.openapi.client.bots.CreateBotResp;
 import com.coze.openapi.client.bots.ListBotReq;
@@ -30,46 +32,63 @@ public class BotService {
     }
 
     public PageResult<SimpleBot> list(@NotNull ListBotReq req) {
+        if (req == null) {
+            throw new IllegalArgumentException("req is required");
+        }
+
         Integer pageNum = req.getPageNum() == null ? 1 : req.getPageNum();
         Integer pageSize = req.getPageSize() == null ? 20 : req.getPageSize();
-        // 获取当前页数据
-        BaseResponse<ListBotResp> resp = Utils.execute(api.ListBots(req.getSpaceID(), pageNum, pageSize));
-        // 生成分页器
-        BotPage pagination = new BotPage(api, pageSize, req.getSpaceID());
-        // 构建当前页数据
-        Boolean hasMore = resp.getData().getBots().size() == pageSize;
+        String spaceID = req.getSpaceID();
 
-        PageResponse<SimpleBot> pageResponse = PageResponse.<SimpleBot>builder()
-            .hasMore(hasMore)
-            .nextCursor(String.valueOf(pageNum + 1))
-            .data(resp.getData().getBots())
+        // 创建分页获取器
+        PageFetcher<SimpleBot> pageFetcher = request -> {
+            BaseResponse<ListBotResp> resp = Utils.execute(api.list(spaceID, request.getPageNum(), request.getPageSize()));
+            
+            return PageResponse.<SimpleBot>builder()
+                .hasMore(resp.getData().getBots().size() == request.getPageSize())
+                .data(resp.getData().getBots())
+                .pageNum(request.getPageNum())
+                .pageSize(request.getPageSize())
+                .total(resp.getData().getTotal())
+                .build();
+        };
+
+        // 创建分页器
+        PageNumBasedPaginator<SimpleBot> paginator = new PageNumBasedPaginator<>(pageFetcher, pageSize);
+
+        // 获取当前页数据
+        PageRequest initialRequest = PageRequest.builder()
+            .pageNum(pageNum)
+            .pageSize(pageSize)
             .build();
+        
+        PageResponse<SimpleBot> firstPage = pageFetcher.fetch(initialRequest);
 
         return PageResult.<SimpleBot>builder()
-            .total(resp.getData().getTotal())
-            .items(resp.getData().getBots())
-            .iterator(new PageIterator<>(pagination, pageResponse))
-            .hasMore(hasMore)
+            .total(firstPage.getTotal())
+            .items(firstPage.getData())
+            .iterator(paginator)
+            .hasMore(firstPage.isHasMore())
             .build();
     }
 
 
     public Bot retrieve(@NotNull String botID) {
-        return Utils.execute(api.GetBotInfo(botID)).getData();
+        return Utils.execute(api.retrieve(botID)).getData();
     }
 
     public CreateBotResp create(@NotNull CreateBotReq req ) {
-        return Utils.execute(api.CreateBot(req)).getData();
+        return Utils.execute(api.create(req)).getData();
     }
 
     public void update(@NotNull String botID, @NotNull UpdateBotReq req) {
         req.setBotID(botID);
-        Utils.execute(api.UpdateBot(req));
+        Utils.execute(api.update(req));
     }
     
     public PublishBotResp publish(@NotNull String botID) {
         PublishBotReq.PublishBotReqBuilder builder = PublishBotReq.builder();
         builder.botID(botID).connectorIDs(Arrays.asList(defaultChannelID));
-        return Utils.execute(api.PublishBot(builder.build())).getData();
+        return Utils.execute(api.publish(builder.build())).getData();
     }
 }
