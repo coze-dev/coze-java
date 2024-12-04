@@ -8,7 +8,7 @@ import com.coze.openapi.client.common.pagination.PageRequest;
 import com.coze.openapi.client.common.pagination.PageResponse;
 import com.coze.openapi.client.common.pagination.PageResult;
 import com.coze.openapi.client.workspace.ListWorkspaceReq;
-import com.coze.openapi.client.workspace.ListWorkspaceResp;
+import com.coze.openapi.client.workspace.ListWorkspaceResult;
 import com.coze.openapi.client.workspace.Workspace;
 import com.coze.openapi.service.utils.Utils;
 
@@ -29,7 +29,7 @@ public class WorkspaceService {
 
         // create paginator
         PageFetcher<Workspace> pageFetcher = request -> {
-            BaseResponse<ListWorkspaceResp> resp = Utils.execute(
+            BaseResponse<ListWorkspaceResult> resp = Utils.execute(
                 workspaceAPI.list(request.getPageNum(), request.getPageSize())
             );
             

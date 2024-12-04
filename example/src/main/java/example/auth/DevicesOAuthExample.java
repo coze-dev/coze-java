@@ -1,4 +1,13 @@
 package example.auth;
+
+import com.coze.openapi.client.auth.DeviceAuthCode;
+import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.exception.CozeAuthException;
+import com.coze.openapi.service.auth.DeviceOAuthClient;
+import com.coze.openapi.service.auth.TokenAuth;
+import com.coze.openapi.service.config.Consts;
+import com.coze.openapi.service.service.CozeAPI;
+
 /*
 This example is about how to use the device oauth process to acquire user authorization.
 
@@ -10,14 +19,6 @@ https://www.coze.com/docs/developer_guides/oauth_device_code. For the cn environ
 accessed at https://www.coze.cn/docs/developer_guides/oauth_device_code.
 After the creation is completed, the client ID can be obtained.
 * */
-import com.coze.openapi.client.auth.DeviceAuthCode;
-import com.coze.openapi.client.auth.OAuthToken;
-import com.coze.openapi.client.exception.CozeAuthException;
-import com.coze.openapi.service.auth.DeviceOAuthClient;
-import com.coze.openapi.service.auth.TokenAuth;
-import com.coze.openapi.service.config.Consts;
-import com.coze.openapi.service.service.CozeAPI;
-
 public class DevicesOAuthExample {
 
     public static void main(String[] args) {
@@ -31,7 +32,11 @@ public class DevicesOAuthExample {
         if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
             cozeAPIBase = Consts.COZE_COM_BASE_URL;
         }
-        DeviceOAuthClient oauth = new DeviceOAuthClient(clientID, cozeAPIBase);
+
+        DeviceOAuthClient oauth = new DeviceOAuthClient.DeviceOAuthBuilder()
+                .clientID(clientID)
+                .baseURL(cozeAPIBase)
+                .build();
 
         /*
         In the device oauth authorization process, developers need to first call the interface
@@ -76,11 +81,10 @@ public class DevicesOAuthExample {
 
 
             // use the access token to init Coze client
-            CozeAPI coze = new CozeAPI(new TokenAuth(resp.getAccessToken()), cozeAPIBase);
+            CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
             // When the token expires, you can also refresh and re-obtain the token
             resp = oauth.refreshToken(resp.getRefreshToken());
         } catch (CozeAuthException e) {
-            // 可以根据错误类型进行处理
             switch (e.getCode()) {
                 case AccessDenied:
                     /*

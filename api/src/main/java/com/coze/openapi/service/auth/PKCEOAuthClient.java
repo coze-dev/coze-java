@@ -11,6 +11,7 @@ import java.util.Base64;
 import com.coze.openapi.client.auth.PKCEAuthParam;
 import com.coze.openapi.service.utils.Utils;
 import lombok.Getter;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,13 +30,10 @@ public class PKCEOAuthClient extends OAuthClient{
 
     private static final int codeVerifierLen = 32;
 
-    public PKCEOAuthClient(String clientID) {
-        super(clientID, null);
+    protected PKCEOAuthClient(PKCEOAuthBuilder builder) {
+        super(builder);
     }
 
-    public PKCEOAuthClient(String clientID, String baseURL) {
-        super(clientID, null, baseURL);
-    }
 
     public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state) {
         return genOAuthURL(redirectURI, state,  CodeChallengeMethod.Plain);
@@ -87,6 +85,18 @@ public class PKCEOAuthClient extends OAuthClient{
         String codeChallenge = Base64.getUrlEncoder().withoutPadding().encodeToString(sha256Hash);
         codeChallenge = codeChallenge.replace("=", "");
         return codeChallenge;
+    }
+
+    public static class PKCEOAuthBuilder extends OAuthBuilder<PKCEOAuthBuilder> {
+        @Override
+        protected PKCEOAuthBuilder self() {
+            return this;
+        }
+        
+        @Override
+        public PKCEOAuthClient build() {
+            return new PKCEOAuthClient(this);
+        }
     }
 
 }

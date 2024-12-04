@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateRoomResp {
+public class CreateRoomResult {
     /**
      * 房间 id
      */

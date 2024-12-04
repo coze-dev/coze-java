@@ -1,7 +1,7 @@
 package example.audio.voice;
 
 import com.coze.openapi.client.audio.voices.CloneVoiceReq;
-import com.coze.openapi.client.audio.voices.CloneVoiceResp;
+import com.coze.openapi.client.audio.voices.CloneVoiceResult;
 import com.coze.openapi.client.audio.common.AudioFormat;
 import com.coze.openapi.client.audio.common.LanguageCode;
 import com.coze.openapi.service.service.CozeAPI;
@@ -12,19 +12,24 @@ public class CloneExample {
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
-        CozeAPI coze = new CozeAPI(authCli);
+        CozeAPI coze = new CozeAPI.Builder()
+                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .auth(authCli)
+                .readTimeout(10000)
+                .connectTimeout(10000)
+                .build();
         String voiceFilePath = System.getenv("VOICE_FILE_PATH");
 
         CloneVoiceReq req = CloneVoiceReq.builder()
                                          .filePath(voiceFilePath)
-                                         .voiceName("ggq test")
+                                         .voiceName("your voice name")
                                          .audioFormat(AudioFormat.M4A)
                                          .language(LanguageCode.ZH)
-                                         .voiceID("7433805584002154522")
-                                         .text("音色克隆测试")
-                                         .previewText("这是我的声音，你也来试一试吧")
+                                         .voiceID(System.getenv("VOICE_ID"))
+                                         .text("your text")
+                                         .previewText("your preview text")
                                          .build();
-        CloneVoiceResp resp = coze.audio().voices().clone(req);
+        CloneVoiceResult resp = coze.audio().voices().clone(req);
         System.out.println("=============== clone voice ===============");
         System.out.println(resp);
         System.out.println("=============== clone voice ===============");

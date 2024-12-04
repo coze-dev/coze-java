@@ -4,8 +4,22 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum DocumentStatus {
+    /**
+     * Processing
+     * 处理中
+     */
     PROCESSING(0),
+
+    /**
+     * Completed
+     * 处理完毕
+     */
     COMPLETED(1),
+
+    /**
+     * Processing failed, it is recommended to re-upload
+     * 处理失败，建议重新上传
+     */
     FAILED(9);
 
     private final int value;

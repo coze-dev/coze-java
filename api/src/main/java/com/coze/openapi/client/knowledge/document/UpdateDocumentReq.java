@@ -16,11 +16,22 @@ import lombok.NonNull;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateDocumentReq {
+    /**
+     * The ID of the knowledge base file.
+     */
     @NonNull
     @JsonProperty("document_id")
     private Long documentID;
+    /**
+     * The new name of the knowledge base file.
+     */
     @JsonProperty("document_name")
     private String documentName;
+
+    /**
+     * The update strategy for online web pages. Defaults to no automatic updates.
+     * For detailed information, refer to the UpdateRule object.
+     */
     @JsonProperty("update_rule")
     private DocumentUpdateRule updateRule;
 }

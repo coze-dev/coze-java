@@ -24,14 +24,34 @@ public class WorkflowRunService {
         this.historyService = new WorkflowRunHistoryService(historyService);
     }
 
+    /*
+     * Run the published workflow.
+     * This API is in non-streaming response mode. For nodes that support streaming output,
+     * you should run the API Run workflow (streaming response) to obtain streaming responses.
+     *
+     * docs en: https://www.coze.com/docs/developer_guides/workflow_run
+     * docs cn: https://www.coze.cn/docs/developer_guides/workflow_run
+    * */
     public RunWorkflowResp run(RunWorkflowReq req) {
         return Utils.execute(workflowRunAPI.run(req));
     }
 
+    /*
+     * Run the published workflow.
+     * This API is in non-streaming response mode. For nodes that support streaming output,
+     * you should run the API Run workflow (streaming response) to obtain streaming responses.
+     *
+     * docs en: https://www.coze.com/docs/developer_guides/workflow_run
+     * docs cn: https://www.coze.cn/docs/developer_guides/workflow_run
+     * */
     public Flowable<WorkflowEvent> stream(RunWorkflowReq req) {
         return stream(workflowRunAPI.stream(req));
     }
 
+    /*
+    *  docs cn: https://www.coze.cn/docs/developer_guides/workflow_resume
+    *  docs en: https://www.coze.com/docs/developer_guides/workflow_resume
+    * */
     public Flowable<WorkflowEvent> resume(ResumeRunReq req) {
         return stream(workflowRunAPI.resume(req));
     }

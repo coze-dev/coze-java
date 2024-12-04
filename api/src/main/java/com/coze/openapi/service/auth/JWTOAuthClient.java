@@ -13,10 +13,10 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
+import okhttp3.OkHttpClient;
 
 import java.security.KeyFactory;
 import java.security.PrivateKey;
-import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HashMap;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -27,37 +27,16 @@ public class JWTOAuthClient extends OAuthClient{
     private final PrivateKey privateKey;
     private final String publicKey;
 
-    public JWTOAuthClient(String clientID, String privateKey, String publicKey)  throws Exception{
-        super(clientID, null);
-        this.privateKey = parsePrivateKey(privateKey);
-        this.publicKey = publicKey;
-        this.ttl = 900;
+    protected JWTOAuthClient(JWTOAuthBuilder builder)  throws Exception{
+        super(builder);
+        this.privateKey = parsePrivateKey(builder.privateKey);
+        this.publicKey = builder.publicKey;
+        this.ttl = builder.ttl;
     }
 
     @Override
     public OAuthToken refreshToken(String refreshToken) {
         return null;
-    }
-
-    public JWTOAuthClient(String clientID, String privateKey, String publicKey, Integer ttl)  throws Exception{
-        super(clientID, null);
-        this.privateKey = parsePrivateKey(privateKey);
-        this.publicKey = publicKey;
-        this.ttl = ttl;
-    }
-
-    public JWTOAuthClient(String clientID, String privateKey, String publicKey, String baseURL)  throws Exception{
-        super(clientID, null, baseURL);
-        this.privateKey = parsePrivateKey(privateKey);
-        this.publicKey = publicKey;
-        this.ttl = 900;
-    }
-
-    public JWTOAuthClient(String clientID, String privateKey, String publicKey, Integer ttl, String baseURL) throws Exception {
-        super(clientID, null, baseURL);
-        this.privateKey = parsePrivateKey(privateKey);
-        this.publicKey = publicKey;
-        this.ttl = ttl;
     }
 
 
@@ -142,5 +121,38 @@ public class JWTOAuthClient extends OAuthClient{
         return keyFactory.generatePrivate(keySpec);
     }
 
+    public static class JWTOAuthBuilder extends OAuthBuilder<JWTOAuthBuilder> {
+        private Integer ttl;
+        private String publicKey;
+        private String privateKey;
+
+        public JWTOAuthBuilder publicKey(String publicKey) {
+            this.publicKey = publicKey;
+            return this;
+        }
+
+        public JWTOAuthBuilder ttl(Integer ttl) {
+            this.ttl = ttl;
+            return this;
+        }
+
+        public JWTOAuthBuilder privateKey(String privateKey) {
+            this.privateKey = privateKey;
+            return this;
+        }
+
+        @Override
+        protected JWTOAuthBuilder self() {
+            return this;
+        }
+
+        @Override
+        public JWTOAuthClient build() throws Exception {
+            if (this.ttl == null || this.ttl.equals(0)){
+                this.ttl = 900;
+            }
+            return new JWTOAuthClient(this);
+        }
+    }
 
 }

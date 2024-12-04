@@ -9,7 +9,11 @@ public class FileExample {
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
-        CozeAPI coze = new CozeAPI(authCli);
+        CozeAPI coze = new CozeAPI.Builder()
+                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .auth(authCli)
+                .readTimeout(10000)
+                .build();;
         String filePath = System.getenv("FILE_PATH");
 
         //*** 上传文件 ***//

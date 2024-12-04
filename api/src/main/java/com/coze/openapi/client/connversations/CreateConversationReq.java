@@ -16,9 +16,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor 
 public class CreateConversationReq {
+
+    /*
+    * Messages in the conversation. For more information, see EnterMessage object.
+    * */
     @JsonProperty("messages")   
     private List<Message> messages;
 
+    /*
+    *  Additional information when creating a message, and this additional information will also be
+        returned when retrieving messages.
+    * */
     @JsonProperty("meta_data")
     private Map<String, String> metaData;
+
+
+    /*
+    * Bind and isolate conversation on different bots.
+    * */
+    @JsonProperty("bot_id")
+    private String botID;
 }

@@ -1,7 +1,5 @@
 package com.coze.openapi.service.service.knowledge;
 
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.api.DocumentAPI;
@@ -30,14 +28,32 @@ public class DocumentService {
         return Utils.execute(api.CreateDocument(req));
     }
 
-    public void modify(UpdateDocumentReq req) {
+    /*
+    *   Modify the knowledge base file name and update strategy.
+
+        docs en: https://www.coze.com/docs/developer_guides/modify_knowledge_files
+        docs zh: https://www.coze.cn/docs/developer_guides/modify_knowledge_files
+    * */
+    public void update(UpdateDocumentReq req) {
         Utils.execute(api.UpdateDocument(req));
     }
 
+    /*
+    *  Delete text, images, sheets, and other files in the knowledge base, supporting batch deletion.
+
+        docs en: https://www.coze.com/docs/developer_guides/delete_knowledge_files
+        docs zh: https://www.coze.cn/docs/developer_guides/delete_knowledge_files
+    * */
     public void delete(DeleteDocumentReq req) {
         Utils.execute(api.DeleteDocument(req));
     }
 
+    /*
+    *  View the file list of a specified knowledge base, which includes lists of documents, spreadsheets, or images.
+
+        docs en: https://www.coze.com/docs/developer_guides/list_knowledge_files
+        docs zh: https://www.coze.cn/docs/developer_guides/list_knowledge_files
+    * */
     public PageResult<Document> list(@NotNull ListDocumentReq req) {
         if (req == null || req.getDatasetID() == null) {
             throw new IllegalArgumentException("req is required");

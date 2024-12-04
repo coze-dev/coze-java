@@ -13,12 +13,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetConversationReq {
+public class RetrieveConversationReq {
+    /*
+    * The ID of the conversation.
+    * */
     @NonNull
     @JsonProperty("conversation_id")
     private String conversationID;
 
-    public static GetConversationReq of(String conversationID) {
-        return GetConversationReq.builder().conversationID(conversationID).build();
+    public static RetrieveConversationReq of(String conversationID) {
+        return RetrieveConversationReq.builder().conversationID(conversationID).build();
     }
 }

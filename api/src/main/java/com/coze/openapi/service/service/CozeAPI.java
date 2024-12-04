@@ -4,10 +4,12 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
 
 import com.coze.openapi.api.*;
 import com.coze.openapi.service.service.bots.BotService;
 import com.coze.openapi.service.service.chat.ChatService;
+import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.service.conversation.ConversationService;
 import com.coze.openapi.service.service.file.FileService;
 import com.coze.openapi.service.service.knowledge.KnowledgeService;
@@ -20,11 +22,13 @@ import com.coze.openapi.service.config.Consts;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.ConnectionPool;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class CozeAPI {
+    private static final Logger logger = CozeLoggerFactory.getLogger();
     private final String baseURL;
     private final ExecutorService executorService;
     private final Auth auth;
@@ -37,59 +41,18 @@ public class CozeAPI {
     private final ChatService chatAPI;
     private final AudioService audioAPI;
 
-    public CozeAPI(Auth auth) {
-        this.auth = auth;
-        this.baseURL = Consts.COZE_COM_BASE_URL;
-        ObjectMapper mapper = Utils.defaultObjectMapper();
-        OkHttpClient client = defaultClient(Duration.ofMillis(300000));
-        Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
-
-        this.executorService = client.dispatcher().executorService();
-        this.workspaceAPI = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
-        this.botAPI = new BotService(retrofit.create(BotAPI.class));
-        this.conversationAPI = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
-        this.fileAPI = new FileService(retrofit.create(FileAPI.class));
-        this.knowledgeAPI = new KnowledgeService(retrofit.create(DocumentAPI.class));
-        this.workflowAPI = new WorkflowService(retrofit.create(WorkflowRunAPI.class), retrofit.create(WorkflowRunHistoryAPI.class));
-        this.chatAPI = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
-        this.audioAPI = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
-    }
-
-    public CozeAPI(Auth auth, String baseURL) {
-        this.auth = auth;
+    private CozeAPI(String baseURL, ExecutorService executorService, Auth auth, WorkspaceService workspaceAPI, BotService botAPI, ConversationService conversationAPI, FileService fileAPI, KnowledgeService knowledgeAPI, WorkflowService workflowAPI, ChatService chatAPI, AudioService audioAPI) {
         this.baseURL = baseURL;
-        ObjectMapper mapper = Utils.defaultObjectMapper();
-        OkHttpClient client = defaultClient(Duration.ofMillis(300000));
-        Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
-
-        this.executorService = client.dispatcher().executorService();
-        this.workspaceAPI = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
-        this.botAPI = new BotService(retrofit.create(BotAPI.class));
-        this.conversationAPI = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
-        this.fileAPI = new FileService(retrofit.create(FileAPI.class));
-        this.knowledgeAPI = new KnowledgeService(retrofit.create(DocumentAPI.class));
-        this.workflowAPI = new WorkflowService(retrofit.create(WorkflowRunAPI.class), retrofit.create(WorkflowRunHistoryAPI.class));
-        this.chatAPI = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
-        this.audioAPI = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
-    }
-
-   
-    private OkHttpClient defaultClient(Duration timeout) {
-        return new OkHttpClient.Builder()
-                .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
-                .readTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
-                // .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .addInterceptor(new AuthenticationInterceptor(this.auth)) // 添加拦截器，在请求头中增加 token
-                .build();
-    }
-
-    private Retrofit defaultRetrofit(OkHttpClient client, ObjectMapper mapper, String baseURL) {
-        return new Retrofit.Builder()
-                .baseUrl(baseURL)
-                .client(client)
-                .addConverterFactory(JacksonConverterFactory.create(mapper))
-                .addCallAdapterFactory(APIResponseCallAdapterFactory.create()) 
-                .build();
+        this.executorService = executorService;
+        this.auth = auth;
+        this.workspaceAPI = workspaceAPI;
+        this.botAPI = botAPI;
+        this.conversationAPI = conversationAPI;
+        this.fileAPI = fileAPI;
+        this.knowledgeAPI = knowledgeAPI;
+        this.workflowAPI = workflowAPI;
+        this.chatAPI = chatAPI;
+        this.audioAPI = audioAPI;
     }
 
     public WorkspaceService workspaces() {
@@ -127,5 +90,102 @@ public class CozeAPI {
     public void shutdownExecutor() {
         Objects.requireNonNull(this.executorService, "executorService must be set in order to shut down");
         this.executorService.shutdown();
+    }
+
+
+    public static class Builder {
+        private String baseURL = Consts.COZE_COM_BASE_URL;
+        private Auth auth;
+        private OkHttpClient client;
+        private int readTimeout = 5000;
+        private int connectTimeout = 5000;
+
+        public Builder logger(Logger logger) {
+            CozeLoggerFactory.setLogger(logger);
+            return this;
+        }
+
+        public Builder baseURL(String url){
+            this.baseURL = url;
+            return this;
+        }
+
+        public Builder auth(Auth auth){
+            this.auth = auth;
+            return this;
+        }
+
+        public Builder client(OkHttpClient client){
+            this.client = client;
+            return this;
+        }
+
+        public Builder readTimeout(int readTimeout){
+            this.readTimeout = readTimeout;
+            return this;
+        }
+
+        public Builder connectTimeout(int connectTimeout){
+            this.connectTimeout = connectTimeout;
+            return this;
+        }
+
+        public CozeAPI build(){
+            if (this.auth == null){
+                throw new IllegalArgumentException("auth must be set");
+            }
+            if (this.client == null){
+                this.client = defaultClient(Duration.ofMillis(this.readTimeout), Duration.ofMillis(this.connectTimeout));
+            }else {
+                this.client = parseClient(this.client);
+            }
+            if (this.baseURL == null || this.baseURL.isEmpty()){
+                this.baseURL = Consts.COZE_COM_BASE_URL;
+            }
+
+            ObjectMapper mapper = Utils.defaultObjectMapper();
+            Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
+            ExecutorService executorService = client.dispatcher().executorService();
+            WorkspaceService workspaceAPI = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
+            BotService botAPI = new BotService(retrofit.create(BotAPI.class));
+            ConversationService conversationAPI = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
+            FileService fileAPI = new FileService(retrofit.create(FileAPI.class));
+            KnowledgeService knowledgeAPI = new KnowledgeService(retrofit.create(DocumentAPI.class));
+            WorkflowService workflowAPI = new WorkflowService(retrofit.create(WorkflowRunAPI.class), retrofit.create(WorkflowRunHistoryAPI.class));
+            ChatService chatAPI = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
+            AudioService audioAPI = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
+
+            return new CozeAPI(this.baseURL, executorService, this.auth, workspaceAPI, botAPI, conversationAPI, fileAPI, knowledgeAPI, workflowAPI, chatAPI, audioAPI);
+        }
+        // 确保加上了 Auth 拦截器
+        private OkHttpClient parseClient(OkHttpClient client){
+            for(Interceptor interceptor :client.interceptors()){
+                if (interceptor instanceof AuthenticationInterceptor){
+                    return client;
+                }
+            }
+            return new OkHttpClient.Builder(client)
+                    .addInterceptor(new AuthenticationInterceptor(this.auth)) // 添加拦截器，在请求头中增加 token
+                    .build();
+        }
+
+
+        private OkHttpClient defaultClient(Duration readTimeout, Duration connectTimeout) {
+            return new OkHttpClient.Builder()
+                    .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
+                    .readTimeout(readTimeout.toMillis(), TimeUnit.MILLISECONDS)
+                    .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+                    .addInterceptor(new AuthenticationInterceptor(this.auth)) // 添加拦截器，在请求头中增加 token
+                    .build();
+        }
+
+        private Retrofit defaultRetrofit(OkHttpClient client, ObjectMapper mapper, String baseURL) {
+            return new Retrofit.Builder()
+                    .baseUrl(baseURL)
+                    .client(client)
+                    .addConverterFactory(JacksonConverterFactory.create(mapper))
+                    .addCallAdapterFactory(APIResponseCallAdapterFactory.create())
+                    .build();
+        }
     }
 }

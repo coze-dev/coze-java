@@ -12,7 +12,11 @@ public class CreateExample {
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
-        CozeAPI coze = new CozeAPI(authCli);
+        CozeAPI coze = new CozeAPI.Builder()
+                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .auth(authCli)
+                .readTimeout(10000)
+                .build();;
         String saveFilePath = System.getenv("SAVE_FILE_PATH");
         String voiceID = System.getenv("VOICE_ID");
         String content = "快来试一试吧";

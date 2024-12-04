@@ -12,10 +12,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeleteMessageReq {
+    /*
+     * The ID of the conversation.
+     * */
     @NonNull
     @JsonProperty("conversation_id")
     private String conversationID;
+
+    /*
+     * message id
+     * */
     @NonNull
     @JsonProperty("message_id")
     private String messageID;
+
+    public static DeleteMessageReq of(String conversationID, String messageID) {
+        return DeleteMessageReq.builder().conversationID(conversationID).messageID(messageID).build();
+    }
 }

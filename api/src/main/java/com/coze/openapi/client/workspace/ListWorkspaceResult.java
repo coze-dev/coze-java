@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ListWorkspaceResp {
+public class ListWorkspaceResult {
     @JsonProperty("total_count")
     private Integer totalCount;
 

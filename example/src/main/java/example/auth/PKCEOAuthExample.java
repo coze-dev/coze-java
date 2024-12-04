@@ -1,5 +1,12 @@
 package example.auth;
 
+import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.PKCEAuthParam;
+import com.coze.openapi.service.auth.PKCEOAuthClient;
+import com.coze.openapi.service.auth.TokenAuth;
+import com.coze.openapi.service.config.Consts;
+import com.coze.openapi.service.service.CozeAPI;
+
 /*
 How to effectuate OpenAPI authorization through the OAuth Proof Key for Code Exchange method.
 
@@ -15,14 +22,6 @@ https://www.coze.com/docs/developer_guides/oauth_pkce. For the cn environment, i
 accessed at https://www.coze.cn/docs/developer_guides/oauth_pkce.
 After the creation is completed, the client ID can be obtained.
 * */
-
-import com.coze.openapi.client.auth.OAuthToken;
-import com.coze.openapi.client.auth.PKCEAuthParam;
-import com.coze.openapi.service.auth.PKCEOAuthClient;
-import com.coze.openapi.service.auth.TokenAuth;
-import com.coze.openapi.service.config.Consts;
-import com.coze.openapi.service.service.CozeAPI;
-
 public class PKCEOAuthExample {
 
     public static void main(String[] args) {
@@ -38,13 +37,15 @@ public class PKCEOAuthExample {
             cozeAPIBase = Consts.COZE_COM_BASE_URL;
         }
 
-        PKCEOAuthClient oauth = new PKCEOAuthClient(clientID, cozeAPIBase);
+        PKCEOAuthClient oauth = new PKCEOAuthClient.PKCEOAuthBuilder()
+                .clientID(clientID)
+                .baseURL(cozeAPIBase)
+                .build();
 
         /*
-        # In the SDK, we have wrapped up the code_challenge process of PKCE. Developers only need
-        # to select the code_challenge_method.
+        In the SDK, we have wrapped up the code_challenge process of PKCE. Developers only need
+        to select the code_challenge_method.
         * */
-        String codeVerifier = "code_verifier";
         PKCEAuthParam oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
         System.out.println(oauthURL);
 
@@ -71,7 +72,7 @@ public class PKCEOAuthExample {
         System.out.println(resp);
 
         // use the access token to init Coze client
-        CozeAPI coze = new CozeAPI(new TokenAuth(resp.getAccessToken()), cozeAPIBase);
+        CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
         // When the token expires, you can also refresh and re-obtain the token
         resp = oauth.refreshToken(resp.getRefreshToken());
 

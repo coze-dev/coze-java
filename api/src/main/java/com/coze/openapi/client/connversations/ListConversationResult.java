@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListConversationResp {
+public class ListConversationResult {
     @JsonProperty("has_more")
     private boolean hasMore;
 

@@ -1,7 +1,8 @@
 package com.coze.openapi.service.service.bots;
 
-import java.util.Arrays;
+import java.util.Collections;
 
+import com.coze.openapi.client.bots.*;
 import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.api.BotAPI;
@@ -13,13 +14,6 @@ import com.coze.openapi.client.common.pagination.PageResult;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
 import com.coze.openapi.client.common.pagination.PageRequest;
-import com.coze.openapi.client.bots.CreateBotReq;
-import com.coze.openapi.client.bots.CreateBotResp;
-import com.coze.openapi.client.bots.ListBotReq;
-import com.coze.openapi.client.bots.ListBotResp;
-import com.coze.openapi.client.bots.PublishBotReq;
-import com.coze.openapi.client.bots.PublishBotResp;
-import com.coze.openapi.client.bots.UpdateBotReq;
 import com.coze.openapi.service.utils.Utils;
 
 public class BotService {
@@ -38,20 +32,7 @@ public class BotService {
 
         Integer pageNum = req.getPageNum() == null ? 1 : req.getPageNum();
         Integer pageSize = req.getPageSize() == null ? 20 : req.getPageSize();
-        String spaceID = req.getSpaceID();
-
-        // 创建分页获取器
-        PageFetcher<SimpleBot> pageFetcher = request -> {
-            BaseResponse<ListBotResp> resp = Utils.execute(api.list(spaceID, request.getPageNum(), request.getPageSize()));
-            
-            return PageResponse.<SimpleBot>builder()
-                .hasMore(resp.getData().getBots().size() == request.getPageSize())
-                .data(resp.getData().getBots())
-                .pageNum(request.getPageNum())
-                .pageSize(request.getPageSize())
-                .total(resp.getData().getTotal())
-                .build();
-        };
+        PageFetcher<SimpleBot> pageFetcher = getSimpleBotPageFetcher(req);
 
         // 创建分页器
         PageNumBasedPaginator<SimpleBot> paginator = new PageNumBasedPaginator<>(pageFetcher, pageSize);
@@ -72,23 +53,41 @@ public class BotService {
             .build();
     }
 
+    @NotNull
+    private PageFetcher<SimpleBot> getSimpleBotPageFetcher(@NotNull ListBotReq req) {
+        String spaceID = req.getSpaceID();
 
-    public Bot retrieve(@NotNull String botID) {
-        return Utils.execute(api.retrieve(botID)).getData();
+        // 创建分页获取器
+        PageFetcher<SimpleBot> pageFetcher = request -> {
+            BaseResponse<ListBotResp> resp = Utils.execute(api.list(spaceID, request.getPageNum(), request.getPageSize()));
+            return PageResponse.<SimpleBot>builder()
+                .hasMore(resp.getData().getBots().size() == request.getPageSize())
+                .data(resp.getData().getBots())
+                .pageNum(request.getPageNum())
+                .pageSize(request.getPageSize())
+                .total(resp.getData().getTotal())
+                .build();
+        };
+        return pageFetcher;
     }
 
-    public CreateBotResp create(@NotNull CreateBotReq req ) {
+
+    public Bot retrieve(@NotNull RetrieveBotReq req) {
+        return Utils.execute(api.retrieve(req.getBotID())).getData();
+    }
+
+    public CreateBotResult create(@NotNull CreateBotReq req ) {
         return Utils.execute(api.create(req)).getData();
     }
 
-    public void update(@NotNull String botID, @NotNull UpdateBotReq req) {
-        req.setBotID(botID);
+    public void update(@NotNull UpdateBotReq req) {
         Utils.execute(api.update(req));
     }
     
-    public PublishBotResp publish(@NotNull String botID) {
-        PublishBotReq.PublishBotReqBuilder builder = PublishBotReq.builder();
-        builder.botID(botID).connectorIDs(Arrays.asList(defaultChannelID));
-        return Utils.execute(api.publish(builder.build())).getData();
+    public PublishBotResult publish(@NotNull PublishBotReq req) {
+        if (req.getConnectorIDs() == null || req.getConnectorIDs().isEmpty()) {
+            req.setConnectorIDs(Collections.singletonList(defaultChannelID));
+        }
+        return Utils.execute(api.publish(req)).getData();
     }
 }

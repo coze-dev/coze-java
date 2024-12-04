@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import org.slf4j.Logger;
+
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.exception.CozeApiExcetion;
 import com.coze.openapi.client.exception.CozeError;
@@ -22,6 +24,8 @@ import retrofit2.Response;
 
 public abstract class AbstractEventCallback<T> implements Callback<ResponseBody> {
     private static final ObjectMapper mapper = Utils.defaultObjectMapper();
+    private static final Logger logger = CozeLoggerFactory.getLogger();
+
     protected FlowableEmitter<T> emitter;
 
     public AbstractEventCallback(FlowableEmitter<T> emitter) {
@@ -35,6 +39,7 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
         try {
             String logID = Utils.getLogID(response);
             if (!response.isSuccessful()) {
+                logger.warn("HTTP error: " + response.code() + " " + response.message());
                 String errStr = response.errorBody().string();
                 CozeError error = mapper.readValue(errStr, CozeError.class);
                 throw new CozeApiExcetion(Integer.valueOf(response.code()), error.getErrorMessage(), logID);
@@ -46,6 +51,7 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
                 String respStr = response.body().string();
                 BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
                 if (baseResp.getCode() != 0) {
+                    logger.warn("API error: " + baseResp.getCode() + " " + baseResp.getMsg());
                     throw new CozeApiExcetion(baseResp.getCode(), baseResp.getMsg(), logID);
                 }
                 return;

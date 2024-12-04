@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.api.AudioVoiceAPI;
 import com.coze.openapi.client.audio.voices.CloneVoiceReq;
-import com.coze.openapi.client.audio.voices.CloneVoiceResp;
+import com.coze.openapi.client.audio.voices.CloneVoiceResult;
 import com.coze.openapi.client.audio.voices.ListVoiceReq;
-import com.coze.openapi.client.audio.voices.ListVoiceResp;
+import com.coze.openapi.client.audio.voices.ListVoiceResult;
 import com.coze.openapi.client.audio.voices.model.Voice;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
@@ -28,7 +28,7 @@ public class VoiceService {
         this.api = api;
     }
 
-    public CloneVoiceResp clone(CloneVoiceReq req) {
+    public CloneVoiceResult clone(CloneVoiceReq req) {
         RequestBody voiceName = RequestBody.create(req.getVoiceName(), MediaType.parse("text/plain"));
         RequestBody audioFormat = RequestBody.create(req.getAudioFormat().getValue(), MediaType.parse("text/plain"));
 
@@ -66,7 +66,7 @@ public class VoiceService {
 
         // 创建分页获取器
         PageFetcher<Voice> pageFetcher = request -> {
-            ListVoiceResp resp = Utils.execute(api.list(filterSystemVoice, request.getPageNum(), request.getPageSize())).getData();
+            ListVoiceResult resp = Utils.execute(api.list(filterSystemVoice, request.getPageNum(), request.getPageSize())).getData();
             
             return PageResponse.<Voice>builder()
                 .hasMore(resp.getVoiceList().size() == request.getPageSize())

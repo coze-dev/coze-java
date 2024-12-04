@@ -8,8 +8,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
-import com.coze.openapi.client.audio.voices.CloneVoiceResp;
-import com.coze.openapi.client.audio.voices.ListVoiceResp;
+import com.coze.openapi.client.audio.voices.CloneVoiceResult;
+import com.coze.openapi.client.audio.voices.ListVoiceResult;
 import com.coze.openapi.client.common.BaseResponse;
 
 import io.reactivex.Single;
@@ -17,7 +17,7 @@ import io.reactivex.Single;
 public interface AudioVoiceAPI {
     @Multipart
     @POST("/v1/audio/voices/clone")
-    Single<BaseResponse<CloneVoiceResp>> clone(
+    Single<BaseResponse<CloneVoiceResult>> clone(
         @Part MultipartBody.Part file,
         @Part("voice_name") RequestBody voiceName,
         @Part("audio_format") RequestBody audioFormat,
@@ -28,7 +28,7 @@ public interface AudioVoiceAPI {
     );
 
     @GET("/v1/audio/voices")
-    Single<BaseResponse<ListVoiceResp>> list(
+    Single<BaseResponse<ListVoiceResult>> list(
         @Query("filter_system_voice") Boolean filterSystemVoice,
         @Query("page_num") Integer pageNum,
         @Query("page_size") Integer pageSize

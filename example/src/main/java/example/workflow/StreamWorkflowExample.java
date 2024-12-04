@@ -1,0 +1,73 @@
+package example.workflow;
+
+import com.coze.openapi.client.workflows.run.ResumeRunReq;
+import com.coze.openapi.client.workflows.run.RunWorkflowReq;
+import com.coze.openapi.client.workflows.run.model.WorkflowEvent;
+import com.coze.openapi.service.auth.TokenAuth;
+import com.coze.openapi.service.service.CozeAPI;
+import io.reactivex.Flowable;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/*
+This example describes how to use the workflow interface to stream chat.
+*/
+public class StreamWorkflowExample {
+
+    public static void main(String[] args) {
+        // Get an access_token through personal access token or oauth.
+        String token = System.getenv("COZE_API_TOKEN");
+        TokenAuth authCli = new TokenAuth(token);
+
+        // Init the Coze client through the access_token.
+        CozeAPI coze = new CozeAPI.Builder()
+                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .auth(authCli)
+                .readTimeout(10000)
+                .build();
+
+        String workflowID = System.getenv("WORKSPACE_ID");
+
+        // if your workflow need input params, you can send them by map
+        Map<String, Object> data = new HashMap<>();
+        data.put("param name", "param values");
+
+        RunWorkflowReq.RunWorkflowReqBuilder builder = RunWorkflowReq.builder();
+        builder.workflowID(workflowID).parameters(data);
+
+        Flowable<WorkflowEvent> flowable = coze.workflows().runs().stream(builder.build());
+        handleEvent(flowable, coze, workflowID);
+    }
+
+    /*
+     * The stream interface will return an iterator of WorkflowEvent. Developers should iterate
+     * through this iterator to obtain WorkflowEvent and handle them separately according to
+     * the type of WorkflowEvent.
+     */
+    private static void handleEvent(Flowable<WorkflowEvent> events, CozeAPI coze, String workflowID){
+        events.subscribe(event -> {
+            switch (event.getEvent()){
+                case MESSAGE:
+                    System.out.println("Got message" + event.getMessage());
+                    break;
+                case ERROR:
+                    System.out.println("Got error" + event.getError());
+                    break;
+                case INTERRUPT:
+                    handleEvent(coze.workflows().runs().resume(
+                            ResumeRunReq.builder()
+                                    .workflowID(workflowID)
+                                    .eventID(event.getInterrupt().getInterruptData().getEventID())
+                                    .resumeData("your data")
+                                    .interruptType(event.getInterrupt().getInterruptData().getType())
+                                    .build()), coze, workflowID);
+                    break;
+                default:
+                    break;
+            }
+        }, Throwable::printStackTrace);
+    }
+
+}
+

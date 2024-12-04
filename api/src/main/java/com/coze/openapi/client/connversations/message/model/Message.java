@@ -15,20 +15,39 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message {
-
+    /**
+     * The entity that sent this message.
+     */
     @JsonProperty("role")
     private MessageRole role;
 
+    /**
+     * The type of message.
+     */
     @JsonProperty("type")
-    @Builder.Default
-    private MessageType type = MessageType.UNKNOWN;
+    private MessageType type;
 
+    /**
+     * The content of the message. It supports various types of content, including plain text, multimodal (a mix of text, images, and files), message cards, and more.
+     * 消息的内容，支持纯文本、多模态（文本、图片、文件混合输入）、卡片等多种类型的内容。
+     */
     @JsonProperty("content")
     private String content;
 
+    /**
+     * The type of message content.
+     * 消息内容的类型
+     */
     @JsonProperty("content_type")
     private MessageContentType contentType;
 
+    /**
+     * Additional information when creating a message, and this additional information will also be returned when retrieving messages.
+     * Custom key-value pairs should be specified in Map object format, with a length of 16 key-value pairs.
+     * The length of the key should be between 1 and 64 characters, and the length of the value should be between 1 and 512 characters.
+     * 创建消息时的附加消息，获取消息时也会返回此附加消息。
+     * 自定义键值对，应指定为 Map 对象格式。长度为 16 对键值对，其中键（key）的长度范围为 1～64 个字符，值（value）的长度范围为 1～512 个字符。
+     */
     @JsonProperty("meta_data")
     private Map<String, String> metaData;
 
@@ -36,16 +55,19 @@ public class Message {
     private String id;
 
     @JsonProperty("conversation_id")
-    private String conversationID;
+    private String conversationId;
 
+    /**
+     * section_id is used to distinguish the context sections of the session history. The same section is one context.
+     */
     @JsonProperty("section_id")
-    private String sectionID;
+    private String sectionId;
 
     @JsonProperty("bot_id")
-    private String botID;
+    private String botId;
 
     @JsonProperty("chat_id")
-    private String chatID;
+    private String chatId;
 
     @JsonProperty("created_at")
     private Long createdAt;

@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClearConversationResp {
+public class ClearConversationResult {
     /**
      * The ID of the conversation.
      */

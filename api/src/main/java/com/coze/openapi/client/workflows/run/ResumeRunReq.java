@@ -14,15 +14,30 @@ import lombok.Setter;
 @Setter(AccessLevel.PACKAGE)
 @NoArgsConstructor
 public class ResumeRunReq {
+    /*
+     * The ID of the workflow, which should have been published.
+     * */
     @NonNull
     @JsonProperty("workflow_id")
     private String workflowID;
+
+    /*
+     * eventID
+     * */
     @NonNull
     @JsonProperty("event_id")
     private String eventID;
+
+    /*
+     * resumeData
+     * */
     @NonNull
     @JsonProperty("resume_data")
     private String resumeData;
+
+    /*
+     * interruptType
+     * */
     @NonNull
     @JsonProperty("interrupt_type")
     private Integer interruptType;

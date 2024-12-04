@@ -3,73 +3,89 @@ package example.chat;
 import com.coze.openapi.client.chat.CancelChatReq;
 import com.coze.openapi.client.chat.ChatReq;
 import com.coze.openapi.client.chat.RetrieveChatReq;
-import com.coze.openapi.client.chat.message.ListMessageReq;
 import com.coze.openapi.client.chat.model.Chat;
+import com.coze.openapi.client.chat.model.ChatPoll;
 import com.coze.openapi.client.chat.model.ChatStatus;
-import com.coze.openapi.client.connversations.CreateConversationReq;
-import com.coze.openapi.client.connversations.CreateConversationResp;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+/*
+This example describes how to use the chat interface to initiate conversations,
+poll the status of the conversation, and obtain the messages after the conversation is completed.
+* */
 public class ChatExample {
 
-    // 非流式接口的聊天，需要先创建聊天，然后轮询聊天结果
-    public static void main(String[] args) {
+    // For non-streaming chat API, it is necessary to create a chat first and then poll the chat results.
+    public static void main(String[] args) throws Exception {
+        // Get an access_token through personal access token or oauth.
         String token = System.getenv("COZE_API_TOKEN");
-        TokenAuth authCli = new TokenAuth(token);
-        CozeAPI coze = new CozeAPI(authCli);
-        String botID = System.getenv("BOT_ID");
+        String botID = System.getenv("PUBLISHED_BOT_ID");
         String uid = System.getenv("USER_ID");
 
-        CreateConversationResp conversationResp = coze.conversations().create(CreateConversationReq.builder()
-                .messages(Collections.singletonList(Message.buildUserQuestionText("你好"))).build());
-        String conversationID = conversationResp.getID();
+        TokenAuth authCli = new TokenAuth(token);
 
+        // Init the Coze client through the access_token.
+        CozeAPI coze = new CozeAPI.Builder()
+                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .auth(authCli)
+                .readTimeout(10000)
+                .build();
+
+
+        /*
+        * Step one, create chat
+        * Call the coze.chat().create() method to create a chat. The create method is a non-streaming
+        * chat and will return a Chat class. Developers should periodically check the status of the
+        * chat and handle them separately according to different states.
+        * */
         ChatReq req = ChatReq.builder()
-                             .conversationID(conversationID)
                              .botID(botID)
                              .userID(uid)
-                             .messages(Arrays.asList(Message.buildUserQuestionText("你好")))
+                             .messages(Collections.singletonList(Message.buildUserQuestionText("What can you do?")))
                              .build();
 
-        // 创建聊天
-        Chat resp = coze.chat().create(req);
-        System.out.println(resp);
-        String chatID = resp.getID();
+        Chat chat = coze.chat().create(req);
+        // get chat id and conversationID
+        String chatID = chat.getID();
+        String conversationID = chat.getConversationID();
 
-        Integer count = 1;
-        while (true) {
-            count++;
+        /*
+        * Step two, poll the result of chat
+        * Assume the development allows at most one chat to run for 10 seconds. If it exceeds 10 seconds,
+        * the chat will be cancelled.
+        * And when the chat status is not completed, poll the status of the chat once every second.
+        * After the chat is completed, retrieve all messages in the chat.
+        * */
+        long timeout = 10L;
+        long start = System.currentTimeMillis() / 1000;
+        while (ChatStatus.IN_PROGRESS.equals(chat.getStatus())) {
             try {
-                Thread.sleep(1000);
+                // The API has a rate limit with 1 QPS.
+                TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-            resp = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID));
-            System.out.println(resp);
-            if (ChatStatus.COMPLETED.equals(resp.getStatus())) {
                 break;
             }
-            if (count >= 2) {
-                // 如果聊天长时间没有完成，可以取消聊天
-                Chat cancelResp = coze.chat().cancel(CancelChatReq.of(conversationID, chatID));
-                System.out.println(cancelResp);
 
-
-                resp = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID));
-                System.out.println(resp);
+            if ((System.currentTimeMillis() / 1000) - start > timeout) {
+                // The chat can be cancelled before its completed.
+                coze.chat().cancel(CancelChatReq.of(conversationID, chatID));
+                break;
+            }
+            chat = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID));
+            if (ChatStatus.COMPLETED.equals(chat.getStatus())) {
                 break;
             }
         }
 
-        List<Message> msg = coze.chat().message().list(ListMessageReq.of(conversationID, chatID));
-        for (Message message : msg) {
-            System.out.println(message);
-        }
+
+        // The sdk provide an automatic polling method.
+        ChatPoll chat2 = coze.chat().createAndPoll(req);
+        // the developer can also set the timeout.
+        ChatPoll chat3 = coze.chat().createAndPoll(req, timeout);
     }
 } 

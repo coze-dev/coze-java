@@ -18,14 +18,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMessageReq {
+    /*
+    * The ID of the conversation.
+    * */
     @JsonProperty("conversation_id")
     private String conversationID;
+
+    /*
+     * The ID of the message.
+     * */
     @JsonProperty("message_id")
     private String messageID;
+
+    /*
+     *  The content of the message, supporting pure text, multimodal (mixed input of text, images, files),
+     * cards, and various types of content.
+     * */
     @JsonProperty("content")
     private String content;
+
     @JsonProperty("meta_data")
     private Map<String, String> metaData;
+
+    /*
+     * The type of message content.
+     * */
     @JsonProperty("content_type")
     private MessageContentType contentType;
 

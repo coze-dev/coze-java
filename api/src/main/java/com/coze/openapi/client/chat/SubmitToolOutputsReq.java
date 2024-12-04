@@ -17,13 +17,25 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class SubmitToolOutputsReq {
 
+    /*
+     *  The Conversation ID can be viewed in the 'conversation_id' field of the Response when
+     *  initiating a conversation through the Chat API.
+     * */
     @NonNull
     @JsonProperty("conversation_id")
     private String conversationID;
+
+    /*
+     * The Chat ID can be viewed in the 'id' field of the Response when initiating a chat through the
+     *  Chat API. If it is a streaming response, check the 'id' field in the chat event of the Response.
+     * */
     @NonNull
     @JsonProperty("chat_id")
     private String chatID;
 
+    /*
+     * The execution result of the tool. For detailed instructions, refer to the ToolOutput Object
+     * */
     @NonNull
     @JsonProperty("tool_outputs")
     private List<ToolOutput> toolOutputs;

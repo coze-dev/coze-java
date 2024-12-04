@@ -1,46 +1,55 @@
 package example.conversation;
 
+import com.coze.openapi.client.connversations.ClearConversationReq;
+import com.coze.openapi.client.connversations.ClearConversationResult;
 import com.coze.openapi.client.connversations.CreateConversationReq;
-import com.coze.openapi.client.connversations.CreateConversationResp;
-import com.coze.openapi.client.connversations.GetConversationReq;
-import com.coze.openapi.client.connversations.GetConversationResp;
+import com.coze.openapi.client.connversations.RetrieveConversationReq;
+import com.coze.openapi.client.connversations.message.CreateMessageReq;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.client.connversations.message.model.MessageObjectString;
+import com.coze.openapi.client.connversations.model.Conversation;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
+/*
+* This example is about how to create conversation and retrieve.
+* */
 public class CreateConversationExample {
 
     public static void main(String[] args) {
+        // Get an access_token through personal access token or oauth.
         String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
-        CozeAPI coze = new CozeAPI(authCli);
-        Map<String, String> metaData = new HashMap<>();
-        metaData.put("user_id", "1234567890");
-        metaData.put("user_name", "test user");
 
-        System.out.println("=============== create conversation ===============");
-        CreateConversationReq.CreateConversationReqBuilder builder = CreateConversationReq.builder();
-        builder.metaData(metaData);
-        builder.messages(Arrays.asList(
-                Message.buildAssistantAnswer("你好"),
-                Message.buildUserQuestionText("你是谁"),
-                Message.buildUserQuestionObjects(Arrays.asList(
-                        MessageObjectString.buildText("你好"),
-                        MessageObjectString.buildImage(null, System.getenv("PICTURE_URL")),
-                        MessageObjectString.buildFile(null, System.getenv("PICTURE_URL"))
-                ))
-        ));
-        CreateConversationResp resp = coze.conversations().create(builder.build());
-        System.out.println(resp);
+        // Init the Coze client through the access_token.
+        CozeAPI coze = new CozeAPI.Builder()
+                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .auth(authCli)
+                .readTimeout(10000)
+                .build();;
 
-        String conversationID = resp.getID();
-        System.out.println("=============== get conversation ===============");
-        GetConversationResp getResp = coze.conversations().retrieve(GetConversationReq.of(conversationID));
-        System.out.println(getResp);
+        Conversation resp = coze.conversations().create(new CreateConversationReq());
+        System.out.println("create conversations" + resp);
+
+        String conversationID = resp.getId();
+        Conversation getResp = coze.conversations().retrieve(RetrieveConversationReq.of(conversationID));
+        System.out.println("retrieve conversations:" + getResp);
+
+        // you can manually create message for conversation
+        Message msgs = coze.conversations().messages().create(CreateMessageReq
+                .builder()
+                .conversationID(conversationID)
+                // if you want to create object content, you can use followed method to simplify your code
+                .objectContent(
+                        Arrays.asList(MessageObjectString.buildText("hello"),
+                                MessageObjectString.buildImageByURL(System.getenv("PICTURE_URL")),
+                                MessageObjectString.buildFileByURL(System.getenv("FILE_URL"))))
+                .build());
+        System.out.println(msgs);
+
+        ClearConversationResult clearResp = coze.conversations().clear(ClearConversationReq.of(conversationID));
+        System.out.println(clearResp);
     }
 } 

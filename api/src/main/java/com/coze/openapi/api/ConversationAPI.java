@@ -1,12 +1,11 @@
 package com.coze.openapi.api;
 
 import com.coze.openapi.client.common.BaseResponse;
-import com.coze.openapi.client.connversations.ClearConversationResp;
+import com.coze.openapi.client.connversations.ClearConversationResult;
 import com.coze.openapi.client.connversations.CreateConversationReq;
-import com.coze.openapi.client.connversations.CreateConversationResp;
-import com.coze.openapi.client.connversations.GetConversationResp;
-import com.coze.openapi.client.connversations.ListConversationResp;
+import com.coze.openapi.client.connversations.ListConversationResult;
 
+import com.coze.openapi.client.connversations.model.Conversation;
 import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -17,17 +16,17 @@ import retrofit2.http.Query;
 public interface ConversationAPI {
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/create")
-    Single<BaseResponse<CreateConversationResp>> create(@Body CreateConversationReq req);
+    Single<BaseResponse<Conversation>> create(@Body CreateConversationReq req);
     
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversation/retrieve")
-    Single<BaseResponse<GetConversationResp>> retrieve(@Query("conversation_id")String id);
+    Single<BaseResponse<Conversation>> retrieve(@Query("conversation_id")String id);
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversations")
-    Single<BaseResponse<ListConversationResp>> list(@Query("bot_id") String botID, @Query("page_num") Integer pageNum, @Query("page_size") Integer pageSize);
+    Single<BaseResponse<ListConversationResult>> list(@Query("bot_id") String botID, @Query("page_num") Integer pageNum, @Query("page_size") Integer pageSize);
 
     @Headers({"Content-Type: application/json"})
     @POST("/v1/conversations/{conversation_id}/clear")
-    Single<BaseResponse<ClearConversationResp>> clear(@Path("conversation_id") String conversationID);
+    Single<BaseResponse<ClearConversationResult>> clear(@Path("conversation_id") String conversationID);
 }

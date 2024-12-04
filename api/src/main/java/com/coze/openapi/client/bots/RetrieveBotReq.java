@@ -1,17 +1,20 @@
 package com.coze.openapi.client.bots;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreateBotResp {
+@NoArgsConstructor
+public class RetrieveBotReq {
     @JsonProperty("bot_id")
-    String botID;
+    private String botID;
+
+    public static RetrieveBotReq of(String botID) {
+        return RetrieveBotReq.builder().botID(botID).build();
+    }
 }

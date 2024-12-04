@@ -4,7 +4,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum DocumentUpdateType {
+    /**
+     * Do not automatically update
+     * 不自动更新
+     */
     NO_AUTO_UPDATE(0),
+
+    /**
+     * Automatically update
+     * 自动更新
+     */
     AUTO_UPDATE(1);
 
     private final int value;

@@ -13,6 +13,8 @@ import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+
 import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -32,41 +34,28 @@ import java.util.stream.Collectors;
 import static com.coze.openapi.service.config.Consts.*;
 
 public abstract class OAuthClient {
-    private final String AuthorizeHeader ="Authorization";
+    private static final String AuthorizeHeader ="Authorization";
     private static final String logHeader = "x-tt-logid";
+    private static final ObjectMapper mapper = Utils.defaultObjectMapper();
+
     protected final String clientSecret;
     protected final String clientID;
     protected final String baseURL;
     protected final CozeAuthAPI api;
     protected final ExecutorService executorService;
-    private static final ObjectMapper mapper = Utils.defaultObjectMapper();
 
-    protected OAuthClient(String clientID, String clientSecret) {
-        this.clientSecret = clientSecret;
-        this.clientID = clientID;
-        this.baseURL = COZE_COM_BASE_URL;
+    protected OAuthClient(OAuthBuilder<?> builder) {
+        builder.init();
+        this.clientSecret = builder.clientSecret;
+        this.clientID = builder.clientID;
+        this.baseURL = builder.baseURL;
 
-        ObjectMapper mapper = Utils.defaultObjectMapper();
-        OkHttpClient client = defaultClient(Duration.ofMillis(3000));
-        Retrofit retrofit = defaultRetrofit(client, mapper, getBaseURL());
+        Retrofit retrofit = defaultRetrofit(builder.client, mapper, getBaseURL());
 
         this.api = retrofit.create(CozeAuthAPI.class);
-        this.executorService = client.dispatcher().executorService();
+        this.executorService = builder.client.dispatcher().executorService();
     }
 
-
-    protected OAuthClient(String clientID, String clientSecret, String baseURL) {
-        this.clientSecret = clientSecret;
-        this.clientID = clientID;
-        this.baseURL = baseURL;
-
-        ObjectMapper mapper = Utils.defaultObjectMapper();
-        OkHttpClient client = defaultClient(Duration.ofMillis(3000));
-        Retrofit retrofit = defaultRetrofit(client, mapper, getBaseURL());
-
-        this.api = retrofit.create(CozeAuthAPI.class);
-        this.executorService = client.dispatcher().executorService();
-    }
 
     protected String getOAuthURL(@NotNull String redirectURI, String state) {
         return this._getOAuthURL(redirectURI, state, null, null, null);
@@ -126,13 +115,6 @@ public abstract class OAuthClient {
                 .collect(Collectors.joining("&"));
 
         return uri + "?" + queryString;
-    }
-
-    protected OkHttpClient defaultClient(Duration timeout) {
-        return new OkHttpClient.Builder()
-                .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
-                .readTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
-                .build();
     }
 
     protected Retrofit defaultRetrofit(OkHttpClient client, ObjectMapper mapper, String baseURL) {
@@ -216,5 +198,89 @@ public abstract class OAuthClient {
     }
 
     public abstract OAuthToken refreshToken(String refreshToken);
+
+    public static abstract class OAuthBuilder<T extends OAuthBuilder<T>> {
+        protected String clientID;
+        protected String clientSecret;
+        protected String baseURL;
+        protected int readTimeout;
+        protected int connectTimeout;
+        protected OkHttpClient client;
+        protected Logger logger;
+
+        @SuppressWarnings("unchecked")
+        protected T self() {
+            return (T) this;
+        }
+
+        public T clientID(String clientID) {
+            this.clientID = clientID;
+            return self();
+        }
+
+        public T clientSecret(String clientSecret) {
+            this.clientSecret = clientSecret;
+            return self();
+        }
+
+        public T baseURL(String baseURL) {
+            this.baseURL = baseURL;
+            return self();
+        }
+
+        public T readTimeout(int readTimeout) {
+            this.readTimeout = readTimeout;
+            return self();
+        }
+
+        public T connectTimeout(int connectTimeout) {
+            this.connectTimeout = connectTimeout;
+            return self();
+        }
+
+        public T client(OkHttpClient client) {
+            this.client = client;
+            return self();
+        }
+
+        public T logger(Logger logger) {
+            this.logger = logger;
+            return self();
+        }
+
+        public abstract OAuthClient build() throws Exception;
+        
+        protected T init() {
+            if (this.logger != null){
+                AuthLogFactory.setLogger(this.logger);
+            }
+            if (this.baseURL == null || this.baseURL.isEmpty()){
+                this.baseURL = COZE_COM_BASE_URL;
+            }
+            
+            if (this.readTimeout == 0){
+                this.readTimeout = 5000;    
+            }
+
+            if (this.connectTimeout == 0){
+                this.connectTimeout = 5000;
+            }
+
+            if (this.client == null){
+                this.client = defaultClient(Duration.ofMillis(this.readTimeout), Duration.ofMillis(this.connectTimeout));
+            }
+            return this.self();
+        }
+
+        protected OkHttpClient defaultClient(Duration readTimeout, Duration connectTimeout) {
+            return new OkHttpClient.Builder()
+                    .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
+                    .readTimeout(readTimeout.toMillis(), TimeUnit.MILLISECONDS)
+                    .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+                    .build();
+        }
+    }
+
+    
 
 }

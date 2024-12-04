@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListVoiceResp {
+public class ListVoiceResult {
     @JsonProperty("voice_list")
     private List<Voice> voiceList;
 }

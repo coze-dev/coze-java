@@ -1,6 +1,7 @@
 package com.coze.openapi.service.service;
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.utils.Utils;
 
 import io.jsonwebtoken.io.IOException;
@@ -10,9 +11,11 @@ import retrofit2.CallAdapter;
 
 import java.lang.reflect.Type;
 
+import org.slf4j.Logger;
+
 public class APIResponseCallAdapter<R> implements CallAdapter<R, Single<?>> {
-    private static final String logHeader = "x-tt-logid";
     private final Type responseType;
+    private static final Logger logger = CozeLoggerFactory.getLogger();
 
     public APIResponseCallAdapter(Type responseType) {
         this.responseType = responseType;
@@ -26,9 +29,9 @@ public class APIResponseCallAdapter<R> implements CallAdapter<R, Single<?>> {
     @Override
     public Single<?> adapt(Call<R> call) {
         return Single.fromCallable(() -> {
-            // todo 添加日志
             retrofit2.Response<R> response = call.execute();
             if (!response.isSuccessful()) {
+                logger.warn("HTTP error: " + response.code() + " " + response.message());
                 try{
                     BaseResponse<?> baseResponse = Utils.fromJson(response.errorBody().string(), BaseResponse.class);
                     throw new CozeApiExcetion(baseResponse.getCode(), baseResponse.getMsg(), Utils.getLogID(response));
@@ -39,6 +42,7 @@ public class APIResponseCallAdapter<R> implements CallAdapter<R, Single<?>> {
             try{
                 BaseResponse<?> baseResponse = (BaseResponse<?>) response.body();
                 if (baseResponse.getCode() != 0) {
+                    logger.warn("API error: " + baseResponse.getCode() + " " + baseResponse.getMsg());
                     throw new CozeApiExcetion(baseResponse.getCode(), baseResponse.getMsg(), Utils.getLogID(response));
                 }
                 return response.body();

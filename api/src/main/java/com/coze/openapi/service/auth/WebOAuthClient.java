@@ -2,17 +2,14 @@ package com.coze.openapi.service.auth;
 
 
 import com.coze.openapi.client.auth.OAuthToken;
+
 import com.coze.openapi.client.auth.GrantType;
 import org.jetbrains.annotations.NotNull;
 
 public class WebOAuthClient extends OAuthClient {
 
-    public WebOAuthClient(String clientID, String clientSecret) {
-        super(clientID, clientSecret);
-    }
-
-    public WebOAuthClient(String clientID, String clientSecret, String baseURL) {
-        super(clientID, clientSecret, baseURL);
+    protected WebOAuthClient(OAuthBuilder builder) {
+        super(builder);
     }
 
 
@@ -34,5 +31,17 @@ public class WebOAuthClient extends OAuthClient {
     @Override
     public OAuthToken refreshToken(String refreshToken) {
         return super.refreshAccessToken(refreshToken, this.clientSecret);
+    }
+
+    public static class WebOAuthBuilder extends OAuthBuilder<WebOAuthBuilder> {
+        @Override
+        protected WebOAuthBuilder self() {
+            return this;
+        }
+
+        @Override
+        public WebOAuthClient build() {
+            return new WebOAuthClient(this);
+        }
     }
 }

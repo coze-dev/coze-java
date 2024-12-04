@@ -3,10 +3,15 @@ package com.coze.openapi.client.common.pagination;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.slf4j.Logger;
+
+import com.coze.openapi.service.service.common.CozeLoggerFactory;
+
 
 public class PageNumBasedPaginator<T> implements Iterator<T> {
     private final PageFetcher<T> pageFetcher;
     private final int pageSize;
+    private static final Logger logger = CozeLoggerFactory.getLogger();
     private Iterator<T> currentIterator;
     private PageResponse<T> currentPage;
     private int currentPageNum = 1;
@@ -24,6 +29,7 @@ public class PageNumBasedPaginator<T> implements Iterator<T> {
                     .pageSize(pageSize)
                     .build();
             currentPage = pageFetcher.fetch(request);
+            logger.info("Fetched page: " + currentPageNum + " success, got" + currentPage.getData().size() + " items");
             currentIterator = currentPage.getData().iterator();
             currentPageNum++;
         } catch (Exception e) {
@@ -37,6 +43,7 @@ public class PageNumBasedPaginator<T> implements Iterator<T> {
             return true;
         }
         if (currentPage.isHasMore()) {
+            logger.info("Fetching next page: " + currentPageNum);
             fetchNextPage();
             return currentIterator.hasNext();
         }

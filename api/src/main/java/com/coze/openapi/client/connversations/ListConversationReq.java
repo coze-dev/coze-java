@@ -23,12 +23,18 @@ public class ListConversationReq {
     /**
      * The page number.
      */
+    @Builder.Default
     @JsonProperty("page_num")
-    private Integer pageNum;
+    private Integer pageNum = 1;
 
     /**
      * The page size.
      */
+    @Builder.Default
     @JsonProperty("page_size")
-    private Integer pageSize;
+    private Integer pageSize = 20;
+
+    public static ListConversationReq of(String botID){
+        return ListConversationReq.builder().botID(botID).build();
+    }
 }

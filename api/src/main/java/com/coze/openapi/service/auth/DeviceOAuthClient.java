@@ -2,20 +2,20 @@ package com.coze.openapi.service.auth;
 
 import com.coze.openapi.client.auth.*;
 import com.coze.openapi.client.exception.CozeAuthException;
+
+
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
 public class DeviceOAuthClient extends OAuthClient{
 
-    public DeviceOAuthClient(String clientID) {
-        super(clientID, null);
+    protected DeviceOAuthClient(DeviceOAuthBuilder builder) {
+        super(builder);
     }
 
-    public DeviceOAuthClient(String clientID, String baseURL) {
-        super(clientID, null, baseURL);
-    }
-
+    private static final Logger logger = AuthLogFactory.getLogger();
     public DeviceAuthCode getDeviceCode(){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
         DeviceAuthCode resp = execute(this.api.device(req));
@@ -49,12 +49,14 @@ public class DeviceOAuthClient extends OAuthClient{
                 int sleepTime = 5;
                 switch (e.getCode()){
                     case AuthorizationPending:
+                        logger.info("Authorization pending, sleep " + sleepTime + " seconds");
                         break;
                     case SlowDown:
                         sleepTime = interval;
                         if (interval < 30){
                             interval+=5;
                         }
+                        logger.info("Slow down, sleep " + sleepTime + " seconds");
                         break;
                     default:
                         throw e;
@@ -62,6 +64,7 @@ public class DeviceOAuthClient extends OAuthClient{
                 try {
                     TimeUnit.SECONDS.sleep(sleepTime);
                 } catch (InterruptedException ie) {
+                    logger.warn("Interrupted while sleeping", ie);
                     Thread.currentThread().interrupt(); // 恢复中断状态
                     throw ie;
                 }
@@ -74,5 +77,17 @@ public class DeviceOAuthClient extends OAuthClient{
     @Override
     public OAuthToken refreshToken(String refreshToken) {
         return super.refreshAccessToken(refreshToken, this.clientSecret);
+    }
+
+    public static class DeviceOAuthBuilder extends OAuthBuilder<DeviceOAuthBuilder> {
+        @Override
+        protected DeviceOAuthBuilder self() {
+            return this;
+        }
+
+        @Override
+        public DeviceOAuthClient build() {
+            return new DeviceOAuthClient(this);
+        }
     }
 }

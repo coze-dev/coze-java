@@ -1,4 +1,9 @@
 package example.auth;
+
+import com.coze.openapi.service.auth.TokenAuth;
+import com.coze.openapi.service.config.Consts;
+import com.coze.openapi.service.service.CozeAPI;
+
 /*
 How to use personal access token to init Coze client.
 
@@ -9,10 +14,6 @@ Click to add a new token. After setting the appropriate name, expiration time, a
 permissions, click OK to generate your personal access token. Please store it in a
 secure environment to prevent this personal access token from being disclosed.
 */
-import com.coze.openapi.service.auth.TokenAuth;
-import com.coze.openapi.service.config.Consts;
-import com.coze.openapi.service.service.CozeAPI;
-
 public class TokenAuthExample {
     public static void main(String[] args) {
         String cozeAPIToken = System.getenv("COZE_API_TOKEN");
@@ -35,7 +36,7 @@ public class TokenAuthExample {
         * Therefore, you can utilize the following code to initialize a coze client.
         *
         * */
-        CozeAPI coze = new CozeAPI(new TokenAuth(cozeAPIToken), cozeAPIBase);
+        CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(cozeAPIToken)).baseURL(cozeAPIBase).build();
 
     }
 

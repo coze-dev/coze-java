@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PublishBotResp {
+public class PublishBotResult {
     @JsonProperty("bot_id") 
     private String botID;
     @JsonProperty("version")

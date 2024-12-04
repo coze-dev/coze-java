@@ -13,9 +13,17 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RetrieveRunHistoryReq {
+
+    /*
+    * The ID of the workflow.
+    * */
     @NonNull
     @JsonProperty("execute_id")
     private String executeID;
+
+    /*
+     * The ID of the workflow async execute.
+     * */
     @NonNull
     @JsonProperty("workflow_id")
     private String workflowID;

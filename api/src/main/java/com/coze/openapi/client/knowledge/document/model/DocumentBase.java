@@ -1,26 +1,32 @@
 package com.coze.openapi.client.knowledge.document.model;
 
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DocumentBase {
-    @NotNull
+    /**
+     * 文件名称。
+     */
+    @NonNull
     @JsonProperty("name")
     private String name;
 
-    @NotNull
+    /**
+     * 文件的元数据信息。详细信息可参考 DocumentSourceInfo object。
+     */
+    @NonNull
     @JsonProperty("source_info")
     private DocumentSourceInfo sourceInfo;
 
+    /**
+     * 在线网页的更新策略。默认不自动更新。
+     */
     @JsonProperty("update_rule")
     private DocumentUpdateRule updateRule;
 

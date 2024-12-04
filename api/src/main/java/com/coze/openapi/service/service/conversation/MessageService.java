@@ -24,13 +24,25 @@ public class MessageService {
         this.api = api;
     }
 
+    /*
+        Create a message and add it to the specified conversation.
+
+        docs en: https://www.coze.com/docs/developer_guides/create_message
+        docs cn: https://www.coze.cn/docs/developer_guides/create_message
+    * */
     public Message create(String conversationID, CreateMessageReq req) {
         if (conversationID == null) {
             throw new IllegalArgumentException("conversationID is required");
         }
         return Utils.execute(api.create(conversationID, req)).getData();
     }
-    
+
+    /*
+    Create a message and add it to the specified conversation.
+
+    docs en: https://www.coze.com/docs/developer_guides/create_message
+    docs cn: https://www.coze.cn/docs/developer_guides/create_message
+    * */
     public Message create(CreateMessageReq req) {
         if (req == null || req.getConversationID() == null) {
             throw new IllegalArgumentException("conversationID is required");
@@ -38,6 +50,12 @@ public class MessageService {
         return create(req.getConversationID(), req);
     }
 
+    /*
+    *   Get the message list of a specified conversation.
+
+        docs en: https://www.coze.com/docs/developer_guides/list_message
+        docs zh: https://www.coze.cn/docs/developer_guides/list_message
+    * */
     public PageResult<Message> list(@NotNull ListMessageReq req) {
         if (req == null || req.getConversationID() == null) {
             throw new IllegalArgumentException("conversationID is required");
@@ -78,6 +96,12 @@ public class MessageService {
     }
 
 
+    /*
+    *  Get the detailed information of specified message.
+
+        docs en: https://www.coze.com/docs/developer_guides/retrieve_message
+        docs zh: https://www.coze.cn/docs/developer_guides/retrieve_message
+    * */
     public Message retrieve(RetrieveMessageReq req) {
         if (req == null || req.getConversationID() == null || req.getMessageID() == null) {
             throw new IllegalArgumentException("conversationID and messageID are required");
@@ -85,6 +109,12 @@ public class MessageService {
         return Utils.execute(api.retrieve(req.getConversationID(), req.getMessageID())).getData();
     }
 
+    /*
+    *  Modify a message, supporting the modification of message content, additional content, and message type.
+
+        docs en: https://www.coze.com/docs/developer_guides/modify_message
+        docs cn: https://www.coze.cn/docs/developer_guides/modify_message
+    * */
     public Message update(UpdateMessageReq req) {
         if (req == null || req.getConversationID() == null || req.getMessageID() == null) {
             throw new IllegalArgumentException("conversationID and messageID are required");

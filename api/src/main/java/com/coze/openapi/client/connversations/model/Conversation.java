@@ -23,6 +23,10 @@ public class Conversation {
     @JsonProperty("meta_data")
     private Map<String, String> metaData;
 
+    /*
+     * section_id is used to distinguish the context sections of the session history.
+     * The same section is one context.
+     * */
     @JsonProperty("last_section_id")
     private String lastSectionID;
 }
