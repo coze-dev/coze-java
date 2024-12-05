@@ -1,23 +1,5 @@
 dependencies {
     implementation project(':api')
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.2'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
-    implementation 'com.squareup.okio:okio:3.0.0'
-    implementation 'com.auth0:java-jwt:3.18.2'
-    implementation 'com.github.scribejava:scribejava-core:8.3.1'
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
-
-    implementation 'org.slf4j:slf4j-api:2.0.12'
 }
 
 sourceSets {
