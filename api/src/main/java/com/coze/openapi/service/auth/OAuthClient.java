@@ -37,7 +37,6 @@ import static com.coze.openapi.service.config.Consts.*;
 
 public abstract class OAuthClient {
     private static final String AuthorizeHeader ="Authorization";
-    private static final String logHeader = "x-tt-logid";
     private static final ObjectMapper mapper = Utils.defaultObjectMapper();
 
     protected final String clientSecret;
@@ -181,6 +180,19 @@ public abstract class OAuthClient {
     protected static <T> T execute(Single<Response<T>> apiCall) {
         try {
             Response<T> response = apiCall.blockingGet();
+            if (!response.isSuccessful()) {
+                try (ResponseBody errorBody = response.errorBody()) {
+                    if (errorBody == null) {
+                        throw new HttpException(response);
+                    }
+                    String logID = Utils.getLogID(response);
+                    String errStr = errorBody.string();
+                    CozeError error = mapper.readValue(errStr, CozeError.class);
+                    throw new CozeAuthException(error, new HttpException(response), response.code(), logID);
+                } catch (IOException ex) {
+                    throw new HttpException(response);
+                }
+            }
             T body = response.body();
             if (body instanceof BaseResp) {
                 ((BaseResp) body).setLogID(Utils.getLogID(response));

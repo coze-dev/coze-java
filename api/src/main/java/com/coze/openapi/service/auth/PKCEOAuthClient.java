@@ -12,6 +12,7 @@ import com.coze.openapi.client.auth.GetPKCEAuthURLResp;
 import com.coze.openapi.service.utils.Utils;
 import lombok.Getter;
 
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +29,7 @@ public class PKCEOAuthClient extends OAuthClient{
         }
     }
 
-    private static final int codeVerifierLen = 32;
+    private static final int codeVerifierLen = 16;
 
     protected PKCEOAuthClient(PKCEOAuthBuilder builder) {
         super(builder);
@@ -51,7 +52,7 @@ public class PKCEOAuthClient extends OAuthClient{
 
     public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod, @NotNull String workspaceID) {
         String codeVerifier = Utils.genRandomSign(codeVerifierLen);
-        String url = super.getOAuthURL(redirectURI, state, getCode(codeVerifier,codeChallengeMethod), codeChallengeMethod.getValue());
+        String url = super.getOAuthURL(redirectURI, state, getCode(codeVerifier,codeChallengeMethod), codeChallengeMethod.getValue(), workspaceID);
         return new GetPKCEAuthURLResp(codeVerifier, url);
     }
     
@@ -66,11 +67,13 @@ public class PKCEOAuthClient extends OAuthClient{
     }
 
     public OAuthToken getAccessToken(@NotNull String code, @NotNull String redirectURI, @Nullable String codeVerifier) {
-        GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
-        builder.clientID(this.clientID).
-                grantType(GrantType.AuthorizationCode.getValue()).
-                code(code).redirectUri(redirectURI).codeVerifier(codeVerifier);
-        return super.getAccessToken(null, builder.build());
+        GetAccessTokenReq req = GetAccessTokenReq.builder()
+                .clientID(this.clientID)
+                .grantType(GrantType.AuthorizationCode.getValue())
+                .code(code)
+                .redirectUri(redirectURI)
+                .codeVerifier(codeVerifier).build();
+        return super.getAccessToken(null, req);
     }
 
 

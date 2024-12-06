@@ -20,6 +20,9 @@ public class Utils {
     public static <T> T execute(Single<Response<T>> apiCall) {
         try {
             Response<T> response = apiCall.blockingGet();
+            if (!response.isSuccessful()){
+                throw new HttpException(response);
+            }
             T body = response.body();
             if (body instanceof BaseResponse) {
                 ((BaseResponse<?>) body).setLogID(getLogID(response));

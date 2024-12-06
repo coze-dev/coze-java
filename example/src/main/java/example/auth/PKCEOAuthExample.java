@@ -67,14 +67,15 @@ public class PKCEOAuthExample {
         /*
         After obtaining the code after redirection, the interface to exchange the code for a
         token can be invoked to generate the coze access_token of the authorized user.
+        The developer should use code verifier returned by genOAuthURL() method
         * */
-        OAuthToken resp = oauth.getAccessToken(code, redirectURI, "");
+        OAuthToken resp = oauth.getAccessToken(code, redirectURI, oauthURL.getCodeVerifier());
         System.out.println(resp);
 
         // use the access token to init Coze client
         CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
         // When the token expires, you can also refresh and re-obtain the token
         resp = oauth.refreshToken(resp.getRefreshToken());
-
+        System.out.println();
     }
 } 

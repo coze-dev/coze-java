@@ -72,6 +72,11 @@ public class WebOAuthExample {
         OAuthToken resp = oauth.getAccessToken(code, redirectURI);
         System.out.println(resp);
 
+        /*
+        * you can get request log by getLogID method
+        * */
+        System.out.println(resp.getLogID());
+
         // use the access token to init Coze client
         CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
         // When the token expires, you can also refresh and re-obtain the token
