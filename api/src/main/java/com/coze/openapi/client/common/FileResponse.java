@@ -1,5 +1,6 @@
 package com.coze.openapi.client.common;
 
+import lombok.ToString;
 import okhttp3.ResponseBody;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class FileResponse extends BaseResp {
     private final ResponseBody response;
 

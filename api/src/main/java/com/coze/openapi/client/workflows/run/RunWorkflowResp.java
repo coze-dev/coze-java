@@ -2,15 +2,15 @@ package com.coze.openapi.client.workflows.run;
 
 import com.coze.openapi.client.common.BaseResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
 public class RunWorkflowResp extends BaseResponse<String> {
     /*
     Execution ID of asynchronous execution. Only returned when the workflow is executed

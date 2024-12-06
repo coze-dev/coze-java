@@ -9,6 +9,7 @@ import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 /*
@@ -16,7 +17,7 @@ This example is for describing how to retrieve a bot, fetch published bot list f
 The document for those interface:
 * */
 public class GetBotExample {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Get an access_token through personal access token or oauth.
         String token = System.getenv("COZE_API_TOKEN");
         String botID = System.getenv("BOT_ID");
@@ -24,7 +25,7 @@ public class GetBotExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();;
@@ -35,6 +36,7 @@ public class GetBotExample {
         RetrieveBotResp botInfo = coze.bots().retrieve(RetrieveBotReq.of(botID));
         Bot bot = botInfo.getBot();
         System.out.println(bot);
+        System.out.println(botInfo.getLogID());
 
         /*
          * get published bot list

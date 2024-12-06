@@ -2,6 +2,7 @@ package com.coze.openapi.api;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -19,7 +20,7 @@ import retrofit2.Response;
 public interface AudioVoiceAPI {
     @Multipart
     @POST("/v1/audio/voices/clone")
-    Single<Response<BaseResponse<CloneVoiceResp>>> clone(
+    Call<BaseResponse<CloneVoiceResp>> clone(
         @Part MultipartBody.Part file,
         @Part("voice_name") RequestBody voiceName,
         @Part("audio_format") RequestBody audioFormat,
@@ -31,7 +32,7 @@ public interface AudioVoiceAPI {
     );
 
     @GET("/v1/audio/voices")
-    Single<Response<BaseResponse<ListVoiceResp>>> list(
+    Call<BaseResponse<ListVoiceResp>> list(
         @Query("filter_system_voice") Boolean filterSystemVoice,
         @Query("page_num") Integer pageNum,
         @Query("page_size") Integer pageSize,

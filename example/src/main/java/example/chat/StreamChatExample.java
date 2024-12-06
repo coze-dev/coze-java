@@ -28,7 +28,7 @@ public class StreamChatExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();;
@@ -53,7 +53,8 @@ public class StreamChatExample {
             if (ChatEventType.CONVERSATION_CHAT_COMPLETED.equals(event.getEvent())) {
                 System.out.println("Token usage:" + event.getChat().getUsage().getTokenCount());
             }
-
         });
+        System.out.println("done");
+        coze.shutdownExecutor();
     }
 } 

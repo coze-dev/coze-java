@@ -23,7 +23,7 @@ public class CrudMessageExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();

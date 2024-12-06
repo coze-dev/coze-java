@@ -10,6 +10,7 @@ import com.coze.openapi.client.bots.model.Bot;
 import com.coze.openapi.client.common.BaseResponse;
 
 import io.reactivex.Single;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -20,17 +21,17 @@ import retrofit2.http.Tag;
 import com.coze.openapi.client.common.BaseReq;
 public interface BotAPI {
     @GET("/v1/space/published_bots_list")
-    Single<Response<BaseResponse<ListBotResp>>> list(@Query("space_id") String spaceID, @Query("page_index") Integer page, @Query("page_size") Integer pageSize, @Tag BaseReq baseReq);
+    Call<BaseResponse<ListBotResp>> list(@Query("space_id") String spaceID, @Query("page_index") Integer page, @Query("page_size") Integer pageSize, @Tag BaseReq baseReq);
 
     @GET("/v1/bot/get_online_info")
-    Single<Response<BaseResponse<Bot>>> retrieve(@Query("bot_id") String botID, @Tag BaseReq baseReq);
+    Call<BaseResponse<Bot>> retrieve(@Query("bot_id") String botID, @Tag BaseReq baseReq);
 
     @POST("/v1/bot/create")
-    Single<Response<BaseResponse<CreateBotResp>>> create(@Body CreateBotReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<CreateBotResp>> create(@Body CreateBotReq req, @Tag BaseReq baseReq);
 
     @POST("/v1/bot/update") 
-    Single<Response<BaseResponse<Void>>> update(@Body UpdateBotReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<Void>> update(@Body UpdateBotReq req, @Tag BaseReq baseReq);
 
     @POST("/v1/bot/publish")
-    Single<Response<BaseResponse<PublishBotResp>>> publish(@Body PublishBotReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<PublishBotResp>> publish(@Body PublishBotReq req, @Tag BaseReq baseReq);
 } 

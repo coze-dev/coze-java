@@ -30,13 +30,13 @@ public class ChatWithImageExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();;
 
         // Call the upload file interface to get the image id.
-        String imagePath = "/path/image.jpg";
+        String imagePath = System.getenv("IMAGE_FILE_PATH");
         FileInfo imageInfo = coze.files().upload(UploadFileReq.of(imagePath)).getFileInfo();
 
         /*

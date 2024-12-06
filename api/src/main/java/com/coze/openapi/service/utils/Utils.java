@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.reactivex.Single;
+import retrofit2.Call;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
@@ -17,25 +17,34 @@ import java.security.SecureRandom;
 public class Utils {
     public static final String LOG_HEADER = "x-tt-logid";
     private static final ObjectMapper mapper = defaultObjectMapper();
-    public static <T> T execute(Single<Response<T>> apiCall) {
-        try {
-            Response<T> response = apiCall.blockingGet();
-            if (!response.isSuccessful()){
+
+    public static <T> T execute(Call<T> call) {
+        try{
+            Response<T> response = call.execute();
+            if (!response.isSuccessful()) {
                 throw new HttpException(response);
             }
             T body = response.body();
+
+            // 处理不同类型的响应
             if (body instanceof BaseResponse) {
-                ((BaseResponse<?>) body).setLogID(getLogID(response));
-                if (((BaseResponse<?>)body).getData() instanceof BaseResp) {
-                    ((BaseResp) ((BaseResponse<?>)body).getData()).setLogID(getLogID(response));
+                BaseResponse<?> baseResponse = (BaseResponse<?>) body;
+                baseResponse.setLogID(getLogID(response));
+
+                if (baseResponse.getData() instanceof BaseResp) {
+                    BaseResp baseResp = (BaseResp) baseResponse.getData();
+                    baseResp.setLogID(getLogID(response));
                 }
             } else if (body instanceof BaseResp) {
-                ((BaseResp) body).setLogID(getLogID(response));
+                BaseResp baseResp = (BaseResp) body;
+                baseResp.setLogID(getLogID(response));
             }
+
             return body;
-        } catch (HttpException e) {
-            throw e;
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
+
     }
 
     public static ObjectMapper defaultObjectMapper() {

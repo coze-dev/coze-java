@@ -4,6 +4,7 @@ import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.workspace.ListWorkspaceResp;
 
 import io.reactivex.Single;
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -15,5 +16,5 @@ public interface WorkspaceAPI {
 
     @Headers({"Content-Type: application/json"})
     @GET("/v1/workspaces")
-    Single<Response<BaseResponse<ListWorkspaceResp>>> list(@Query("page_num") Integer page, @Query("page_size") Integer pageSize, @Tag BaseReq baseReq );
+    Call<BaseResponse<ListWorkspaceResp>> list(@Query("page_num") Integer page, @Query("page_size") Integer pageSize, @Tag BaseReq baseReq );
 }

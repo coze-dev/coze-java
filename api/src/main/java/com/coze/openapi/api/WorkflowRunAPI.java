@@ -17,7 +17,7 @@ import retrofit2.http.Tag;
 public interface WorkflowRunAPI {
 
     @POST("/v1/workflow/run")
-    Single<Response<RunWorkflowResp>> run(@Body RunWorkflowReq req, @Tag BaseReq baseReq);
+    Call<RunWorkflowResp> run(@Body RunWorkflowReq req, @Tag BaseReq baseReq);
 
     @POST("/v1/workflow/stream_run")
     @Streaming

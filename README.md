@@ -63,7 +63,7 @@ public voic example() {
      * The default access is api.coze.com, but if you neeed to access api.coze.cn
      * please use baseUrl to configure the api endpoint to access
      */
-    String baseUrl = System.getenv("COZE_API_BASE_URL");
+    String baseUrl = System.getenv("COZE_API_BASE");
     CozeAPI coze = new CozeAPI.Builder()
             .baseURL(baseUrl)
             .auth(authCli)
@@ -88,7 +88,7 @@ public voic example() throws Exception {
     String botID = System.getenv("PUBLISHED_BOT_ID");
     String uid = System.getenv("USER_ID");
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(new TokenAuth(token))
             .readTimeout(10000)
             .build();
@@ -123,7 +123,7 @@ public voic example() {
     String userID = System.getenv("USER_ID");
     TokenAuth authCli = new TokenAuth(token);
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(authCli)
             .build();
     ChatReq req = ChatReq.builder()
@@ -155,7 +155,7 @@ public voic example() {
     TokenAuth authCli = new TokenAuth(token);
     // Init the Coze client through the access_token.
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(authCli)
             .build();
     /*
@@ -222,7 +222,7 @@ public voic example() {
     TokenAuth authCli = new TokenAuth(token);
     // Init the Coze client through the access_token.
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(authCli)
             .readTimeout(10000)
             .build();
@@ -293,7 +293,7 @@ public voic example() {
     String token = System.getenv("COZE_API_TOKEN");
     TokenAuth authCli = new TokenAuth(token);
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(authCli)
             .readTimeout(10000)
             .build();
@@ -322,7 +322,7 @@ public static void main(String[] args) {
     TokenAuth authCli = new TokenAuth(token);
     // Init the Coze client through the access_token.
     CozeAPI coze = new CozeAPI.Builder()
-        .baseURL(System.getenv("COZE_API_BASE_URL"))
+        .baseURL(System.getenv("COZE_API_BASE"))
         .auth(authCli)
         .readTimeout(10000)
         .build();
@@ -355,7 +355,7 @@ public static void main(String[] args) {
     TokenAuth authCli = new TokenAuth(token);
     // Init the Coze client through the access_token.
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(authCli)
             .readTimeout(10000)
             .build();
@@ -379,7 +379,7 @@ public static void main(String[] args) {
     TokenAuth authCli = new TokenAuth(token);
     // Init the Coze client through the access_token.
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(authCli)
             .readTimeout(10000)
             .build();
@@ -762,7 +762,7 @@ TokenAuth authCli = new TokenAuth(token);
 
 // Init the Coze client through the access_token.
 CozeAPI coze = new CozeAPI.Builder()
-        .baseURL(System.getenv("COZE_API_BASE_URL"))
+        .baseURL(System.getenv("COZE_API_BASE"))
         .auth(authCli)
         .readTimeout(10000)
         .build();;
@@ -800,7 +800,7 @@ public streamRun() {
 
     // Init the Coze client through the access_token.
     CozeAPI coze = new CozeAPI.Builder()
-            .baseURL(System.getenv("COZE_API_BASE_URL"))
+            .baseURL(System.getenv("COZE_API_BASE"))
             .auth(authCli)
             .readTimeout(10000)
             .build();
@@ -858,7 +858,7 @@ TokenAuth authCli = new TokenAuth(token);
 
 // Init the Coze client through the access_token.
 CozeAPI coze = new CozeAPI.Builder()
-        .baseURL(System.getenv("COZE_API_BASE_URL"))
+        .baseURL(System.getenv("COZE_API_BASE"))
         .auth(authCli)
         .readTimeout(10000)
         .build();;
@@ -892,7 +892,7 @@ TokenAuth authCli = new TokenAuth(token);
 
 // Init the Coze client through the access_token.
 CozeAPI coze = new CozeAPI.Builder()
-        .baseURL(System.getenv("COZE_API_BASE_URL"))
+        .baseURL(System.getenv("COZE_API_BASE"))
         .auth(authCli)
         .readTimeout(10000)
         .build();;

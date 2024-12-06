@@ -21,20 +21,19 @@ public class RunWorkflowExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();;
 
-        String workflowID = System.getenv("WORKSPACE_ID");
+        String workflowID = System.getenv("WORKFLOW_ID");
 
         // if your workflow need input params, you can send them by map
         Map<String, Object> data = new HashMap<>();
         data.put("param name", "param values");
-        RunWorkflowReq.RunWorkflowReqBuilder builder = RunWorkflowReq.builder();
-        builder.workflowID(workflowID).parameters(data);
+        RunWorkflowReq req = RunWorkflowReq.builder().workflowID(workflowID).parameters(data).build();
 
-        RunWorkflowResp resp = coze.workflows().runs().create(builder.build());
+        RunWorkflowResp resp = coze.workflows().runs().create(req);
         System.out.println(resp);
 
     }

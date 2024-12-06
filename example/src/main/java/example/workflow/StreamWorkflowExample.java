@@ -23,16 +23,16 @@ public class StreamWorkflowExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();
 
-        String workflowID = System.getenv("WORKSPACE_ID");
+        String workflowID = System.getenv("WORKFLOW_ID");
 
         // if your workflow need input params, you can send them by map
         Map<String, Object> data = new HashMap<>();
-        data.put("param name", "param values");
+        data.put("A", "param values");
 
         RunWorkflowReq req = RunWorkflowReq.builder().workflowID(workflowID).parameters(data).build();
 
@@ -51,7 +51,7 @@ public class StreamWorkflowExample {
                 System.out.println("Got message" + event.getMessage());
             } else if (event.getEvent().equals(WorkflowEventType.ERROR)) {
                 System.out.println("Got error" + event.getError());
-            } else if (event.getEvent().equals(WorkflowEventType.INTERRUPT)) {
+            } else if (event.getEvent().equals(WorkflowEventType.DONE)) {
                 System.out.println("Got message" + event.getMessage());
             } else if (event.getEvent().equals(WorkflowEventType.INTERRUPT)) {
                 handleEvent(coze.workflows().runs().resume(
@@ -63,6 +63,7 @@ public class StreamWorkflowExample {
                                 .build()), coze, workflowID);
             }
         }, Throwable::printStackTrace);
+        coze.shutdownExecutor();
     }
 
 }

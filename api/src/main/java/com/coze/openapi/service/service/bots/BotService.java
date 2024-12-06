@@ -1,5 +1,6 @@
 package com.coze.openapi.service.service.bots;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import com.coze.openapi.client.bots.*;

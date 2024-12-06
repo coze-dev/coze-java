@@ -3,6 +3,8 @@ package com.coze.openapi.service.service.audio;
 import com.coze.openapi.api.AudioSpeechAPI;
 import com.coze.openapi.client.audio.speech.CreateSpeechReq;
 import com.coze.openapi.client.audio.speech.CreateSpeechResp;
+import com.coze.openapi.client.common.BaseResp;
+import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.service.utils.Utils;
 
 import io.reactivex.Single;
@@ -18,14 +20,17 @@ public class SpeechService {
     }
 
     public CreateSpeechResp create(CreateSpeechReq req) {
-        Single<Response<ResponseBody>> call = api.create(req, req);
-        try {
-            Response<ResponseBody> response = call.blockingGet();
+        try{
+            Response<ResponseBody> response = api.create(req, req).execute();
+            if (!response.isSuccessful()) {
+                throw new HttpException(response);
+            }
             CreateSpeechResp resp = new CreateSpeechResp(response.body());
             resp.setLogID(Utils.getLogID(response));
             return resp;
-        } catch (HttpException e) {
-            throw e;
+
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
 }

@@ -89,6 +89,8 @@ public class ChatService {
         String conversationID = req.getConversationID();
         req.clearBeforeReq();
         Chat chat = Utils.execute(chatAPI.chat(conversationID, req, req)).getData();
+        // 处理一开始没有传入 ConversationID 的情况
+        conversationID = chat.getConversationID();
         String chatID = chat.getID();
         long start = System.currentTimeMillis() / 1000;
         while (ChatStatus.IN_PROGRESS.equals(chat.getStatus())) {

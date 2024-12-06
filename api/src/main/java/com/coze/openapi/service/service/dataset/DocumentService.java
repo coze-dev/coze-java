@@ -70,12 +70,13 @@ public class DocumentService {
         PageFetcher<Document> pageFetcher = request -> {
             ListDocumentResp resp = Utils.execute(api.ListDocument(ListDocumentReq.of(req.getDatasetID(), request.getPageNum(), request.getPageSize()), req));
             return PageResponse.<Document>builder()
-                .hasMore(resp.getDocumentInfos().size() == request.getPageSize())
-                .data(resp.getDocumentInfos())
-                .pageNum(request.getPageNum())
-                .pageSize(request.getPageSize())
-                .total(resp.getTotal().intValue())
-                .build();
+                    .hasMore(resp.getDocumentInfos().size() == request.getPageSize())
+                    .data(resp.getDocumentInfos())
+                    .pageNum(request.getPageNum())
+                    .logID(resp.getLogID())
+                    .pageSize(request.getPageSize())
+                    .total(resp.getTotal().intValue())
+                    .build();
         };
 
         // 创建分页器
@@ -90,11 +91,12 @@ public class DocumentService {
         PageResponse<Document> currentPage = pageFetcher.fetch(initialRequest);
 
         return PageResp.<Document>builder()
-            .total(currentPage.getTotal())
-            .items(currentPage.getData())
-            .iterator(paginator)
-            .hasMore(currentPage.isHasMore())
-            .build();
+                .total(currentPage.getTotal())
+                .items(currentPage.getData())
+                .iterator(paginator)
+                .hasMore(currentPage.isHasMore())
+                .logID(currentPage.getLogID())
+                .build();
     }
 
 }

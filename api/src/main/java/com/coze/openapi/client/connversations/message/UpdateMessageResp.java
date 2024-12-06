@@ -1,20 +1,23 @@
 package com.coze.openapi.client.connversations.message;
 
-import com.coze.openapi.client.common.BaseResponse;
+import com.coze.openapi.client.common.BaseResp;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UpdateMessageResp extends BaseResponse<Message> {
+@ToString(callSuper = true)
+public class UpdateMessageResp extends BaseResp {
     @JsonProperty("message")
     private Message message;
-    
-    
 }

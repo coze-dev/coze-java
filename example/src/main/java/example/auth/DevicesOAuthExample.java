@@ -54,6 +54,7 @@ public class DevicesOAuthExample {
         */
 
         DeviceAuthResp codeResp = oauth.getDeviceCode();
+        System.out.println(codeResp);
 
         /*
          * The space permissions for which the Access Token is granted can be specified. As following codes:
@@ -91,11 +92,13 @@ public class DevicesOAuthExample {
                 The user rejected the authorization.
                 Developers need to guide the user to open the authorization link again.
                 * */
+                System.out.println("access denied");
             }else if (AuthErrorCode.EXPIRED_TOKEN.equals(e.getCode())){  
                 /*
                 The token has expired. Developers need to guide the user to open
                 the authorization link again.
                 * */
+                System.out.println("expired token");
             } else {
                 e.printStackTrace();
             }

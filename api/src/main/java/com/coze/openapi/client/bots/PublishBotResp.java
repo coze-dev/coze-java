@@ -1,20 +1,16 @@
 package com.coze.openapi.client.bots;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import com.coze.openapi.client.common.BaseResp;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class PublishBotResp extends BaseResp{
     @JsonProperty("bot_id") 
     private String botID;

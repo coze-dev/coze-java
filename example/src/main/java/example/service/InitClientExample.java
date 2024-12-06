@@ -22,7 +22,7 @@ public class InitClientExample {
          * to pass the access token to the server.
         */
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .client(new OkHttpClient.Builder().build()) 
                 .build();
@@ -34,7 +34,7 @@ public class InitClientExample {
          * You can directly set the timeout when initializing the Coze client, set it by your okhttp client
         */
         coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .connectTimeout(10000)
@@ -48,7 +48,7 @@ public class InitClientExample {
         */
 
         coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .connectTimeout(10000)

@@ -14,7 +14,7 @@ public class ListExample {
         String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .connectTimeout(10000)

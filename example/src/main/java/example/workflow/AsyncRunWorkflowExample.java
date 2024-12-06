@@ -21,12 +21,12 @@ public class AsyncRunWorkflowExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();;
 
-        String workflowID = System.getenv("WORKSPACE_ID");
+        String workflowID = System.getenv("WORKFLOW_ID");
 
         // if your workflow need input params, you can send them by map
         Map<String, Object> data = new HashMap<>();
@@ -51,6 +51,7 @@ public class AsyncRunWorkflowExample {
 
         while(!isFinished){
             RetrieveRunHistoryResp historyResp = coze.workflows().runs().histories().retrieve(RetrieveRunHistoryReq.of(workflowID, executeID));
+            System.out.println(historyResp);
             WorkflowRunHistory history = historyResp.getHistories().get(0);
             if (history.getExecuteStatus().equals(WorkflowExecuteStatus.FAIL)) {
                 System.out.println("Workflow run failed, reason:" + history.getErrorMessage());

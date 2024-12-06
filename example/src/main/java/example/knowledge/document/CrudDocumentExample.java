@@ -1,11 +1,9 @@
 package example.knowledge.document;
 
-import com.coze.openapi.client.dataset.document.CreateDocumentReq;
-import com.coze.openapi.client.dataset.document.CreateDocumentResp;
-import com.coze.openapi.client.dataset.document.DeleteDocumentReq;
-import com.coze.openapi.client.dataset.document.UpdateDocumentReq;
+import com.coze.openapi.client.dataset.document.*;
 import com.coze.openapi.client.dataset.document.model.Document;
 import com.coze.openapi.client.dataset.document.model.DocumentBase;
+import com.coze.openapi.client.files.UploadFileResp;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -24,7 +22,7 @@ public class CrudDocumentExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();;
@@ -36,10 +34,11 @@ public class CrudDocumentExample {
         CreateDocumentReq createReq = CreateDocumentReq.builder()
                 .datasetID(datasetID)
                 .documentBases(Arrays.asList(
-                        DocumentBase.buildWebPage("web doc example", "https://your-website.com"),
+                        DocumentBase.buildWebPage("web doc example", "https://bytedance.com"),
                         DocumentBase.buildLocalFile("file doc example", "your file content", "txt")))
                 .build();
         CreateDocumentResp creatResp = coze.datasets().documents().create(createReq);
+        System.out.println(creatResp);
         List<Long> documentIDs = new ArrayList<>();
         for (Document documentBase : creatResp.getDocumentInfos()) {
             documentIDs.add(Long.parseLong(documentBase.getDocumentID()));
@@ -52,12 +51,14 @@ public class CrudDocumentExample {
                 .documentID(documentIDs.get(0))
                 .documentName("new name")
                 .build();
-        coze.datasets().documents().update(updateReq);
+        UpdateDocumentResp uploadFileResp = coze.datasets().documents().update(updateReq);
+        System.out.println(uploadFileResp);
 
         /*
          * delete document. It means success that no exception has been thrown
          * */
-        coze.datasets().documents().delete(DeleteDocumentReq.builder().documentIDs(Collections.singletonList(documentIDs.get(0))).build());
+        DeleteDocumentResp deletedResp =  coze.datasets().documents().delete(DeleteDocumentReq.builder().documentIDs(Collections.singletonList(documentIDs.get(0))).build());
+        System.out.println(deletedResp);
     }
 
 

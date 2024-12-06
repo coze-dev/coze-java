@@ -1,6 +1,6 @@
 package com.coze.openapi.service.service;
 
-import io.reactivex.Single;
+import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import retrofit2.http.Streaming;
@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 public class APIResponseCallAdapterFactory extends CallAdapter.Factory {
     @Override
     public CallAdapter<?, ?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
-        if (getRawType(returnType) != Single.class) {
+        if (getRawType(returnType) != Call.class) {
             return null;
         }
         for (Annotation annotation : annotations) {

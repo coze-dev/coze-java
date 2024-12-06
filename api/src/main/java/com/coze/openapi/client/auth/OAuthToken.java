@@ -7,13 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
-public class OAuthToken extends BaseResp{
+@ToString(callSuper = true)
+public class OAuthToken extends BaseResp {
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("expires_in")

@@ -15,11 +15,11 @@ public class ListConversationsExample {
         String token = System.getenv("COZE_API_TOKEN");
         TokenAuth authCli = new TokenAuth(token);
 
-        String botID = System.getenv("COZE_BOT_ID");
+        String botID = System.getenv("BOT_ID");
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();;

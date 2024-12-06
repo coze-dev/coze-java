@@ -11,13 +11,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ListVoiceResp extends BaseResp{
+@ToString(callSuper = true)
+public class ListVoiceResp extends BaseResp {
     @JsonProperty("voice_list")
     private List<Voice> voiceList;
 }

@@ -35,7 +35,7 @@ public class SubmitToolOutputExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();
@@ -53,12 +53,16 @@ public class SubmitToolOutputExample {
         Flowable<ChatEvent> resp = coze.chat().stream(req);
 
         resp.blockingForEach(event -> {
+            if (ChatEventType.CONVERSATION_MESSAGE_DELTA.equals(event.getEvent())) {
+                System.out.print(event.getMessage().getContent());
+            }
             /*
              * handle the chat event, if event type is CONVERSATION_CHAT_REQUIRES_ACTION,
              * it means the bot requires the invocation of local plugins.
              * In this example, we will invoke the local plugin to get the weather information.
              * */
             if (ChatEventType.CONVERSATION_CHAT_REQUIRES_ACTION.equals(event.getEvent())) {
+                System.out.println("need action");
                 pluginEventRef.set(event);
                 conversationRef.set(event.getChat().getConversationID());
             }
@@ -91,5 +95,6 @@ public class SubmitToolOutputExample {
                 System.out.print(event.getMessage().getContent());
             }
         });
+        coze.shutdownExecutor();
     }
 } 

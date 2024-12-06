@@ -3,17 +3,14 @@ package com.coze.openapi.client.audio.rooms;
 
 import com.coze.openapi.client.common.BaseResp;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class CreateRoomResp extends BaseResp{
     /**
      * 房间 id

@@ -21,24 +21,24 @@ import retrofit2.http.Tag;
 public interface ChatAPI {
 
     @POST("/v3/chat")
-    Single<Response<BaseResponse<Chat>>> chat(@Query("conversation_id") String conversationID, @Body CreateChatReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<Chat>> chat(@Query("conversation_id") String conversationID, @Body CreateChatReq req, @Tag BaseReq baseReq);
 
     @POST("/v3/chat")
     @Streaming
     Call<ResponseBody> stream(@Query("conversation_id") String conversationID, @Body CreateChatReq req, @Tag BaseReq baseReq);
 
     @GET("/v3/chat/retrieve")
-    Single<Response<BaseResponse<Chat>>> retrieve(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID, @Tag BaseReq baseReq);
+    Call<BaseResponse<Chat>> retrieve(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID, @Tag BaseReq baseReq);
     
     @POST("/v3/chat/cancel")
-    Single<Response<BaseResponse<Chat>>> cancel(@Body CancelChatReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<Chat>> cancel(@Body CancelChatReq req, @Tag BaseReq baseReq);
 
     @POST("/v3/chat/submit_tool_outputs")
     @Streaming
     Call<ResponseBody> streamSubmitToolOutputs(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID, @Body SubmitToolOutputsReq req, @Tag BaseReq baseReq);
 
     @POST("/v3/chat/submit_tool_outputs")
-    Single<Response<BaseResponse<Chat>>> submitToolOutputs(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID, @Body SubmitToolOutputsReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<Chat>> submitToolOutputs(@Query("conversation_id") String conversationID, @Query("chat_id") String chatID, @Body SubmitToolOutputsReq req, @Tag BaseReq baseReq);
 
 
 }

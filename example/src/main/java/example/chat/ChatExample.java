@@ -1,9 +1,6 @@
 package example.chat;
 
-import com.coze.openapi.client.chat.CancelChatReq;
-import com.coze.openapi.client.chat.CreateChatReq;
-import com.coze.openapi.client.chat.CreateChatResp;
-import com.coze.openapi.client.chat.RetrieveChatReq;
+import com.coze.openapi.client.chat.*;
 import com.coze.openapi.client.chat.model.Chat;
 import com.coze.openapi.client.chat.model.ChatPoll;
 import com.coze.openapi.client.chat.model.ChatStatus;
@@ -31,7 +28,7 @@ public class ChatExample {
 
         // Init the Coze client through the access_token.
         CozeAPI coze = new CozeAPI.Builder()
-                .baseURL(System.getenv("COZE_API_BASE_URL"))
+                .baseURL(System.getenv("COZE_API_BASE"))
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();
@@ -50,6 +47,7 @@ public class ChatExample {
                              .build();
 
         CreateChatResp chatResp = coze.chat().create(req);
+        System.out.println(chatResp);
         Chat chat = chatResp.getChat();
         // get chat id and conversationID
         String chatID = chat.getID();
@@ -75,10 +73,12 @@ public class ChatExample {
 
             if ((System.currentTimeMillis() / 1000) - start > timeout) {
                 // The chat can be cancelled before its completed.
-                coze.chat().cancel(CancelChatReq.of(conversationID, chatID));
+                System.out.println(coze.chat().cancel(CancelChatReq.of(conversationID, chatID)));
                 break;
             }
-            chat = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID)).getChat();
+            RetrieveChatResp resp = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID));
+            System.out.println(resp);
+            chat = resp.getChat();
             if (ChatStatus.COMPLETED.equals(chat.getStatus())) {
                 break;
             }
@@ -87,7 +87,9 @@ public class ChatExample {
 
         // The sdk provide an automatic polling method.
         ChatPoll chat2 = coze.chat().createAndPoll(req);
+        System.out.println(chat2);
         // the developer can also set the timeout.
         ChatPoll chat3 = coze.chat().createAndPoll(req, timeout);
+        System.out.println(chat3);
     }
 } 
