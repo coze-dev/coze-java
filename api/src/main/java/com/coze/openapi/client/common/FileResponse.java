@@ -1,6 +1,5 @@
 package com.coze.openapi.client.common;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.File;
@@ -8,7 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FileResponse {
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class FileResponse extends BaseResp {
     private final ResponseBody response;
 
     public FileResponse(ResponseBody response) {

@@ -2,7 +2,7 @@ package example.chat;
 /*
 * This use case teaches you how to use local plugin.
 * */
-import com.coze.openapi.client.chat.ChatReq;
+import com.coze.openapi.client.chat.CreateChatReq;
 import com.coze.openapi.client.chat.SubmitToolOutputsReq;
 import com.coze.openapi.client.chat.model.ChatEvent;
 import com.coze.openapi.client.chat.model.ChatEventType;
@@ -41,7 +41,7 @@ public class SubmitToolOutputExample {
                 .build();
 
 
-        ChatReq req = ChatReq.builder()
+        CreateChatReq req = CreateChatReq.builder()
                              .botID(botID)
                              .userID(userID)
                              .messages(Collections.singletonList(

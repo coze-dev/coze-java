@@ -2,14 +2,15 @@ package com.coze.openapi.client.chat.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
-public enum ChatRequiredActionType {
-    UNKNOWN(""),
-    SUBMIT_TOOL_OUTPUTS("submit_tool_outputs");
+@Getter
+public class ChatRequiredActionType {
+    public static final ChatRequiredActionType SUBMIT_TOOL_OUTPUTS = new ChatRequiredActionType("submit_tool_outputs");
 
     private final String value;
 
-    ChatRequiredActionType(String value) {
+    private ChatRequiredActionType(String value) {
         this.value = value;
     }
 
@@ -20,11 +21,9 @@ public enum ChatRequiredActionType {
 
     @JsonCreator
     public static ChatRequiredActionType fromString(String value) {
-        for (ChatRequiredActionType type : ChatRequiredActionType.values()) {
-            if (type.value.equals(value)) {
-                return type;
-            }
+        if (SUBMIT_TOOL_OUTPUTS.value.equals(value)) {
+            return SUBMIT_TOOL_OUTPUTS;
         }
-        throw new IllegalArgumentException("Unknown ChatRequiredActionType: " + value);
+        return new ChatRequiredActionType(value);
     }
 } 

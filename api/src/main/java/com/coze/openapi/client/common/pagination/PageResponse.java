@@ -14,24 +14,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageResponse<T> {
-    @JsonProperty("has_more")
     private boolean hasMore;
     
-    @JsonProperty("page_num")
     private Integer pageNum;
     
-    @JsonProperty("page_size")
     private Integer pageSize;
     
-    @JsonProperty("total")
     private Integer total;
     
-    @JsonProperty("data")
     private List<T> data;
 
-    @JsonProperty("last_token")
-    private String lastToken;
+    private String lastID;
 
-    @JsonProperty("next_token")
-    private String nextToken;
+    private String nextID;
+
+    private String logID;
 }

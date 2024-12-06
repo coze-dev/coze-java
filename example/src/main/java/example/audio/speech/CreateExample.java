@@ -1,7 +1,7 @@
 package example.audio.speech;
 
 import com.coze.openapi.client.audio.speech.CreateSpeechReq;
-import com.coze.openapi.client.common.FileResponse;
+import com.coze.openapi.client.audio.speech.CreateSpeechResp;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -26,7 +26,7 @@ public class CreateExample {
                                              .voiceID(voiceID)
                                              .build();
 
-        FileResponse resp = coze.audio().speeches().create(req);
+        CreateSpeechResp resp = coze.audio().speech().create(req);
         System.out.println(resp);
         try {
             resp.writeToFile(saveFilePath);

@@ -38,10 +38,10 @@ your projects.
 | workspace                     | [ListWorkspaceExample.java](example/src/main/java/example/workspace/ListWorkspaceExample.java)              |
 | create update delete message  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/CUDMessageExample.java)      |
 | list message                  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/ListMessageExample.java)     |
-| create update delete document | [ListWorkspaceExample.java](example/src/main/java/example/knowledge/document/CUDDocumentExample.java)      |
+| create update delete document | [ListWorkspaceExample.java](example/src/main/java/example/datasets/document/CUDDocumentExample.java)      |
 | initial client                | [InitServiceExample.java](example/src/main/java/example/service/InitServiceExample.java)                      |
 | how to handle exception       | [HandlerExceptionExample.java](example/src/main/java/example/service/HandlerExceptionExample.java)             |
-
+| get request log id            | [GetLogExample.java](example/src/main/java/example/service/GetLogExample.java)                                    |
 ### Initialize the Coze client
 
 Firstly, you need to access https://www.coze.com/open/oauth/pats (for the cn environment,
@@ -370,7 +370,7 @@ public static void main(String[] args) {
 }
 ```
 
-### Knowledge
+### Dataset
 
 ```java
 public static void main(String[] args) {
@@ -390,10 +390,10 @@ public static void main(String[] args) {
     CreateDocumentReq createReq = CreateDocumentReq.builder()
             .datasetID(datasetID)
             .documentBases(Arrays.asList(
-                    DocumentBase.buildWebPage("web doc example", "https://your-website.com"), //create knowledge documents by web page
-                    DocumentBase.buildLocalFile("file doc example", "your file content", "txt"))) //create knowledge documents by local file
+                    DocumentBase.buildWebPage("web doc example", "https://your-website.com"), //create datasets documents by web page
+                    DocumentBase.buildLocalFile("file doc example", "your file content", "txt"))) //create datasets documents by local file
             .build();
-    CreateDocumentResp creatResp = coze.knowledge().documents().create(createReq);
+    CreateDocumentResp creatResp = coze.datasets().documents().create(createReq);
     List<Long> documentIDs = new ArrayList<>();
     for (Document documentBase : creatResp.getDocumentInfos()) {
         documentIDs.add(Long.parseLong(documentBase.getDocumentID()));
@@ -405,11 +405,11 @@ public static void main(String[] args) {
             .documentID(documentIDs.get(0))
             .documentName("new name")
             .build();
-    coze.knowledge().documents().update(updateReq);
+    coze.datasets().documents().update(updateReq);
     /*
      * delete document. It means success that no exception has been thrown
      * */
-    coze.knowledge().documents().delete(DeleteDocumentReq.builder().documentIDs(Collections.singletonList(documentIDs.get(0))).build());
+    coze.datasets().documents().delete(DeleteDocumentReq.builder().documentIDs(Collections.singletonList(documentIDs.get(0))).build());
 
     /*
      * list documents
@@ -421,7 +421,7 @@ public static void main(String[] args) {
                 .build();
 
     // you can use iterator to automatically retrieve next page
-    PageResult<Document> documents = coze.knowledge().documents().list(req);
+    PageResult<Document> documents = coze.datasets().documents().list(req);
     Iterator<Document> iter = documents.getIterator();
     iter.forEachRemaining(System.out::println);
 }

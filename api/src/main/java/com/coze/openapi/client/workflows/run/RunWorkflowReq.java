@@ -2,15 +2,22 @@ package com.coze.openapi.client.workflows.run;
 
 import java.util.Map;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RunWorkflowReq {
+public class RunWorkflowReq extends BaseReq {
     /*
     * The ID of the workflow, which should have been published.
     * */

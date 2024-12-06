@@ -1,6 +1,7 @@
 package example.service;
 
 import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeAuthException;
 import com.coze.openapi.client.workspace.ListWorkspaceReq;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
@@ -29,6 +30,12 @@ public class HandlerExceptionExample {
             * en: https://www.coze.com/docs/developer_guides/coze_error_codes
             */
             System.out.println(e.getMessage());
+            /*
+             * you can get request log id by getLogID() method
+            */
+            System.out.println(e.getLogID());
+        } catch (CozeAuthException e){
+
         }
     }
 }

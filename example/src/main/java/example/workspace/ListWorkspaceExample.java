@@ -2,9 +2,9 @@ package example.workspace;
 
 import java.util.Iterator;
 
-import com.coze.openapi.client.common.pagination.PageResult;
-import com.coze.openapi.client.workspace.Workspace;
+import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.client.workspace.ListWorkspaceReq;
+import com.coze.openapi.client.workspace.model.Workspace;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -23,20 +23,16 @@ public class ListWorkspaceExample {
                 .build();
 
         // you can use iterator to automatically retrieve next page
-        PageResult<Workspace> workspaces = coze.workspaces().list(new ListWorkspaceReq());
+        PageResp<Workspace> workspaces = coze.workspaces().list(new ListWorkspaceReq());
         Iterator<Workspace> iter = workspaces.getIterator();
         iter.forEachRemaining(System.out::println);
 
-        // you can manually retrieve next page
-        int pageNum = 1;
-        ListWorkspaceReq req = new ListWorkspaceReq();
-        while (workspaces.getHasMore()){
-            pageNum++;
-            req.setPageNum(pageNum);
-            workspaces = coze.workspaces().list(req);
-            for (Workspace item : workspaces.getItems()) {
-                System.out.println(item);
-            }
+        // the page result will return followed information
+        System.out.println("total: " + workspaces.getTotal());
+        System.out.println("has_more: " + workspaces.getHasMore());
+        System.out.println("logID: " + workspaces.getLogID());
+        for (Workspace item : workspaces.getItems()) {
+            System.out.println(item);
         }
     }
 } 

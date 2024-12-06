@@ -2,13 +2,15 @@ package com.coze.openapi.client.chat.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
-public enum ChatToolCallType {
-    FUNCTION("function");
+@Getter
+public class ChatToolCallType {
+    public static final ChatToolCallType FUNCTION = new ChatToolCallType("function");
 
     private final String value;
 
-    ChatToolCallType(String value) {
+    private ChatToolCallType(String value) {
         this.value = value;
     }
 
@@ -19,10 +21,8 @@ public enum ChatToolCallType {
 
     @JsonCreator
     public static ChatToolCallType fromString(String value) {
-        for (ChatToolCallType type : ChatToolCallType.values()) {
-            if (type.value.equals(value)) {
-                return type;
-            }
+        if (FUNCTION.value.equals(value)) {
+            return FUNCTION;
         }
         throw new IllegalArgumentException("Unknown ChatToolCallType: " + value);
     }

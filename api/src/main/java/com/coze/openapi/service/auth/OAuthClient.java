@@ -3,6 +3,7 @@ package com.coze.openapi.service.auth;
 import com.coze.openapi.api.CozeAuthAPI;
 import com.coze.openapi.client.auth.GetAccessTokenReq;
 import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.common.BaseResp;
 import com.coze.openapi.client.auth.GrantType;
 import com.coze.openapi.client.exception.CozeError;
 import com.coze.openapi.client.exception.CozeAuthException;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import retrofit2.HttpException;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -176,15 +178,20 @@ public abstract class OAuthClient {
         return execute(this.api.retrieve(headers, req));
     }
 
-    protected static <T> T execute(Single<T> apiCall) {
+    protected static <T> T execute(Single<Response<T>> apiCall) {
         try {
-            return apiCall.blockingGet();
+            Response<T> response = apiCall.blockingGet();
+            T body = response.body();
+            if (body instanceof BaseResp) {
+                ((BaseResp) body).setLogID(Utils.getLogID(response));
+            }
+            return body;
         } catch (HttpException e) {
             try (ResponseBody errorBody = e.response().errorBody()){
                 if (errorBody == null) {
                     throw e;
                 }
-                String logID = e.response().raw().headers().get(logHeader);
+                String logID = Utils.getLogID(e.response());
 
                 String errStr = e.response().errorBody().string();
 

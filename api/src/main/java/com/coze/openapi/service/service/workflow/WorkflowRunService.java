@@ -32,8 +32,8 @@ public class WorkflowRunService {
      * docs en: https://www.coze.com/docs/developer_guides/workflow_run
      * docs cn: https://www.coze.cn/docs/developer_guides/workflow_run
     * */
-    public RunWorkflowResp run(RunWorkflowReq req) {
-        return Utils.execute(workflowRunAPI.run(req));
+    public RunWorkflowResp create(RunWorkflowReq req) {
+        return Utils.execute(workflowRunAPI.run(req, req));
     }
 
     /*
@@ -45,7 +45,7 @@ public class WorkflowRunService {
      * docs cn: https://www.coze.cn/docs/developer_guides/workflow_run
      * */
     public Flowable<WorkflowEvent> stream(RunWorkflowReq req) {
-        return stream(workflowRunAPI.stream(req));
+        return stream(workflowRunAPI.stream(req, req));
     }
 
     /*
@@ -53,7 +53,7 @@ public class WorkflowRunService {
     *  docs en: https://www.coze.com/docs/developer_guides/workflow_resume
     * */
     public Flowable<WorkflowEvent> resume(ResumeRunReq req) {
-        return stream(workflowRunAPI.resume(req));
+        return stream(workflowRunAPI.resume(req, req));
     }
 
 
@@ -61,7 +61,7 @@ public class WorkflowRunService {
         return Flowable.create(emitter -> apiCall.enqueue(new EventCallback(emitter)), BackpressureStrategy.BUFFER);
     }
 
-    public WorkflowRunHistoryService history(){
+    public WorkflowRunHistoryService histories(){
         return historyService;
     }
     

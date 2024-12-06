@@ -2,9 +2,10 @@ package example.bot;
 
 import com.coze.openapi.client.bots.ListBotReq;
 import com.coze.openapi.client.bots.RetrieveBotReq;
+import com.coze.openapi.client.bots.RetrieveBotResp;
 import com.coze.openapi.client.bots.model.Bot;
 import com.coze.openapi.client.bots.model.SimpleBot;
-import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -31,7 +32,9 @@ public class GetBotExample {
         /*
          * retrieve a bot
          * */
-        Bot botInfo = coze.bots().retrieve(RetrieveBotReq.of(botID));
+        RetrieveBotResp botInfo = coze.bots().retrieve(RetrieveBotReq.of(botID));
+        Bot bot = botInfo.getBot();
+        System.out.println(bot);
 
         /*
          * get published bot list
@@ -44,20 +47,20 @@ public class GetBotExample {
                 .pageNum(pageNum)
                 .pageSize(10)
                 .build();
-        PageResult<SimpleBot> botList = coze.bots().list(listBotReq);
-
-        // the api provides two ways for developers to turn pages for all paging interfaces.
-        // 1. The first way is to let developers manually call the API to request the next page.
-        while (botList.getHasMore()){
-            pageNum++;
-            listBotReq.setPageNum(pageNum);
-            botList = coze.bots().list(listBotReq);
-        }
+        PageResp<SimpleBot> botList = coze.bots().list(listBotReq);
 
         // 2. The SDK encapsulates an iterator, which can be used to turn pages backward automatically.
         Iterator<SimpleBot> iterator = botList.getIterator();
         while (iterator.hasNext()) {
             iterator.forEachRemaining(System.out::println);
+        }
+
+        // the page result will return followed information
+        System.out.println("total: " + botList.getTotal());
+        System.out.println("has_more: " + botList.getHasMore());
+        System.out.println("logID: " + botList.getLogID());
+        for (SimpleBot item : botList.getItems()) {
+            System.out.println(item);
         }
     }
 }

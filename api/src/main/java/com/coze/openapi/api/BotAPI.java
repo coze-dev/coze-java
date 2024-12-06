@@ -1,11 +1,11 @@
 package com.coze.openapi.api;
 
 import com.coze.openapi.client.bots.CreateBotReq;
-import com.coze.openapi.client.bots.CreateBotResult;
+import com.coze.openapi.client.bots.CreateBotResp;
 import com.coze.openapi.client.bots.ListBotResp;
 import com.coze.openapi.client.bots.UpdateBotReq;
 import com.coze.openapi.client.bots.PublishBotReq;
-import com.coze.openapi.client.bots.PublishBotResult;
+import com.coze.openapi.client.bots.PublishBotResp;
 import com.coze.openapi.client.bots.model.Bot;
 import com.coze.openapi.client.common.BaseResponse;
 
@@ -14,20 +14,23 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Body;
+import retrofit2.Response;
+import retrofit2.http.Tag;
 
+import com.coze.openapi.client.common.BaseReq;
 public interface BotAPI {
     @GET("/v1/space/published_bots_list")
-    Single<BaseResponse<ListBotResp>> list(@Query("space_id") String spaceID, @Query("page_index") Integer page, @Query("page_size") Integer pageSize);
+    Single<Response<BaseResponse<ListBotResp>>> list(@Query("space_id") String spaceID, @Query("page_index") Integer page, @Query("page_size") Integer pageSize, @Tag BaseReq baseReq);
 
     @GET("/v1/bot/get_online_info")
-    Single<BaseResponse<Bot>> retrieve(@Query("bot_id") String botID);
+    Single<Response<BaseResponse<Bot>>> retrieve(@Query("bot_id") String botID, @Tag BaseReq baseReq);
 
     @POST("/v1/bot/create")
-    Single<BaseResponse<CreateBotResult>> create(@Body CreateBotReq req);
+    Single<Response<BaseResponse<CreateBotResp>>> create(@Body CreateBotReq req, @Tag BaseReq baseReq);
 
     @POST("/v1/bot/update") 
-    Single<BaseResponse<Void>> update(@Body UpdateBotReq req);
+    Single<Response<BaseResponse<Void>>> update(@Body UpdateBotReq req, @Tag BaseReq baseReq);
 
     @POST("/v1/bot/publish")
-    Single<BaseResponse<PublishBotResult>> publish(@Body PublishBotReq req);
+    Single<Response<BaseResponse<PublishBotResp>>> publish(@Body PublishBotReq req, @Tag BaseReq baseReq);
 } 

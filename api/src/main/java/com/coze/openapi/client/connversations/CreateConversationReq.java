@@ -3,19 +3,22 @@ package com.coze.openapi.client.connversations;
 import java.util.List;
 import java.util.Map;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor 
-public class CreateConversationReq {
+@EqualsAndHashCode(callSuper = true)
+public class CreateConversationReq extends BaseReq {
 
     /*
     * Messages in the conversation. For more information, see EnterMessage object.

@@ -1,7 +1,8 @@
 package example.chat;
 
 import com.coze.openapi.client.chat.CancelChatReq;
-import com.coze.openapi.client.chat.ChatReq;
+import com.coze.openapi.client.chat.CreateChatReq;
+import com.coze.openapi.client.chat.CreateChatResp;
 import com.coze.openapi.client.chat.RetrieveChatReq;
 import com.coze.openapi.client.chat.model.Chat;
 import com.coze.openapi.client.chat.model.ChatPoll;
@@ -42,13 +43,14 @@ public class ChatExample {
         * chat and will return a Chat class. Developers should periodically check the status of the
         * chat and handle them separately according to different states.
         * */
-        ChatReq req = ChatReq.builder()
+        CreateChatReq req = CreateChatReq.builder()
                              .botID(botID)
                              .userID(uid)
                              .messages(Collections.singletonList(Message.buildUserQuestionText("What can you do?")))
                              .build();
 
-        Chat chat = coze.chat().create(req);
+        CreateChatResp chatResp = coze.chat().create(req);
+        Chat chat = chatResp.getChat();
         // get chat id and conversationID
         String chatID = chat.getID();
         String conversationID = chat.getConversationID();
@@ -76,7 +78,7 @@ public class ChatExample {
                 coze.chat().cancel(CancelChatReq.of(conversationID, chatID));
                 break;
             }
-            chat = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID));
+            chat = coze.chat().retrieve(RetrieveChatReq.of(conversationID, chatID)).getChat();
             if (ChatStatus.COMPLETED.equals(chat.getStatus())) {
                 break;
             }

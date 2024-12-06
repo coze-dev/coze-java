@@ -2,15 +2,21 @@ package com.coze.openapi.client.workspace;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+
+import com.coze.openapi.client.common.BaseReq;
+
 import lombok.AllArgsConstructor;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListWorkspaceReq {
+public class ListWorkspaceReq extends BaseReq {
     @NonNull
     @Builder.Default
     private Integer pageNum = 1;

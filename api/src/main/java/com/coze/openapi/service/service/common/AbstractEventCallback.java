@@ -51,7 +51,7 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
                 String respStr = response.body().string();
                 BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
                 if (baseResp.getCode() != 0) {
-                    logger.warn("API error: " + baseResp.getCode() + " " + baseResp.getMsg());
+                    logger.warn("API error: {} {}", baseResp.getCode(), baseResp.getMsg());
                     throw new CozeApiExcetion(baseResp.getCode(), baseResp.getMsg(), logID);
                 }
                 return;

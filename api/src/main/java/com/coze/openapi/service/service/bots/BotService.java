@@ -10,7 +10,7 @@ import com.coze.openapi.client.bots.model.Bot;
 import com.coze.openapi.client.bots.model.SimpleBot;
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.common.pagination.PageResponse;
-import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
 import com.coze.openapi.client.common.pagination.PageRequest;
@@ -18,14 +18,13 @@ import com.coze.openapi.service.utils.Utils;
 
 public class BotService {
 
-    private final String defaultChannelID = "1024";
     private final BotAPI api;
 
     public BotService(BotAPI api) {
         this.api = api;
     }
 
-    public PageResult<SimpleBot> list(@NotNull ListBotReq req) {
+    public PageResp<SimpleBot> list(@NotNull ListBotReq req) {
         if (req == null) {
             throw new IllegalArgumentException("req is required");
         }
@@ -45,10 +44,11 @@ public class BotService {
         
         PageResponse<SimpleBot> firstPage = pageFetcher.fetch(initialRequest);
 
-        return PageResult.<SimpleBot>builder()
+        return PageResp.<SimpleBot>builder()
             .total(firstPage.getTotal())
             .items(firstPage.getData())
             .iterator(paginator)
+            .logID(firstPage.getLogID())
             .hasMore(firstPage.isHasMore())
             .build();
     }
@@ -59,35 +59,40 @@ public class BotService {
 
         // 创建分页获取器
         PageFetcher<SimpleBot> pageFetcher = request -> {
-            BaseResponse<ListBotResp> resp = Utils.execute(api.list(spaceID, request.getPageNum(), request.getPageSize()));
+            BaseResponse<ListBotResp> resp = Utils.execute(api.list(spaceID, request.getPageNum(), request.getPageSize(), req));
             return PageResponse.<SimpleBot>builder()
                 .hasMore(resp.getData().getBots().size() == request.getPageSize())
                 .data(resp.getData().getBots())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
                 .total(resp.getData().getTotal())
+                .logID(resp.getLogID())
                 .build();
         };
         return pageFetcher;
     }
 
 
-    public Bot retrieve(@NotNull RetrieveBotReq req) {
-        return Utils.execute(api.retrieve(req.getBotID())).getData();
+    public RetrieveBotResp retrieve(@NotNull RetrieveBotReq req) {
+        BaseResponse<Bot> resp = Utils.execute(api.retrieve(req.getBotID(), req));
+        return RetrieveBotResp.builder()
+            .bot(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
 
-    public CreateBotResult create(@NotNull CreateBotReq req ) {
-        return Utils.execute(api.create(req)).getData();
+    public CreateBotResp create(@NotNull CreateBotReq req ) {
+        return Utils.execute(api.create(req, req)).getData();
     }
 
-    public void update(@NotNull UpdateBotReq req) {
-        Utils.execute(api.update(req));
+    public UpdateBotResp update(@NotNull UpdateBotReq req) {
+        String logID = Utils.execute(api.update(req, req)).getLogID();
+        return UpdateBotResp.builder()
+            .logID(logID)
+            .build();
     }
     
-    public PublishBotResult publish(@NotNull PublishBotReq req) {
-        if (req.getConnectorIDs() == null || req.getConnectorIDs().isEmpty()) {
-            req.setConnectorIDs(Collections.singletonList(defaultChannelID));
-        }
-        return Utils.execute(api.publish(req)).getData();
+    public PublishBotResp publish(@NotNull PublishBotReq req) {
+        return Utils.execute(api.publish(req, req)).getData();
     }
 }

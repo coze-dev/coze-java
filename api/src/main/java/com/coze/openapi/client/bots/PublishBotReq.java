@@ -2,23 +2,21 @@ package com.coze.openapi.client.bots;
 
 import java.util.List;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PublishBotReq {
+@EqualsAndHashCode(callSuper = true)
+public class PublishBotReq extends BaseReq {
     @NonNull
     @JsonProperty("bot_id") 
     private String botID;
     @JsonProperty("connector_ids")
     private List<String> connectorIDs;
-
-    public static PublishBotReq of(@NotNull String botID) {
-        return PublishBotReq.builder().botID(botID).build();
-    }
 }

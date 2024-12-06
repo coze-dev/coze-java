@@ -23,7 +23,7 @@ public class AudioService {
         return this.roomAPI;
     }
 
-    public SpeechService speeches() {
+    public SpeechService speech() {
         return this.speechAPI;
     }
 

@@ -3,15 +3,20 @@ package com.coze.openapi.service.service.chat;
 import com.coze.openapi.api.ChatAPI;
 import com.coze.openapi.api.ChatMessageAPI;
 import com.coze.openapi.client.chat.CancelChatReq;
-import com.coze.openapi.client.chat.ChatReq;
+import com.coze.openapi.client.chat.CancelChatResp;
+import com.coze.openapi.client.chat.CreateChatReq;
+import com.coze.openapi.client.chat.CreateChatResp;
 import com.coze.openapi.client.chat.RetrieveChatReq;
+import com.coze.openapi.client.chat.RetrieveChatResp;
 import com.coze.openapi.client.chat.SubmitToolOutputsReq;
+import com.coze.openapi.client.chat.SubmitToolOutputsResp;
 import com.coze.openapi.client.chat.message.ListMessageReq;
+import com.coze.openapi.client.chat.message.ListMessageResp;
 import com.coze.openapi.client.chat.model.Chat;
 import com.coze.openapi.client.chat.model.ChatEvent;
 import com.coze.openapi.client.chat.model.ChatPoll;
 import com.coze.openapi.client.chat.model.ChatStatus;
-import com.coze.openapi.client.connversations.message.model.Message;
+import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.utils.Utils;
 
@@ -20,7 +25,6 @@ import io.reactivex.Flowable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -46,11 +50,15 @@ public class ChatService {
     * docs en: https://www.coze.com/docs/developer_guides/chat_v3
     * docs zh: https://www.coze.cn/docs/developer_guides/chat_v3
     * */
-    public Chat create(ChatReq req) {
+    public CreateChatResp create(CreateChatReq req) {
         req.disableStream();
         String conversationID = req.getConversationID();
         req.clearBeforeReq();
-        return Utils.execute(chatAPI.chat(conversationID, req)).getData();
+        BaseResponse<Chat> resp = Utils.execute(chatAPI.chat(conversationID, req, req));
+        return CreateChatResp.builder()
+            .chat(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
     /*
      * Call the Chat API with non-streaming to send messages to a published Coze bot and
@@ -58,8 +66,8 @@ public class ChatService {
      * docs en: https://www.coze.com/docs/developer_guides/chat_v3
      * docs zh: https://www.coze.cn/docs/developer_guides/chat_v3
      * */
-    public ChatPoll createAndPoll(ChatReq req) throws Exception{
-        return _createAndPoll(req, null, false);
+    public ChatPoll createAndPoll(CreateChatReq req) throws Exception{
+        return _createAndPoll(req, null);
     }
 
     /*
@@ -71,21 +79,21 @@ public class ChatService {
      * timeout: The maximum time to wait for the chat to complete. The chat will be cancelled after the progress of it
      * exceed timeout. The unit is second.
      * */
-    public ChatPoll createAndPoll(ChatReq req, Long timeout) throws Exception{
+    public ChatPoll createAndPoll(CreateChatReq req, Long timeout) throws Exception{
         Objects.requireNonNull(timeout, "timeout is required");
-        return _createAndPoll(req, timeout, true);
+        return _createAndPoll(req, timeout);
     }
 
-    private ChatPoll _createAndPoll(ChatReq req, Long timeout, boolean needTimeout) throws Exception{
+    private ChatPoll _createAndPoll(CreateChatReq req, Long timeout) throws Exception{
         req.disableStream();
         String conversationID = req.getConversationID();
         req.clearBeforeReq();
-        Chat chat = Utils.execute(chatAPI.chat(conversationID, req)).getData();
+        Chat chat = Utils.execute(chatAPI.chat(conversationID, req, req)).getData();
         String chatID = chat.getID();
         long start = System.currentTimeMillis() / 1000;
         while (ChatStatus.IN_PROGRESS.equals(chat.getStatus())) {
             TimeUnit.SECONDS.sleep(1);
-            if (needTimeout) {
+            if (timeout != null && timeout > 0) {
                 if ((System.currentTimeMillis() / 1000) - start > timeout) {
                     logger.warn("Chat timeout: " + timeout + " seconds, cancel Chat");
                     // The chat can be cancelled before its completed.
@@ -94,14 +102,14 @@ public class ChatService {
                 }
             }
 
-            chat = retrieve(RetrieveChatReq.of(conversationID, chatID));
+            chat = retrieve(RetrieveChatReq.of(conversationID, chatID)).getChat();
             if (ChatStatus.COMPLETED.equals(chat.getStatus())) {
                 logger.info("Chat completed, spend " + (System.currentTimeMillis() / 1000 - start) + " seconds");
                 break;
             }
         }
-        List<Message> messages = message().list(ListMessageReq.of(conversationID, chatID));
-        return new ChatPoll(chat, messages);
+        ListMessageResp resp = message().list(ListMessageReq.of(conversationID, chatID));
+        return new ChatPoll(chat, resp.getMessages());
     }
 
     /*
@@ -109,8 +117,12 @@ public class ChatService {
     * docs en: https://www.coze.com/docs/developer_guides/retrieve_chat
     * docs zh: https://www.coze.cn/docs/developer_guides/retrieve_chat
     * */
-    public Chat retrieve(RetrieveChatReq req) {
-        return Utils.execute(chatAPI.retrieve(req.getConversationID(), req.getChatID())).getData();
+    public RetrieveChatResp retrieve(RetrieveChatReq req) {
+        BaseResponse<Chat> resp = Utils.execute(chatAPI.retrieve(req.getConversationID(), req.getChatID(), req));
+        return RetrieveChatResp.builder()
+            .chat(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
 
     /*
@@ -118,8 +130,12 @@ public class ChatService {
     * docs en: https://www.coze.com/docs/developer_guides/chat_cancel
     * docs zh: https://www.coze.cn/docs/developer_guides/chat_cancel
     * */
-    public Chat cancel(CancelChatReq req) {
-        return Utils.execute(chatAPI.cancel(req)).getData();
+    public CancelChatResp cancel(CancelChatReq req) {
+        BaseResponse<Chat> resp = Utils.execute(chatAPI.cancel(req, req));
+        return CancelChatResp.builder()
+            .chat(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
 
     /*
@@ -127,12 +143,16 @@ public class ChatService {
      * docs en: https://www.coze.com/docs/developer_guides/chat_submit_tool_outputs
      * docs zh: https://www.coze.cn/docs/developer_guides/chat_submit_tool_outputs
      */
-    public Chat submitToolOutputs(SubmitToolOutputsReq req) {
+    public SubmitToolOutputsResp submitToolOutputs(SubmitToolOutputsReq req) {
         req.disableStream();
         String conversationID = req.getConversationID();
         String chatID = req.getChatID();
         req.clearBeforeReq();
-        return Utils.execute(chatAPI.submitToolOutputs(conversationID, chatID, req)).getData();
+        BaseResponse<Chat> resp = Utils.execute(chatAPI.submitToolOutputs(conversationID, chatID, req, req));
+        return SubmitToolOutputsResp.builder()
+            .chat(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
 
     /*
@@ -145,7 +165,7 @@ public class ChatService {
         String conversationID = req.getConversationID();
         String chatID = req.getChatID();
         req.clearBeforeReq();
-        return stream(chatAPI.streamSubmitToolOutputs(conversationID, chatID, req));
+        return stream(chatAPI.streamSubmitToolOutputs(conversationID, chatID, req, req));
     }
 
     /*
@@ -153,11 +173,11 @@ public class ChatService {
     * docs en: https://www.coze.com/docs/developer_guides/chat_v3
     * docs zh: https://www.coze.cn/docs/developer_guides/chat_v3
     * */
-    public Flowable<ChatEvent> stream(ChatReq req) {
+    public Flowable<ChatEvent> stream(CreateChatReq req) {
         req.enableStream();
         String conversationID = req.getConversationID();
         req.clearBeforeReq();
-        return stream(chatAPI.stream(conversationID, req));
+        return stream(chatAPI.stream(conversationID, req, req));
     }
     
 

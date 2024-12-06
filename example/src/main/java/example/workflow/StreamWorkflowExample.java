@@ -3,6 +3,7 @@ package example.workflow;
 import com.coze.openapi.client.workflows.run.ResumeRunReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowReq;
 import com.coze.openapi.client.workflows.run.model.WorkflowEvent;
+import com.coze.openapi.client.workflows.run.model.WorkflowEventType;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 import io.reactivex.Flowable;
@@ -33,10 +34,9 @@ public class StreamWorkflowExample {
         Map<String, Object> data = new HashMap<>();
         data.put("param name", "param values");
 
-        RunWorkflowReq.RunWorkflowReqBuilder builder = RunWorkflowReq.builder();
-        builder.workflowID(workflowID).parameters(data);
+        RunWorkflowReq req = RunWorkflowReq.builder().workflowID(workflowID).parameters(data).build();
 
-        Flowable<WorkflowEvent> flowable = coze.workflows().runs().stream(builder.build());
+        Flowable<WorkflowEvent> flowable = coze.workflows().runs().stream(req);
         handleEvent(flowable, coze, workflowID);
     }
 
@@ -47,24 +47,20 @@ public class StreamWorkflowExample {
      */
     private static void handleEvent(Flowable<WorkflowEvent> events, CozeAPI coze, String workflowID){
         events.subscribe(event -> {
-            switch (event.getEvent()){
-                case MESSAGE:
-                    System.out.println("Got message" + event.getMessage());
-                    break;
-                case ERROR:
-                    System.out.println("Got error" + event.getError());
-                    break;
-                case INTERRUPT:
-                    handleEvent(coze.workflows().runs().resume(
-                            ResumeRunReq.builder()
-                                    .workflowID(workflowID)
-                                    .eventID(event.getInterrupt().getInterruptData().getEventID())
-                                    .resumeData("your data")
-                                    .interruptType(event.getInterrupt().getInterruptData().getType())
-                                    .build()), coze, workflowID);
-                    break;
-                default:
-                    break;
+            if (event.getEvent().equals(WorkflowEventType.MESSAGE)) {
+                System.out.println("Got message" + event.getMessage());
+            } else if (event.getEvent().equals(WorkflowEventType.ERROR)) {
+                System.out.println("Got error" + event.getError());
+            } else if (event.getEvent().equals(WorkflowEventType.INTERRUPT)) {
+                System.out.println("Got message" + event.getMessage());
+            } else if (event.getEvent().equals(WorkflowEventType.INTERRUPT)) {
+                handleEvent(coze.workflows().runs().resume(
+                        ResumeRunReq.builder()
+                                .workflowID(workflowID)
+                                .eventID(event.getInterrupt().getInterruptData().getEventID())
+                                .resumeData("your data")
+                                .interruptType(event.getInterrupt().getInterruptData().getType())
+                                .build()), coze, workflowID);
             }
         }, Throwable::printStackTrace);
     }

@@ -1,7 +1,7 @@
 package example.audio.room;
 
 import com.coze.openapi.client.audio.rooms.CreateRoomReq;
-import com.coze.openapi.client.audio.rooms.CreateRoomResult;
+import com.coze.openapi.client.audio.rooms.CreateRoomResp;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -22,6 +22,6 @@ public class CreateExample {
                                          .botID(botID)
                                          .voiceID(voiceID)
                                          .build();
-        CreateRoomResult resp = coze.audio().rooms().create(req);
+        CreateRoomResp resp = coze.audio().rooms().create(req);
     }
 } 

@@ -3,6 +3,7 @@ package com.coze.openapi.client.connversations.message;
 import java.util.List;
 import java.util.Map;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.connversations.message.model.MessageContentType;
 import com.coze.openapi.client.connversations.message.model.MessageObjectString;
 import com.coze.openapi.client.connversations.message.model.MessageRole;
@@ -10,16 +11,18 @@ import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder(builderClassName = "CreateMessageReqBuilder")
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateMessageReq {
+@EqualsAndHashCode(callSuper = true)
+public class CreateMessageReq extends BaseReq{
     /*
      * The ID of the conversation.
      * */
@@ -55,13 +58,12 @@ public class CreateMessageReq {
     private Map<String, String> metadata;
         
 
-    public static class CreateMessageReqBuilder {
-        public CreateMessageReqBuilder objectContent(List<MessageObjectString> objects) {
+    public static abstract class CreateMessageReqBuilder<C extends CreateMessageReq, B extends CreateMessageReqBuilder<C, B>> extends BaseReqBuilder<C, B> {
+        public B objectContent(List<MessageObjectString> objects) {
             this.content = Utils.toJson(objects);
             this.contentType = MessageContentType.OBJECT_STRING;
-            return this;
+            return self();
         }
     }
-
 
 }

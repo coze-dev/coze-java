@@ -1,8 +1,10 @@
 package example.workflow;
 
 import com.coze.openapi.client.workflows.run.RetrieveRunHistoryReq;
+import com.coze.openapi.client.workflows.run.RetrieveRunHistoryResp;
 import com.coze.openapi.client.workflows.run.RunWorkflowReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowResp;
+import com.coze.openapi.client.workflows.run.model.WorkflowExecuteStatus;
 import com.coze.openapi.client.workflows.run.model.WorkflowRunHistory;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
@@ -41,31 +43,30 @@ public class AsyncRunWorkflowExample {
         Call the  coze.workflows().runs().run() method to create a workflow run. The create method
         is a non-streaming chat and will return a WorkflowRunResult class.
         * */
-        RunWorkflowResp resp = coze.workflows().runs().run(req);
+        RunWorkflowResp resp = coze.workflows().runs().create(req);
         System.out.println("Start async workflow run:" + resp.getExecuteID());
 
         String executeID = resp.getExecuteID();
         boolean isFinished = false;
 
         while(!isFinished){
-            WorkflowRunHistory historyResp = coze.workflows().runs().history().retrieve(RetrieveRunHistoryReq.of(workflowID, executeID));
-            switch (historyResp.getExecuteStatus()){
-                case FAIL:
-                    System.out.println("Workflow run failed, reason:" + historyResp.getErrorMessage());
-                    isFinished = true;
-                    break;
-                case RUNNING:
-                    System.out.println("Workflow run is running");
-                    try{
-                        TimeUnit.SECONDS.sleep(1);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    break;
-                default:
-                    System.out.println("Workflow run success" + historyResp.getOutput());
-                    isFinished = true;
-                    break;
+            RetrieveRunHistoryResp historyResp = coze.workflows().runs().histories().retrieve(RetrieveRunHistoryReq.of(workflowID, executeID));
+            WorkflowRunHistory history = historyResp.getHistories().get(0);
+            if (history.getExecuteStatus().equals(WorkflowExecuteStatus.FAIL)) {
+                System.out.println("Workflow run failed, reason:" + history.getErrorMessage());
+                isFinished = true;
+                break;
+            } else if (history.getExecuteStatus().equals(WorkflowExecuteStatus.RUNNING)) {
+                System.out.println("Workflow run is running");
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Workflow run success" + history.getOutput());
+                isFinished = true;
+                break;
             }
         }
     }

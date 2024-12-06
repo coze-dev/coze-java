@@ -29,7 +29,7 @@ public class PageNumBasedPaginator<T> implements Iterator<T> {
                     .pageSize(pageSize)
                     .build();
             currentPage = pageFetcher.fetch(request);
-            logger.info("Fetched page: " + currentPageNum + " success, got" + currentPage.getData().size() + " items");
+            logger.info("Fetched page: {} success, got{} items", currentPageNum, currentPage.getData().size());
             currentIterator = currentPage.getData().iterator();
             currentPageNum++;
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class PageNumBasedPaginator<T> implements Iterator<T> {
             return true;
         }
         if (currentPage.isHasMore()) {
-            logger.info("Fetching next page: " + currentPageNum);
+            logger.info("Fetching next page: {}", currentPageNum);
             fetchNextPage();
             return currentIterator.hasNext();
         }

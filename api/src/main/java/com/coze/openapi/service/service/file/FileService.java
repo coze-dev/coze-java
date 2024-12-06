@@ -3,6 +3,12 @@ package com.coze.openapi.service.service.file;
 import java.io.File;
 
 import com.coze.openapi.api.FileAPI;
+import com.coze.openapi.client.common.BaseReq;
+import com.coze.openapi.client.common.BaseResponse;
+import com.coze.openapi.client.files.RetrieveFileReq;
+import com.coze.openapi.client.files.RetrieveFileResp;
+import com.coze.openapi.client.files.UploadFileReq;
+import com.coze.openapi.client.files.UploadFileResp;
 import com.coze.openapi.client.files.model.FileInfo;
 import com.coze.openapi.service.utils.Utils;
 
@@ -28,45 +34,25 @@ public class FileService {
      * docs en: https://www.coze.com/docs/developer_guides/upload_files
      * docs zh: https://www.coze.cn/docs/developer_guides/upload_files
 
-     * @param filePath local file path
      */
-    public FileInfo upload(String filePath) {
-        File file = new File(filePath);
-        return uploadFile(file, file.getName());
-    }
-
-    /**
-     * Upload files by byte array.
-     * When you need to upload files retrieved from other servers to Coze, 
-     * instead of downloading them locally first, you can call this method to 
-     * directly upload the byte array to Coze, eliminating the need for local storage.
-     * 
-     * docs en: https://www.coze.com/docs/developer_guides/upload_files
-     * docs zh: https://www.coze.cn/docs/developer_guides/upload_files
-     * 
-     * @param bytes file byte array
-     * @param filename file name
-     */
-    public FileInfo upload(byte[] bytes, String filename) {
-        return uploadFile(bytes, filename);
-    }
-
-    /**
-     * Upload files by File object.
-     * 
-     * docs en: https://www.coze.com/docs/developer_guides/upload_files
-     * docs zh: https://www.coze.cn/docs/developer_guides/upload_files
-     * 
-     * @param file File object
-     */
-    public FileInfo upload(File file) {
-        return uploadFile(file, file.getName());
+    public UploadFileResp upload(UploadFileReq req) {
+        if (req.getFilePath() != null) {
+            File file = new File(req.getFilePath());
+            return uploadFile(file, file.getName(), req);
+        }
+        if (req.getFileBytes() != null) {
+            return uploadFile(req.getFileBytes(), req.getFileName(), req);
+        }
+        if (req.getFile() != null) {
+            return uploadFile(req.getFile(), req.getFileName(), req);
+        }
+        throw new IllegalArgumentException("file source is required");
     }
 
     /**
      * Internal unified upload processing method
      */
-    private FileInfo uploadFile(Object fileSource, String filename) {
+    private UploadFileResp uploadFile(Object fileSource, String filename, BaseReq req) {
         RequestBody requestFile;
         if (fileSource instanceof File) {
             requestFile = RequestBody.create((File) fileSource, MediaType.parse("multipart/form-data"));
@@ -75,11 +61,14 @@ public class FileService {
         }
         
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", filename, requestFile);
-        return Utils.execute(api.upload(body)).getData();
+
+        BaseResponse<FileInfo> resp = Utils.execute(api.upload(body, req));
+        return UploadFileResp.builder().fileInfo(resp.getData()).logID(resp.getLogID()).build();
     }
 
-    public FileInfo retrieve(String fileID) {
-        return Utils.execute(api.retrieve(fileID)).getData();
+    public RetrieveFileResp retrieve(RetrieveFileReq req) {
+        BaseResponse<FileInfo> resp = Utils.execute(api.retrieve(req.getFileID(), req));
+        return RetrieveFileResp.builder().fileInfo(resp.getData()).logID(resp.getLogID()).build();
     }   
 
 }

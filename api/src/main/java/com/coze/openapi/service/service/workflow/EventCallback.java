@@ -28,7 +28,7 @@ public class EventCallback extends AbstractEventCallback<WorkflowEvent> {
             eventLine.put("event", event);
             eventLine.put("data", data);
 
-            WorkflowEvent eventData = WorkflowEvent.parseEvent(eventLine);
+            WorkflowEvent eventData = WorkflowEvent.parseEvent(eventLine, logID);
 
             if (eventData != null) {
                 emitter.onNext(eventData);

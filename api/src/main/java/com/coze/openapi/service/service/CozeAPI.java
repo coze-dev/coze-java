@@ -11,8 +11,8 @@ import com.coze.openapi.service.service.bots.BotService;
 import com.coze.openapi.service.service.chat.ChatService;
 import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.service.conversation.ConversationService;
+import com.coze.openapi.service.service.dataset.DatasetService;
 import com.coze.openapi.service.service.file.FileService;
-import com.coze.openapi.service.service.knowledge.KnowledgeService;
 import com.coze.openapi.service.service.workflow.WorkflowService;
 import com.coze.openapi.service.service.workspace.WorkspaceService;
 import com.coze.openapi.service.utils.Utils;
@@ -36,12 +36,12 @@ public class CozeAPI {
     private final BotService botAPI;
     private final ConversationService conversationAPI;
     private final FileService fileAPI;
-    private final KnowledgeService knowledgeAPI;
+    private final DatasetService datasetAPI;
     private final WorkflowService workflowAPI;
     private final ChatService chatAPI;
     private final AudioService audioAPI;
 
-    private CozeAPI(String baseURL, ExecutorService executorService, Auth auth, WorkspaceService workspaceAPI, BotService botAPI, ConversationService conversationAPI, FileService fileAPI, KnowledgeService knowledgeAPI, WorkflowService workflowAPI, ChatService chatAPI, AudioService audioAPI) {
+    private CozeAPI(String baseURL, ExecutorService executorService, Auth auth, WorkspaceService workspaceAPI, BotService botAPI, ConversationService conversationAPI, FileService fileAPI, DatasetService knowledgeAPI, WorkflowService workflowAPI, ChatService chatAPI, AudioService audioAPI) {
         this.baseURL = baseURL;
         this.executorService = executorService;
         this.auth = auth;
@@ -49,7 +49,7 @@ public class CozeAPI {
         this.botAPI = botAPI;
         this.conversationAPI = conversationAPI;
         this.fileAPI = fileAPI;
-        this.knowledgeAPI = knowledgeAPI;
+        this.datasetAPI = knowledgeAPI;
         this.workflowAPI = workflowAPI;
         this.chatAPI = chatAPI;
         this.audioAPI = audioAPI;
@@ -71,8 +71,8 @@ public class CozeAPI {
         return this.fileAPI;
     }
 
-    public KnowledgeService knowledge() {
-        return this.knowledgeAPI;
+    public DatasetService datasets() {
+        return this.datasetAPI;
     }
 
     public WorkflowService workflows() {
@@ -150,7 +150,7 @@ public class CozeAPI {
             BotService botAPI = new BotService(retrofit.create(BotAPI.class));
             ConversationService conversationAPI = new ConversationService(retrofit.create(ConversationAPI.class), retrofit.create(ConversationMessageAPI.class));
             FileService fileAPI = new FileService(retrofit.create(FileAPI.class));
-            KnowledgeService knowledgeAPI = new KnowledgeService(retrofit.create(DocumentAPI.class));
+            DatasetService knowledgeAPI = new DatasetService(retrofit.create(DocumentAPI.class));
             WorkflowService workflowAPI = new WorkflowService(retrofit.create(WorkflowRunAPI.class), retrofit.create(WorkflowRunHistoryAPI.class));
             ChatService chatAPI = new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
             AudioService audioAPI = new AudioService(retrofit.create(AudioVoiceAPI.class), retrofit.create(AudioRoomAPI.class), retrofit.create(AudioSpeechAPI.class));
@@ -159,14 +159,27 @@ public class CozeAPI {
         }
         // 确保加上了 Auth 拦截器
         private OkHttpClient parseClient(OkHttpClient client){
+            boolean hasAuthInterceptor = false;
+            boolean hasTimeoutInterceptor = false;
             for(Interceptor interceptor :client.interceptors()){
                 if (interceptor instanceof AuthenticationInterceptor){
-                    return client;
+                    hasAuthInterceptor = true;
+                }
+                if (interceptor instanceof TimeoutInterceptor){
+                    hasTimeoutInterceptor = true;
                 }
             }
-            return new OkHttpClient.Builder(client)
-                    .addInterceptor(new AuthenticationInterceptor(this.auth)) // 添加拦截器，在请求头中增加 token
-                    .build();
+            if (hasAuthInterceptor && hasTimeoutInterceptor){
+                return client;
+            }
+            OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
+            if (!hasAuthInterceptor){
+                builder.addInterceptor(new AuthenticationInterceptor(this.auth));
+            }
+            if (!hasTimeoutInterceptor){
+                builder.addInterceptor(new TimeoutInterceptor());
+            }
+            return builder.build();
         }
 
 
@@ -176,6 +189,7 @@ public class CozeAPI {
                     .readTimeout(readTimeout.toMillis(), TimeUnit.MILLISECONDS)
                     .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
                     .addInterceptor(new AuthenticationInterceptor(this.auth)) // 添加拦截器，在请求头中增加 token
+                    .addInterceptor(new TimeoutInterceptor()) // 添加拦截器，设置超时时间
                     .build();
         }
 

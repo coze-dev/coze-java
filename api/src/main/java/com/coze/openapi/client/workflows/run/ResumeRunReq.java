@@ -1,19 +1,19 @@
 package com.coze.openapi.client.workflows.run;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-@Getter
-@Setter(AccessLevel.PACKAGE)
+@Data
+@SuperBuilder
 @NoArgsConstructor
-public class ResumeRunReq {
+@EqualsAndHashCode(callSuper = true)
+public class ResumeRunReq extends BaseReq {
     /*
      * The ID of the workflow, which should have been published.
      * */

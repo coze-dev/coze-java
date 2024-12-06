@@ -1,15 +1,18 @@
 package com.coze.openapi.client.audio.speech;
 
 import com.coze.openapi.client.audio.common.AudioFormat;
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSpeechReq {
+@EqualsAndHashCode(callSuper = true)
+public class CreateSpeechReq extends BaseReq {
     @NonNull
     @JsonProperty("input")
     private String input;

@@ -1,18 +1,21 @@
 package com.coze.openapi.client.chat.message;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-public class ListMessageReq {
+@EqualsAndHashCode(callSuper = true)
+public class ListMessageReq extends BaseReq {
     @NonNull
     @JsonProperty("conversation_id")
     private String conversationID;

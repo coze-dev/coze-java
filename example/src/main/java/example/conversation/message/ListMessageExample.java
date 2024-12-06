@@ -2,7 +2,7 @@ package example.conversation.message;
 
 import com.coze.openapi.client.connversations.message.ListMessageReq;
 import com.coze.openapi.client.connversations.message.model.Message;
-import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -31,19 +31,17 @@ public class ListMessageExample {
                 .build();
 
         // you can use iterator to automatically retrieve next page
-        PageResult<Message> messages = coze.conversations().messages().list(req);
+        PageResp<Message> messages = coze.conversations().messages().list(req);
         Iterator<Message> iter = messages.getIterator();
         iter.forEachRemaining(System.out::println);
 
-        // you can manually retrieve next page
-        int pageNum = 1;
-        while (messages.getHasMore()){
-            pageNum++;
-            req.setLimit(pageNum);
-            messages = coze.conversations().messages().list(req);
-            for (Message item : messages.getItems()) {
-                System.out.println(item);
-            }
+        // the page result will return followed information
+        System.out.println("total: " + messages.getTotal());
+        System.out.println("has_more: " + messages.getHasMore());
+        System.out.println("lastID: " + messages.getLastID());
+        System.out.println("logID: " + messages.getLogID());
+        for (Message item : messages.getItems()) {
+            System.out.println(item);
         }
     }
 } 

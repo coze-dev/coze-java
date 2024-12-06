@@ -1,9 +1,13 @@
 package example.conversation.message;
 
 import com.coze.openapi.client.connversations.message.CreateMessageReq;
+import com.coze.openapi.client.connversations.message.CreateMessageResp;
 import com.coze.openapi.client.connversations.message.DeleteMessageReq;
+import com.coze.openapi.client.connversations.message.DeleteMessageResp;
 import com.coze.openapi.client.connversations.message.RetrieveMessageReq;
+import com.coze.openapi.client.connversations.message.RetrieveMessageResp;
 import com.coze.openapi.client.connversations.message.UpdateMessageReq;
+import com.coze.openapi.client.connversations.message.UpdateMessageResp;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.client.connversations.message.model.MessageContentType;
 import com.coze.openapi.client.connversations.message.model.MessageRole;
@@ -34,16 +38,18 @@ public class CrudMessageExample {
                 .role(MessageRole.USER)
                 .content("message count")
                 .contentType(MessageContentType.TEXT);
-        Message message = coze.conversations().messages().create(builder.build());
+        CreateMessageResp messageResp = coze.conversations().messages().create(builder.build());
+        Message message = messageResp.getMessage();
         System.out.println(message);
 
         /*
         * retrieve message
         * */
-        Message retrievedMsg = coze.conversations().messages().retrieve(RetrieveMessageReq.builder()
+        RetrieveMessageResp retrievedMsgResp = coze.conversations().messages().retrieve(RetrieveMessageReq.builder()
                 .conversationID(conversationID)
                 .messageID(message.getId())
                 .build());
+        Message retrievedMsg = retrievedMsgResp.getMessage();
         System.out.println(retrievedMsg);
 
         /*
@@ -53,13 +59,15 @@ public class CrudMessageExample {
                 .conversationID(conversationID).messageID(message.getId())
                 .content(String.format("modified message content:%s", message.getContent()))
                 .contentType(MessageContentType.TEXT).build();
-        Message resp = coze.conversations().messages().update(updateReq);
-        System.out.println(resp);
+        UpdateMessageResp updateResp = coze.conversations().messages().update(updateReq);
+        Message updatedMsg = updateResp.getMessage();
+        System.out.println(updatedMsg);
 
         /*
         * delete message
         * */
-        Message deletedMsg = coze.conversations().messages().delete(DeleteMessageReq.of(conversationID, message.getId()));
+        DeleteMessageResp deletedMsgResp = coze.conversations().messages().delete(DeleteMessageReq.of(conversationID, message.getId()));
+        Message deletedMsg = deletedMsgResp.getMessage();
         System.out.println(deletedMsg);
 
     }

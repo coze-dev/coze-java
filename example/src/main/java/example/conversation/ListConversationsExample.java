@@ -1,6 +1,6 @@
 package example.conversation;
 
-import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.client.connversations.ListConversationReq;
 import com.coze.openapi.client.connversations.model.Conversation;
 import com.coze.openapi.service.auth.TokenAuth;
@@ -25,20 +25,17 @@ public class ListConversationsExample {
                 .build();;
 
         // you can use iterator to automatically retrieve next page
-        PageResult<Conversation> conversations = coze.conversations().list(ListConversationReq.of(botID));
+        PageResp<Conversation> conversations = coze.conversations().list(ListConversationReq.of(botID));
         Iterator<Conversation> iter = conversations.getIterator();
         iter.forEachRemaining(System.out::println);
 
-        // you can manually retrieve next page
-        int pageNum = 1;
-        ListConversationReq req = ListConversationReq.of(botID);
-        while (conversations.getHasMore()){
-            pageNum++;
-            req.setPageNum(pageNum);
-            conversations = coze.conversations().list(req);
-            for (Conversation item : conversations.getItems()) {
-                System.out.println(item);
-            }
+
+         // the page result will return followed information
+        System.out.println("total: " + conversations.getTotal());
+        System.out.println("has_more: " + conversations.getHasMore());
+        System.out.println("logID: " + conversations.getLogID());
+        for (Conversation item : conversations.getItems()) {
+            System.out.println(item);
         }
     }
 }

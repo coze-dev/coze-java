@@ -2,7 +2,7 @@ package example.audio.voice;
 
 import com.coze.openapi.client.audio.voices.ListVoiceReq;
 import com.coze.openapi.client.audio.voices.model.Voice;
-import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -20,7 +20,7 @@ public class ListExample {
                 .connectTimeout(10000)
                 .build();
 
-        PageResult<Voice> resp = coze.audio().voices().list(ListVoiceReq.builder().pageSize(10).build());
+        PageResp<Voice> resp = coze.audio().voices().list(ListVoiceReq.builder().pageSize(10).build());
         Iterator<Voice> iterator = resp.getIterator();
         while (iterator.hasNext()) {
             Voice voice = iterator.next();

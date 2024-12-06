@@ -1,7 +1,8 @@
 package example.auth;
 
-import com.coze.openapi.client.auth.DeviceAuthCode;
+import com.coze.openapi.client.auth.DeviceAuthResp;
 import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.exception.AuthErrorCode;
 import com.coze.openapi.client.exception.CozeAuthException;
 import com.coze.openapi.service.auth.DeviceOAuthClient;
 import com.coze.openapi.service.auth.TokenAuth;
@@ -52,12 +53,12 @@ public class DevicesOAuthExample {
         First, make a call to obtain 'getDeviceCode'
         */
 
-        DeviceAuthCode codeResp = oauth.getDeviceCode();
+        DeviceAuthResp codeResp = oauth.getDeviceCode();
 
         /*
          * The space permissions for which the Access Token is granted can be specified. As following codes:
          * */
-        DeviceAuthCode wCodeResp = oauth.getDeviceCode("workspaceID");
+        DeviceAuthResp wCodeResp = oauth.getDeviceCode("workspaceID");
 
 
         /*
@@ -85,21 +86,18 @@ public class DevicesOAuthExample {
             // When the token expires, you can also refresh and re-obtain the token
             resp = oauth.refreshToken(resp.getRefreshToken());
         } catch (CozeAuthException e) {
-            switch (e.getCode()) {
-                case AccessDenied:
-                    /*
-                    The user rejected the authorization.
-                    Developers need to guide the user to open the authorization link again.
-                    * */
-                    break;
-                case ExpiredToken:
-                    /*
-                    The token has expired. Developers need to guide the user to open
-                    the authorization link again.
-                    * */
-                default:
-                    e.printStackTrace();
-                    break;
+            if (AuthErrorCode.ACCESS_DENIED.equals(e.getCode())) {
+                /*
+                The user rejected the authorization.
+                Developers need to guide the user to open the authorization link again.
+                * */
+            }else if (AuthErrorCode.EXPIRED_TOKEN.equals(e.getCode())){  
+                /*
+                The token has expired. Developers need to guide the user to open
+                the authorization link again.
+                * */
+            } else {
+                e.printStackTrace();
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,19 +1,23 @@
 package com.coze.openapi.client.auth;
 
 import com.coze.openapi.client.auth.scope.Scope;
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetAccessTokenReq {
+@EqualsAndHashCode(callSuper = true)
+public class GetAccessTokenReq extends BaseReq {
     @JsonProperty("client_id")
     private String clientID;
 

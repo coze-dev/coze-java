@@ -1,7 +1,7 @@
 package example.audio.voice;
 
 import com.coze.openapi.client.audio.voices.CloneVoiceReq;
-import com.coze.openapi.client.audio.voices.CloneVoiceResult;
+import com.coze.openapi.client.audio.voices.CloneVoiceResp;
 import com.coze.openapi.client.audio.common.AudioFormat;
 import com.coze.openapi.client.audio.common.LanguageCode;
 import com.coze.openapi.service.service.CozeAPI;
@@ -29,9 +29,7 @@ public class CloneExample {
                                          .text("your text")
                                          .previewText("your preview text")
                                          .build();
-        CloneVoiceResult resp = coze.audio().voices().clone(req);
-        System.out.println("=============== clone voice ===============");
+        CloneVoiceResp resp = coze.audio().voices().clone(req);
         System.out.println(resp);
-        System.out.println("=============== clone voice ===============");
     }
 } 

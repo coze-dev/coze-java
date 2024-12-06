@@ -1,23 +1,26 @@
 package com.coze.openapi.client.connversations.message;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.Map;
 
 import com.coze.openapi.client.connversations.message.model.MessageContentType;
 import com.coze.openapi.client.connversations.message.model.MessageObjectString;
+import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
-@Builder(builderClassName = "UpdateMessageReqBuilder")
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateMessageReq {
+@EqualsAndHashCode(callSuper = true)
+public class UpdateMessageReq extends BaseReq {
     /*
     * The ID of the conversation.
     * */
@@ -46,24 +49,11 @@ public class UpdateMessageReq {
     @JsonProperty("content_type")
     private MessageContentType contentType;
 
-    public static class UpdateMessageReqBuilder {
-        public UpdateMessageReqBuilder ObjectContent(List<MessageObjectString> objects) {
+    public static abstract class UpdateMessageReqBuilder<C extends UpdateMessageReq, B extends UpdateMessageReqBuilder<C, B>> extends BaseReqBuilder<C, B> {
+        public B objectContent(List<MessageObjectString> objects) {
             this.content = Utils.toJson(objects);
             this.contentType = MessageContentType.OBJECT_STRING;
-            return this;
-        }
-
-        public UpdateMessageReq build(){
-            if (this.conversationID == null || this.messageID == null) {
-                throw new IllegalStateException("conversationID and messageID are required");
-            }
-            if (this.content == null && this.metaData == null) {
-                throw new IllegalStateException("content and contentType cannot be both null");
-            }
-            if (this.content != null && this.contentType == null) {
-                throw new IllegalStateException("contentType is required when content is not null");
-            }
-            return new UpdateMessageReq(this.conversationID, this.messageID, this.content, this.metaData, this.contentType);
+            return self();
         }
     }
 }

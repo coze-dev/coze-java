@@ -3,18 +3,21 @@ package com.coze.openapi.client.bots;
 import com.coze.openapi.client.bots.model.BotKnowledge;
 import com.coze.openapi.client.bots.model.BotOnboardingInfo;
 import com.coze.openapi.client.bots.model.BotPromptInfo;
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateBotReq {
+@EqualsAndHashCode(callSuper = true)
+public class UpdateBotReq extends BaseReq {
 
     @NotNull
     @JsonProperty("bot_id")

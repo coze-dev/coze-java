@@ -1,6 +1,7 @@
 package example.auth;
 
 import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.exception.AuthErrorCode;
 import com.coze.openapi.client.exception.CozeAuthException;
 import com.coze.openapi.service.auth.WebOAuthClient;
 import com.coze.openapi.service.config.Consts;
@@ -66,13 +67,8 @@ public class HandlerExceptionExample {
              * You need to handle the exception and guide users to re-authenticate
              * For different oauth type, the error code may be different, you should read document to get more information
             */
-            switch (e.getCode()) {
-                case AuthorizationPending:
-                    // The authorization code is invalid or expired, please re-authorize
-                    break;
-            
-                default:
-                    break;
+            if (AuthErrorCode.AUTHORIZATION_PENDING.equals(e.getCode())){
+                // The authorization code is invalid or expired, please re-authorize
             }
 
             System.out.println(e.getMessage());

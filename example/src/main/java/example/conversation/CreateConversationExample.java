@@ -1,13 +1,14 @@
 package example.conversation;
 
 import com.coze.openapi.client.connversations.ClearConversationReq;
-import com.coze.openapi.client.connversations.ClearConversationResult;
+import com.coze.openapi.client.connversations.ClearConversationResp;
 import com.coze.openapi.client.connversations.CreateConversationReq;
+import com.coze.openapi.client.connversations.CreateConversationResp;
 import com.coze.openapi.client.connversations.RetrieveConversationReq;
+import com.coze.openapi.client.connversations.RetrieveConversationResp;
 import com.coze.openapi.client.connversations.message.CreateMessageReq;
-import com.coze.openapi.client.connversations.message.model.Message;
+import com.coze.openapi.client.connversations.message.CreateMessageResp;
 import com.coze.openapi.client.connversations.message.model.MessageObjectString;
-import com.coze.openapi.client.connversations.model.Conversation;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -30,15 +31,15 @@ public class CreateConversationExample {
                 .readTimeout(10000)
                 .build();;
 
-        Conversation resp = coze.conversations().create(new CreateConversationReq());
+        CreateConversationResp resp = coze.conversations().create(new CreateConversationReq());
         System.out.println("create conversations" + resp);
 
-        String conversationID = resp.getId();
-        Conversation getResp = coze.conversations().retrieve(RetrieveConversationReq.of(conversationID));
+        String conversationID = resp.getConversation().getId();
+        RetrieveConversationResp getResp = coze.conversations().retrieve(RetrieveConversationReq.of(conversationID));
         System.out.println("retrieve conversations:" + getResp);
 
         // you can manually create message for conversation
-        Message msgs = coze.conversations().messages().create(CreateMessageReq
+        CreateMessageResp msgs = coze.conversations().messages().create(CreateMessageReq
                 .builder()
                 .conversationID(conversationID)
                 // if you want to create object content, you can use followed method to simplify your code
@@ -49,7 +50,7 @@ public class CreateConversationExample {
                 .build());
         System.out.println(msgs);
 
-        ClearConversationResult clearResp = coze.conversations().clear(ClearConversationReq.of(conversationID));
+        ClearConversationResp clearResp = coze.conversations().clear(ClearConversationReq.of(conversationID));
         System.out.println(clearResp);
     }
 } 

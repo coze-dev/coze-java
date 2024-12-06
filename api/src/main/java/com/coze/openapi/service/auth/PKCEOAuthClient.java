@@ -8,7 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-import com.coze.openapi.client.auth.PKCEAuthParam;
+import com.coze.openapi.client.auth.GetPKCEAuthURLResp;
 import com.coze.openapi.service.utils.Utils;
 import lombok.Getter;
 
@@ -35,24 +35,24 @@ public class PKCEOAuthClient extends OAuthClient{
     }
 
 
-    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state) {
+    public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state) {
         return genOAuthURL(redirectURI, state,  CodeChallengeMethod.Plain);
     }
 
-    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state, @NotNull String workspaceID) {
+    public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state, @NotNull String workspaceID) {
         return genOAuthURL(redirectURI, state, CodeChallengeMethod.Plain, workspaceID);
     }
 
-    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod) {
+    public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod) {
         String codeVerifier = Utils.genRandomSign(codeVerifierLen);
         String url = super.getOAuthURL(redirectURI, state, getCode(codeVerifier,codeChallengeMethod), codeChallengeMethod.getValue());
-        return new PKCEAuthParam(codeVerifier, url);
+        return new GetPKCEAuthURLResp(codeVerifier, url);
     }
 
-    public PKCEAuthParam genOAuthURL(@NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod, @NotNull String workspaceID) {
+    public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod, @NotNull String workspaceID) {
         String codeVerifier = Utils.genRandomSign(codeVerifierLen);
         String url = super.getOAuthURL(redirectURI, state, getCode(codeVerifier,codeChallengeMethod), codeChallengeMethod.getValue());
-        return new PKCEAuthParam(codeVerifier, url);
+        return new GetPKCEAuthURLResp(codeVerifier, url);
     }
     
     private String getCode(@NotNull String codeVerifier, @NotNull CodeChallengeMethod codeChallengeMethod){

@@ -2,39 +2,39 @@ package com.coze.openapi.client.workflows.run.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Workflow event types.
  */
-public enum WorkflowEventType {
+@Getter
+@AllArgsConstructor
+public class WorkflowEventType {
     /**
      * The output message from the workflow node, such as the output message from
      * the message node or end node. You can view the specific message content in data.
      */
-    MESSAGE("Message"),
+    public static final WorkflowEventType MESSAGE = new WorkflowEventType("Message");
 
     /**
      * An error has occurred. You can view the error_code and error_message in data to
      * troubleshoot the issue.
      */
-    ERROR("Error"),
+    public static final WorkflowEventType ERROR = new WorkflowEventType("Error");
 
     /**
      * End. Indicates the end of the workflow execution, where data is empty.
      */
-    DONE("Done"),
+    public static final WorkflowEventType DONE = new WorkflowEventType("Done");
 
     /**
      * Interruption. Indicates the workflow has been interrupted, where the data field
      * contains specific interruption information.
      */
-    INTERRUPT("Interrupt");
+    public static final WorkflowEventType INTERRUPT = new WorkflowEventType("Interrupt");
 
     private final String value;
-
-    WorkflowEventType(String value) {
-        this.value = value;
-    }
 
     @JsonValue
     public String getValue() {
@@ -43,11 +43,15 @@ public enum WorkflowEventType {
 
     @JsonCreator
     public static WorkflowEventType fromString(String value) {
-        for (WorkflowEventType type : WorkflowEventType.values()) {
-            if (type.value.equals(value)) {
-                return type;
-            }
+        if (value == null) {
+            return new WorkflowEventType("");
         }
-        throw new IllegalArgumentException("Unknown WorkflowEventType: " + value);
+        
+        if (value.equals(MESSAGE.getValue())) return MESSAGE;
+        if (value.equals(ERROR.getValue())) return ERROR;
+        if (value.equals(DONE.getValue())) return DONE;
+        if (value.equals(INTERRUPT.getValue())) return INTERRUPT;
+        
+        return new WorkflowEventType(value);
     }
 } 

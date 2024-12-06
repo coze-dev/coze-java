@@ -6,15 +6,15 @@ import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.api.AudioVoiceAPI;
 import com.coze.openapi.client.audio.voices.CloneVoiceReq;
-import com.coze.openapi.client.audio.voices.CloneVoiceResult;
+import com.coze.openapi.client.audio.voices.CloneVoiceResp;
 import com.coze.openapi.client.audio.voices.ListVoiceReq;
-import com.coze.openapi.client.audio.voices.ListVoiceResult;
+import com.coze.openapi.client.audio.voices.ListVoiceResp;
 import com.coze.openapi.client.audio.voices.model.Voice;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
 import com.coze.openapi.client.common.pagination.PageRequest;
 import com.coze.openapi.client.common.pagination.PageResponse;
-import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.service.utils.Utils;
 
 import okhttp3.MediaType;
@@ -28,7 +28,7 @@ public class VoiceService {
         this.api = api;
     }
 
-    public CloneVoiceResult clone(CloneVoiceReq req) {
+    public CloneVoiceResp clone(CloneVoiceReq req) {
         RequestBody voiceName = RequestBody.create(req.getVoiceName(), MediaType.parse("text/plain"));
         RequestBody audioFormat = RequestBody.create(req.getAudioFormat().getValue(), MediaType.parse("text/plain"));
 
@@ -52,10 +52,10 @@ public class VoiceService {
         RequestBody fileBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), fileBody);
 
-        return Utils.execute(api.clone(filePart, voiceName, audioFormat, language, voiceID, previewText, text)).getData();
+        return Utils.execute(api.clone(filePart, voiceName, audioFormat, language, voiceID, previewText, text, req)).getData();
     }
 
-     public PageResult<Voice> list(@NotNull ListVoiceReq req) {
+     public PageResp<Voice> list(@NotNull ListVoiceReq req) {
         if (req == null) {
             throw new IllegalArgumentException("req is required");
         }
@@ -66,13 +66,14 @@ public class VoiceService {
 
         // 创建分页获取器
         PageFetcher<Voice> pageFetcher = request -> {
-            ListVoiceResult resp = Utils.execute(api.list(filterSystemVoice, request.getPageNum(), request.getPageSize())).getData();
+            ListVoiceResp resp = Utils.execute(api.list(filterSystemVoice, request.getPageNum(), request.getPageSize(), req)).getData();
             
             return PageResponse.<Voice>builder()
                 .hasMore(resp.getVoiceList().size() == request.getPageSize())
                 .data(resp.getVoiceList())
                 .pageNum(request.getPageNum())
                 .pageSize(request.getPageSize())
+                .logID(resp.getLogID())
                 .build();
         };
 
@@ -87,10 +88,11 @@ public class VoiceService {
         
         PageResponse<Voice> currentPage = pageFetcher.fetch(initialRequest);
 
-        return PageResult.<Voice>builder()
+        return PageResp.<Voice>builder()
             .items(currentPage.getData())
             .iterator(paginator)
             .hasMore(currentPage.isHasMore())
+            .logID(currentPage.getLogID())
             .build();
     }
 }

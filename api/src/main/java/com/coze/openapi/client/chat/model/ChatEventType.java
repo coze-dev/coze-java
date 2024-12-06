@@ -2,66 +2,66 @@ package com.coze.openapi.client.chat.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
 /**
  * Event types for chat.
  */
-public enum ChatEventType {
+@Getter
+public class ChatEventType {
     /**
      * Event for creating a conversation, indicating the start of the conversation.
      */
-    CONVERSATION_CHAT_CREATED("conversation.chat.created"),
+    public static final ChatEventType CONVERSATION_CHAT_CREATED = new ChatEventType("conversation.chat.created");
 
     /**
      * The server is processing the conversation.
      */
-    CONVERSATION_CHAT_IN_PROGRESS("conversation.chat.in_progress"),
+    public static final ChatEventType CONVERSATION_CHAT_IN_PROGRESS = new ChatEventType("conversation.chat.in_progress");
 
     /**
      * Incremental message, usually an incremental message when type=answer.
      */
-    CONVERSATION_MESSAGE_DELTA("conversation.message.delta"),
+    public static final ChatEventType CONVERSATION_MESSAGE_DELTA = new ChatEventType("conversation.message.delta");
 
     /**
-     * The message has been completely replied to. At this point, the streaming package contains the spliced results of all message.delta, and each message is in a completed state.
+     * The message has been completely replied to.
      */
-    CONVERSATION_MESSAGE_COMPLETED("conversation.message.completed"),
+    public static final ChatEventType CONVERSATION_MESSAGE_COMPLETED = new ChatEventType("conversation.message.completed");
 
     /**
      * The conversation is completed.
      */
-    CONVERSATION_CHAT_COMPLETED("conversation.chat.completed"),
+    public static final ChatEventType CONVERSATION_CHAT_COMPLETED = new ChatEventType("conversation.chat.completed");
 
     /**
      * This event is used to mark a failed conversation.
      */
-    CONVERSATION_CHAT_FAILED("conversation.chat.failed"),
+    public static final ChatEventType CONVERSATION_CHAT_FAILED = new ChatEventType("conversation.chat.failed");
 
     /**
      * The conversation is interrupted and requires the user to report the execution results of the tool.
      */
-    CONVERSATION_CHAT_REQUIRES_ACTION("conversation.chat.requires_action"),
+    public static final ChatEventType CONVERSATION_CHAT_REQUIRES_ACTION = new ChatEventType("conversation.chat.requires_action");
 
     /**
-     * If there is a voice message in the input message, the conversation.audio.delta event will be returned in the
-     * streaming response event. The data of this event corresponds to the Message Object. The content_type is audio,
-     * and the content is a PCM audio clip with a sampling rate of 24kHz, raw 16 bit, 1 channel, little-endian.
+     * Audio delta event
      */
-    CONVERSATION_AUDIO_DELTA("conversation.audio.delta"),
+    public static final ChatEventType CONVERSATION_AUDIO_DELTA = new ChatEventType("conversation.audio.delta");
 
     /**
-     * Error events during the streaming response process. For detailed explanations of code and msg, please refer to Error codes.
+     * Error events during the streaming response process.
      */
-    ERROR("error"),
+    public static final ChatEventType ERROR = new ChatEventType("error");
 
     /**
      * The streaming response for this session ended normally.
      */
-    DONE("done");
+    public static final ChatEventType DONE = new ChatEventType("done");
 
     private final String value;
 
-    ChatEventType(String value) {
+    private ChatEventType(String value) {
         this.value = value;
     }
 
@@ -72,11 +72,19 @@ public enum ChatEventType {
 
     @JsonCreator
     public static ChatEventType fromString(String value) {
-        for (ChatEventType type : ChatEventType.values()) {
+        ChatEventType[] types = {
+            CONVERSATION_CHAT_CREATED, CONVERSATION_CHAT_IN_PROGRESS,
+            CONVERSATION_MESSAGE_DELTA, CONVERSATION_MESSAGE_COMPLETED,
+            CONVERSATION_CHAT_COMPLETED, CONVERSATION_CHAT_FAILED,
+            CONVERSATION_CHAT_REQUIRES_ACTION, CONVERSATION_AUDIO_DELTA,
+            ERROR, DONE
+        };
+        
+        for (ChatEventType type : types) {
             if (type.value.equals(value)) {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Unknown ChatEventType: " + value);
+        return new ChatEventType(value);
     }
 } 

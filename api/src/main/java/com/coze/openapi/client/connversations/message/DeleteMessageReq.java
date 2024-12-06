@@ -1,17 +1,21 @@
 package com.coze.openapi.client.connversations.message;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteMessageReq {
+@EqualsAndHashCode(callSuper = true)
+public class DeleteMessageReq extends BaseReq{
     /*
      * The ID of the conversation.
      * */

@@ -1,7 +1,7 @@
 package example.auth;
 
 import com.coze.openapi.client.auth.OAuthToken;
-import com.coze.openapi.client.auth.PKCEAuthParam;
+import com.coze.openapi.client.auth.GetPKCEAuthURLResp;
 import com.coze.openapi.service.auth.PKCEOAuthClient;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.config.Consts;
@@ -46,7 +46,7 @@ public class PKCEOAuthExample {
         In the SDK, we have wrapped up the code_challenge process of PKCE. Developers only need
         to select the code_challenge_method.
         * */
-        PKCEAuthParam oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
+        GetPKCEAuthURLResp oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
         System.out.println(oauthURL);
 
         /*

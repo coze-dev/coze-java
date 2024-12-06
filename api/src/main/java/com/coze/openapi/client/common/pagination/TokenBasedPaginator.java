@@ -31,7 +31,7 @@ public class TokenBasedPaginator<T> implements Iterator<T> {
             currentPage = pageFetcher.fetch(request);
             logger.info("Fetched page: "+ pageToken + " success, got" + currentPage.getData().size() + " items");
             currentIterator = currentPage.getData().iterator();
-            pageToken = currentPage.getNextToken();
+            pageToken = currentPage.getNextID();
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch page", e);
         }

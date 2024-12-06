@@ -1,67 +1,81 @@
 package com.coze.openapi.client.exception;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
+/**
+ * 认证错误码类
+ */
 @Getter
-@AllArgsConstructor
-public enum AuthErrorCode {
-    UnknownError("unknown_error"),
+public class AuthErrorCode {
     /*
      * The user has not completed authorization yet, please try again later
-    */
-    AuthorizationPending("authorization_pending"),
+     */
+    public static final AuthErrorCode AUTHORIZATION_PENDING = new AuthErrorCode("authorization_pending");
+
     /*
      * The request is too frequent, please try again later
-    */
-    SlowDown("slow_down"),
+     */
+    public static final AuthErrorCode SLOW_DOWN = new AuthErrorCode("slow_down");
+
     /*
      * The user has denied the authorization
-    */
-    AccessDenied("access_denied"),
+     */
+    public static final AuthErrorCode ACCESS_DENIED = new AuthErrorCode("access_denied");
+
     /*
      * The token is expired
-    */
-    ExpiredToken("expired_token"),
-    /*
-     * The request param is invalid
-    */
-    InvalidRequest("invalid_request"),
-    /*
-     * The client credentials (JWT Token or Client Secret) are invalid
-    */
-    InvalidClient("invalid_client"),
-    /*
-     * The grant type is not supported
-    */
-    UnsupportedGrantType("unsupported_grant_type"),
-    /*
-     * This exception caused by three possibilities:
-     * 
-     * 1. The OAuth application has been disabled.
-     * 2. The type of APP is incorrect.
-     * 3. User login status is invalid
-    */
-    AccessDeny("access_deny"),
-    /*
-     * Server internal error, you can try again later
-    */
-    InternalError("internal_error");
+     */
+    public static final AuthErrorCode EXPIRED_TOKEN = new AuthErrorCode("expired_token");
 
-
+    /**
+     * 错误码的字符串值
+     */
     private final String value;
+
+    /**
+     * 私有构造函数，防止外部创建新实例
+     *
+     * @param value 错误码字符串值
+     */
+    private AuthErrorCode(String value) {
+        this.value = value;
+    }
+
+    /**
+     * 获取错误码的值，用于 JSON 序列化
+     *
+     * @return 错误码字符串值
+     */
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
 
     @Override
     public String toString() {
         return this.value;
     }
 
+    /**
+     * 从字符串创建错误码实例
+     *
+     * @param value 错误码字符串值
+     * @return 对应的错误码实例
+     * @throws IllegalArgumentException 如果找不到对应的错误码
+     */
+    @JsonCreator
     public static AuthErrorCode fromString(String value) {
-        for (AuthErrorCode errorCode : AuthErrorCode.values()) {
-            if (errorCode.value.equals(value)) {
-                return errorCode;
-            }
+        if (value == null) {
+            return null;
         }
-        return UnknownError;
+        
+        if (value.equals(AUTHORIZATION_PENDING.value)) return AUTHORIZATION_PENDING;
+        if (value.equals(SLOW_DOWN.value)) return SLOW_DOWN;
+        if (value.equals(ACCESS_DENIED.value)) return ACCESS_DENIED;
+        if (value.equals(EXPIRED_TOKEN.value)) return EXPIRED_TOKEN;
+        
+        return new AuthErrorCode(value);
     }
 }

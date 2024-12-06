@@ -1,8 +1,8 @@
 package example.knowledge.document;
 
-import com.coze.openapi.client.common.pagination.PageResult;
-import com.coze.openapi.client.knowledge.document.ListDocumentReq;
-import com.coze.openapi.client.knowledge.document.model.Document;
+import com.coze.openapi.client.common.pagination.PageResp;
+import com.coze.openapi.client.dataset.document.ListDocumentReq;
+import com.coze.openapi.client.dataset.document.model.Document;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -30,19 +30,16 @@ public class ListDocumentExample {
                 .build();
 
         // you can use iterator to automatically retrieve next page
-        PageResult<Document> documents = coze.knowledge().documents().list(req);
+        PageResp<Document> documents = coze.datasets().documents().list(req);
         Iterator<Document> iter = documents.getIterator();
         iter.forEachRemaining(System.out::println);
 
-        // you can manually retrieve next page
-        int pageNum = 1;
-        while (documents.getHasMore()){
-            pageNum++;
-            req.setPage(pageNum);
-            documents = coze.knowledge().documents().list(req);
-            for (Document item : documents.getItems()) {
-                System.out.println(item);
-            }
+        // the page result will return followed information
+        System.out.println("total: " + documents.getTotal());
+        System.out.println("has_more: " + documents.getHasMore());
+        System.out.println("logID: " + documents.getLogID());
+        for (Document item : documents.getItems()) {
+            System.out.println(item);
         }
     }
 }

@@ -4,16 +4,21 @@ import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.api.ConversationMessageAPI;
 import com.coze.openapi.client.common.pagination.PageResponse;
-import com.coze.openapi.client.common.pagination.PageResult;
+import com.coze.openapi.client.common.pagination.PageResp;
+import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageRequest;
 import com.coze.openapi.client.common.pagination.TokenBasedPaginator;
 import com.coze.openapi.client.connversations.message.CreateMessageReq;
+import com.coze.openapi.client.connversations.message.CreateMessageResp;
 import com.coze.openapi.client.connversations.message.DeleteMessageReq;
+import com.coze.openapi.client.connversations.message.DeleteMessageResp;
 import com.coze.openapi.client.connversations.message.ListMessageReq;
-import com.coze.openapi.client.connversations.message.GetMessageListResp;
+import com.coze.openapi.client.connversations.message.ListMessageResp;
 import com.coze.openapi.client.connversations.message.UpdateMessageReq;
+import com.coze.openapi.client.connversations.message.UpdateMessageResp;
 import com.coze.openapi.client.connversations.message.RetrieveMessageReq;
+import com.coze.openapi.client.connversations.message.RetrieveMessageResp;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.service.utils.Utils;
 
@@ -30,11 +35,15 @@ public class MessageService {
         docs en: https://www.coze.com/docs/developer_guides/create_message
         docs cn: https://www.coze.cn/docs/developer_guides/create_message
     * */
-    public Message create(String conversationID, CreateMessageReq req) {
+    public CreateMessageResp create(String conversationID, CreateMessageReq req) {
         if (conversationID == null) {
             throw new IllegalArgumentException("conversationID is required");
         }
-        return Utils.execute(api.create(conversationID, req)).getData();
+        BaseResponse<Message> resp = Utils.execute(api.create(conversationID, req, req));
+        return CreateMessageResp.builder()
+            .message(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
 
     /*
@@ -43,10 +52,11 @@ public class MessageService {
     docs en: https://www.coze.com/docs/developer_guides/create_message
     docs cn: https://www.coze.cn/docs/developer_guides/create_message
     * */
-    public Message create(CreateMessageReq req) {
+    public CreateMessageResp create(CreateMessageReq req) {
         if (req == null || req.getConversationID() == null) {
             throw new IllegalArgumentException("conversationID is required");
         }
+        
         return create(req.getConversationID(), req);
     }
 
@@ -56,7 +66,7 @@ public class MessageService {
         docs en: https://www.coze.com/docs/developer_guides/list_message
         docs zh: https://www.coze.cn/docs/developer_guides/list_message
     * */
-    public PageResult<Message> list(@NotNull ListMessageReq req) {
+    public PageResp<Message> list(@NotNull ListMessageReq req) {
         if (req == null || req.getConversationID() == null) {
             throw new IllegalArgumentException("conversationID is required");
         }
@@ -67,13 +77,13 @@ public class MessageService {
         // 创建分页获取器
         PageFetcher<Message> pageFetcher = request -> {
             req.setAfterID(request.getPageToken()); // 设置 lastID
-            GetMessageListResp resp = Utils.execute(api.list(conversationID, req));
+            ListMessageResp resp = Utils.execute(api.list(conversationID, req, req));
             
             return PageResponse.<Message>builder()
                 .hasMore(resp.getData().size() >= pageSize)
                 .data(resp.getData())
-                .lastToken(resp.getLastID()) // 使用 firstID 作为上一页的 token
-                .nextToken(resp.getFirstID()) // 使用 lastID 作为下一页的 token
+                .lastID(resp.getLastID()) // 使用 firstID 作为上一页的 token
+                .nextID(resp.getFirstID()) // 使用 lastID 作为下一页的 token
                 .build();
         };
 
@@ -88,10 +98,10 @@ public class MessageService {
         
         PageResponse<Message> currentPage = pageFetcher.fetch(initialRequest);
 
-        return PageResult.<Message>builder()
+        return PageResp.<Message>builder()
             .items(currentPage.getData())
             .iterator(paginator)
-            .nextCursor(currentPage.getNextToken()) // 保持与原有接口兼容，使用 nextCursor
+            .lastID(currentPage.getNextID())
             .build();
     }
 
@@ -102,11 +112,15 @@ public class MessageService {
         docs en: https://www.coze.com/docs/developer_guides/retrieve_message
         docs zh: https://www.coze.cn/docs/developer_guides/retrieve_message
     * */
-    public Message retrieve(RetrieveMessageReq req) {
+    public RetrieveMessageResp retrieve(RetrieveMessageReq req) {
         if (req == null || req.getConversationID() == null || req.getMessageID() == null) {
             throw new IllegalArgumentException("conversationID and messageID are required");
         }
-        return Utils.execute(api.retrieve(req.getConversationID(), req.getMessageID())).getData();
+        BaseResponse<Message> resp = Utils.execute(api.retrieve(req.getConversationID(), req.getMessageID(), req));
+        return RetrieveMessageResp.builder()
+            .message(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
 
     /*
@@ -115,18 +129,22 @@ public class MessageService {
         docs en: https://www.coze.com/docs/developer_guides/modify_message
         docs cn: https://www.coze.cn/docs/developer_guides/modify_message
     * */
-    public Message update(UpdateMessageReq req) {
+    public UpdateMessageResp update(UpdateMessageReq req) {
         if (req == null || req.getConversationID() == null || req.getMessageID() == null) {
             throw new IllegalArgumentException("conversationID and messageID are required");
         }
-        return Utils.execute(api.update(req.getConversationID(), req.getMessageID(), req)).getMessage();
+        return Utils.execute(api.update(req.getConversationID(), req.getMessageID(), req, req));
     }
 
-    public Message delete(DeleteMessageReq req) {
+    public DeleteMessageResp delete(DeleteMessageReq req) {
         if (req == null || req.getConversationID() == null || req.getMessageID() == null) {
             throw new IllegalArgumentException("conversationID and messageID are required");
         }
-        return Utils.execute(api.delete(req.getConversationID(), req.getMessageID())).getData();
+        BaseResponse<Message> resp = Utils.execute(api.delete(req.getConversationID(), req.getMessageID(), req));
+        return DeleteMessageResp.builder()
+            .message(resp.getData())
+            .logID(resp.getLogID())
+            .build();
     }
 
 

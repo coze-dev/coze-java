@@ -1,16 +1,19 @@
 package com.coze.openapi.client.bots;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RetrieveBotReq {
+@EqualsAndHashCode(callSuper = true)
+public class RetrieveBotReq extends BaseReq {
     @JsonProperty("bot_id")
     private String botID;
 

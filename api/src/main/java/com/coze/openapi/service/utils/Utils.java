@@ -1,6 +1,8 @@
 package com.coze.openapi.service.utils;
 
 
+import com.coze.openapi.client.common.BaseResp;
+import com.coze.openapi.client.common.BaseResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -15,9 +17,19 @@ import java.security.SecureRandom;
 public class Utils {
     public static final String LOG_HEADER = "x-tt-logid";
     private static final ObjectMapper mapper = defaultObjectMapper();
-    public static <T> T execute(Single<T> apiCall) {
+    public static <T> T execute(Single<Response<T>> apiCall) {
         try {
-            return apiCall.blockingGet();
+            Response<T> response = apiCall.blockingGet();
+            T body = response.body();
+            if (body instanceof BaseResponse) {
+                ((BaseResponse<?>) body).setLogID(getLogID(response));
+                if (((BaseResponse<?>)body).getData() instanceof BaseResp) {
+                    ((BaseResp) ((BaseResponse<?>)body).getData()).setLogID(getLogID(response));
+                }
+            } else if (body instanceof BaseResp) {
+                ((BaseResp) body).setLogID(getLogID(response));
+            }
+            return body;
         } catch (HttpException e) {
             throw e;
         }

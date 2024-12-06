@@ -1,6 +1,8 @@
 package example.file;
 
 import com.coze.openapi.client.files.model.FileInfo;
+import com.coze.openapi.client.files.RetrieveFileReq;
+import com.coze.openapi.client.files.UploadFileReq;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -17,7 +19,7 @@ public class FileExample {
         String filePath = System.getenv("FILE_PATH");
 
         //*** 上传文件 ***//
-        FileInfo fileInfo = coze.files().upload(filePath);
+        FileInfo fileInfo = coze.files().upload(UploadFileReq.of(filePath)).getFileInfo();
 
         try {
             Thread.sleep(1000);
@@ -26,7 +28,7 @@ public class FileExample {
         }
 
         //*** 获取文件 ***//
-        FileInfo retrievedInfo = coze.files().retrieve(fileInfo.getID());
+        FileInfo retrievedInfo = coze.files().retrieve(RetrieveFileReq.of(fileInfo.getID())).getFileInfo();
         System.out.println(retrievedInfo);
     }
 } 

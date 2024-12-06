@@ -1,10 +1,11 @@
 package example.chat;
 
-import com.coze.openapi.client.chat.ChatReq;
+import com.coze.openapi.client.chat.CreateChatReq;
 import com.coze.openapi.client.chat.model.ChatEvent;
 import com.coze.openapi.client.chat.model.ChatEventType;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.client.connversations.message.model.MessageObjectString;
+import com.coze.openapi.client.files.UploadFileReq;
 import com.coze.openapi.client.files.model.FileInfo;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
@@ -36,7 +37,7 @@ public class ChatWithImageExample {
 
         // Call the upload file interface to get the image id.
         String imagePath = "/path/image.jpg";
-        FileInfo imageInfo = coze.files().upload(imagePath);
+        FileInfo imageInfo = coze.files().upload(UploadFileReq.of(imagePath)).getFileInfo();
 
         /*
          * Step one, create chat
@@ -44,7 +45,7 @@ public class ChatWithImageExample {
          * chat and will return a Flowable ChatEvent. Developers should iterate the iterator to get
          * chat event and handle them.
          * */
-        ChatReq req = ChatReq.builder()
+        CreateChatReq req = CreateChatReq.builder()
                 .botID(botID)
                 .userID(userID)
                 .messages(Collections.singletonList(Message.buildUserQuestionObjects(

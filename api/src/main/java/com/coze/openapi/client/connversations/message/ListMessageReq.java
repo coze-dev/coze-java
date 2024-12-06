@@ -3,17 +3,21 @@ package com.coze.openapi.client.connversations.message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.common.Sort;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListMessageReq {
+@EqualsAndHashCode(callSuper = true)
+public class ListMessageReq extends BaseReq {
     /**
      * The ID of the conversation.
      */

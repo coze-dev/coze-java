@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 // 非流式接口的默认返回值
@@ -12,8 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BaseResponse<T>{
+public class BaseResponse<T> extends BaseResp {
     @JsonProperty("msg")
     private String msg;
 
@@ -28,7 +30,6 @@ public class BaseResponse<T>{
 
     @Data
     @Builder
-
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Detail {

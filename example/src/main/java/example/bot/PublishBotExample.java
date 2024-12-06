@@ -3,6 +3,7 @@ package example.bot;
 import com.coze.openapi.client.bots.*;
 import com.coze.openapi.client.bots.model.BotOnboardingInfo;
 import com.coze.openapi.client.bots.model.BotPromptInfo;
+import com.coze.openapi.client.files.UploadFileReq;
 import com.coze.openapi.client.files.model.FileInfo;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
@@ -42,7 +43,7 @@ public class PublishBotExample {
                 .build();
         // Call the upload file interface to get the avatar id.
         String avatarPath = "/path/avatar.jpg";
-        FileInfo avatarInfo = coze.files().upload(avatarPath);
+        FileInfo avatarInfo = coze.files().upload(UploadFileReq.of(avatarPath)).getFileInfo();
 
         // build the request
         CreateBotReq createReq = CreateBotReq.builder()
@@ -61,9 +62,13 @@ public class PublishBotExample {
          * step two, update the bot, you can update the bot after being created
          * in this example, we will update the avatar of the bot
          */
+        PublishBotReq publishReq = PublishBotReq.builder()
+                .botID(botID)
+                .connectorIDs(Arrays.asList("connector_id_1", "connector_id_2"))
+                .build();
 
         // Call the publishing interface to publish the bot on the api channel.
-        PublishBotResult updateResp = coze.bots().publish(PublishBotReq.of(botID));
+        PublishBotResp updateResp = coze.bots().publish(publishReq);
 
 
         /*
@@ -74,7 +79,7 @@ public class PublishBotExample {
         // set the onboarding info of your bot
         // Call the upload file interface to get the avatar id.
         String newAvatarPath = "/path/new_avatar.jpg";
-        FileInfo newAvatarInfo = coze.files().upload(newAvatarPath);
+        FileInfo newAvatarInfo = coze.files().upload(UploadFileReq.of(newAvatarPath)).getFileInfo();
         // build the request
         UpdateBotReq updateReq = UpdateBotReq.builder()
                 .botID(botID)
@@ -82,7 +87,7 @@ public class PublishBotExample {
                 .build();
         // Invoke the update interface to update a bot, It means success that no exception has been thrown.
         coze.bots().update(updateReq);
-        updateResp = coze.bots().publish(PublishBotReq.of(botID));
+        updateResp = coze.bots().publish(publishReq);
 
     }
 } 

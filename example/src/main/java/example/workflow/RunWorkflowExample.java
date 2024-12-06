@@ -34,7 +34,7 @@ public class RunWorkflowExample {
         RunWorkflowReq.RunWorkflowReqBuilder builder = RunWorkflowReq.builder();
         builder.workflowID(workflowID).parameters(data);
 
-        RunWorkflowResp resp = coze.workflows().runs().run(builder.build());
+        RunWorkflowResp resp = coze.workflows().runs().create(builder.build());
         System.out.println(resp);
 
     }

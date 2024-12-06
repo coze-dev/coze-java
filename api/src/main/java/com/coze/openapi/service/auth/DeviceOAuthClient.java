@@ -1,6 +1,7 @@
 package com.coze.openapi.service.auth;
 
 import com.coze.openapi.client.auth.*;
+import com.coze.openapi.client.exception.AuthErrorCode;
 import com.coze.openapi.client.exception.CozeAuthException;
 
 
@@ -16,16 +17,16 @@ public class DeviceOAuthClient extends OAuthClient{
     }
 
     private static final Logger logger = AuthLogFactory.getLogger();
-    public DeviceAuthCode getDeviceCode(){
+    public DeviceAuthResp getDeviceCode(){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
-        DeviceAuthCode resp = execute(this.api.device(req));
+        DeviceAuthResp resp = execute(this.api.device(req));
         resp.setVerificationURL(resp.getVerificationURI() + "?user_code=" + resp.getUserCode());
         return resp;
     }
 
-    public DeviceAuthCode getDeviceCode(@NotNull String workspaceID){
+    public DeviceAuthResp getDeviceCode(@NotNull String workspaceID){
         DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
-        DeviceAuthCode resp = execute(this.api.device(workspaceID, req));
+        DeviceAuthResp resp = execute(this.api.device(workspaceID, req));
         resp.setVerificationURL(resp.getVerificationURI() + "?user_code=" + resp.getUserCode());
         return resp;
     }
@@ -39,39 +40,36 @@ public class DeviceOAuthClient extends OAuthClient{
         builder.clientID(this.clientID).
                 grantType(GrantType.DeviceCode.getValue()).deviceCode(deviceCode);
         if (!poll){
-            return super.getAccessToken(null, builder.build());
+            return super.getAccessToken(null, builder.build()); // secret 放进去
         }
         int interval = 5;
         while (true){
             try{
                 return super.getAccessToken(null, builder.build());
             }catch (CozeAuthException e){
-                int sleepTime = 5;
-                switch (e.getCode()){
-                    case AuthorizationPending:
-                        logger.info("Authorization pending, sleep " + sleepTime + " seconds");
-                        break;
-                    case SlowDown:
-                        sleepTime = interval;
-                        if (interval < 30){
-                            interval+=5;
-                        }
-                        logger.info("Slow down, sleep " + sleepTime + " seconds");
-                        break;
-                    default:
-                        throw e;
+                if (AuthErrorCode.AUTHORIZATION_PENDING.equals(e.getCode())){
+                    logger.info("Authorization pending, sleep " + interval + " seconds");
+                } else if (AuthErrorCode.SLOW_DOWN.equals(e.getCode())){
+                    if (interval < 30){
+                        interval+=5;
                     }
+                    logger.info("Slow down, sleep " + interval + " seconds");
+                } else {
+                    throw e;
+                }
                 try {
-                    TimeUnit.SECONDS.sleep(sleepTime);
+                    TimeUnit.SECONDS.sleep(interval);
                 } catch (InterruptedException ie) {
                     logger.warn("Interrupted while sleeping", ie);
                     Thread.currentThread().interrupt(); // 恢复中断状态
                     throw ie;
                 }
-                }
-
+            }catch (Exception e){
+                throw e;
             }
         }
+    }
+
 
 
     @Override

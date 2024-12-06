@@ -1,18 +1,19 @@
 package com.coze.openapi.client.chat;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-public class CancelChatReq {
+@EqualsAndHashCode(callSuper = true)
+public class CancelChatReq extends BaseReq {
 
     /*
      *  The Conversation ID can be viewed in the 'conversation_id' field of the Response when

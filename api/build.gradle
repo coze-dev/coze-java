@@ -8,8 +8,9 @@ dependencies {
     api 'org.slf4j:slf4j-api:2.0.12'
     api 'com.squareup.okhttp3:okhttp:4.9.3'
 
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
     implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'

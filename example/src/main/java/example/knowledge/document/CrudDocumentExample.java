@@ -1,11 +1,11 @@
 package example.knowledge.document;
 
-import com.coze.openapi.client.knowledge.document.CreateDocumentReq;
-import com.coze.openapi.client.knowledge.document.CreateDocumentResp;
-import com.coze.openapi.client.knowledge.document.DeleteDocumentReq;
-import com.coze.openapi.client.knowledge.document.UpdateDocumentReq;
-import com.coze.openapi.client.knowledge.document.model.Document;
-import com.coze.openapi.client.knowledge.document.model.DocumentBase;
+import com.coze.openapi.client.dataset.document.CreateDocumentReq;
+import com.coze.openapi.client.dataset.document.CreateDocumentResp;
+import com.coze.openapi.client.dataset.document.DeleteDocumentReq;
+import com.coze.openapi.client.dataset.document.UpdateDocumentReq;
+import com.coze.openapi.client.dataset.document.model.Document;
+import com.coze.openapi.client.dataset.document.model.DocumentBase;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -39,7 +39,7 @@ public class CrudDocumentExample {
                         DocumentBase.buildWebPage("web doc example", "https://your-website.com"),
                         DocumentBase.buildLocalFile("file doc example", "your file content", "txt")))
                 .build();
-        CreateDocumentResp creatResp = coze.knowledge().documents().create(createReq);
+        CreateDocumentResp creatResp = coze.datasets().documents().create(createReq);
         List<Long> documentIDs = new ArrayList<>();
         for (Document documentBase : creatResp.getDocumentInfos()) {
             documentIDs.add(Long.parseLong(documentBase.getDocumentID()));
@@ -52,12 +52,12 @@ public class CrudDocumentExample {
                 .documentID(documentIDs.get(0))
                 .documentName("new name")
                 .build();
-        coze.knowledge().documents().update(updateReq);
+        coze.datasets().documents().update(updateReq);
 
         /*
          * delete document. It means success that no exception has been thrown
          * */
-        coze.knowledge().documents().delete(DeleteDocumentReq.builder().documentIDs(Collections.singletonList(documentIDs.get(0))).build());
+        coze.datasets().documents().delete(DeleteDocumentReq.builder().documentIDs(Collections.singletonList(documentIDs.get(0))).build());
     }
 
 
