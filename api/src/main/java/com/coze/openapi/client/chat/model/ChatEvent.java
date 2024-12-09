@@ -68,6 +68,6 @@ public class ChatEvent extends BaseResp {
     }
 
     public boolean isDone() {
-        return ChatEventType.DONE.equals(this.event) || ChatEventType.CONVERSATION_CHAT_FAILED.equals(this.event);
+        return ChatEventType.DONE.equals(this.event) || ChatEventType.ERROR.equals(this.event);
     }
 } 

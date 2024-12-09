@@ -6,9 +6,7 @@ import com.coze.openapi.client.connversations.CreateConversationReq;
 import com.coze.openapi.client.connversations.ListConversationResp;
 
 import com.coze.openapi.client.connversations.model.Conversation;
-import io.reactivex.Single;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.*;
 import com.coze.openapi.client.common.BaseReq;
 

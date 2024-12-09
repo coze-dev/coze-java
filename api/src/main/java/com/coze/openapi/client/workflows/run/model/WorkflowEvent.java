@@ -89,10 +89,10 @@ public class WorkflowEvent extends BaseResp {
         } else if (WorkflowEventType.DONE.equals(event)) {
             return parseWorkflowEventDone(id, logID);
         }
-        return null;
+        return parseWorkflowEventMessage(id, data, logID);
     }
 
     public boolean isDone() {
-        return !WorkflowEventType.MESSAGE.equals(this.event);
+        return WorkflowEventType.DONE.equals(this.event);
     }
 } 

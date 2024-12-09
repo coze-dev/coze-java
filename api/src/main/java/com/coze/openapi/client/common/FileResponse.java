@@ -1,5 +1,6 @@
 package com.coze.openapi.client.common;
 
+import lombok.Data;
 import lombok.ToString;
 import okhttp3.ResponseBody;
 
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
+@Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
