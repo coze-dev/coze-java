@@ -7,6 +7,9 @@ import com.coze.openapi.client.common.BaseResp;
 import com.coze.openapi.client.auth.GrantType;
 import com.coze.openapi.client.exception.CozeError;
 import com.coze.openapi.client.exception.CozeAuthException;
+import com.coze.openapi.service.service.AuthenticationInterceptor;
+import com.coze.openapi.service.service.TimeoutInterceptor;
+import com.coze.openapi.service.utils.UserAgentInterceptor;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.Single;
@@ -128,7 +131,7 @@ public abstract class OAuthClient {
     }
 
     private String getBaseURL(){
-        return "https://api.coze.cn";
+        return this.baseURL;
     }
 
     protected OAuthToken getAccessToken(GrantType type, String code, String clientSecret, String redirectURI) {
@@ -287,6 +290,11 @@ public abstract class OAuthClient {
 
             if (this.client == null){
                 this.client = defaultClient(Duration.ofMillis(this.readTimeout), Duration.ofMillis(this.connectTimeout));
+            }else {
+                OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
+                builder.addInterceptor(new UserAgentInterceptor());
+
+                this.client = builder.build();
             }
             return this.self();
         }
@@ -296,6 +304,7 @@ public abstract class OAuthClient {
                     .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
                     .readTimeout(readTimeout.toMillis(), TimeUnit.MILLISECONDS)
                     .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+                    .addInterceptor(new UserAgentInterceptor())
                     .build();
         }
     }

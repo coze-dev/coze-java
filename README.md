@@ -20,8 +20,8 @@ your projects.
 |-------------------------------|-------------------------------------------------------------------------------------------------------------|
 | pat auth                      | [TokenAuthExample.java](example/src/main/java/example/auth/TokenAuthExample.java)                           |
 | oauth by web code             | [WebOAuthExample.java](example/src/main/java/example/auth/WebOAuthExample.java)                             |
-| oauth by jwt flow             | [JWTsOauthExample.java](example/src/main/java/example/auth/JWTsOauthExample.java)                           |
-| oauth by pkce flow            | [PKCEOauthExample.java](example/src/main/java/example/auth/PKCEOauthExample.java)                           |
+| oauth by jwt flow             | [JWTsOauthExample.java](example/src/main/java/example/auth/JWTOAuthExample.java)                            |
+| oauth by pkce flow            | [PKCEOauthExample.java](example/src/main/java/example/auth/PKCEOAuthExample.java)                           |
 | oauth by device flow          | [DevicesOAuthExample.java](example/src/main/java/example/auth/DevicesOAuthExample.java)                     |
 | handle auth exception         | [HandlerExceptionExample.java](example/src/main/java/example/auth/HandlerExceptionExample.java)             |
 | bot create, publish and chat  | [PublishBotExample.java](example/src/main/java/example/bot/PublishBotExample.java)                          |
@@ -36,12 +36,14 @@ your projects.
 | conversation                  | [CreateConversationExample.java](example/src/main/java/example/conversation/CreateConversationExample.java) |
 | list conversation             | [ListConversationsExample.java](example/src/main/java/example/conversation/ListConversationsExample.java)   |
 | workspace                     | [ListWorkspaceExample.java](example/src/main/java/example/workspace/ListWorkspaceExample.java)              |
-| create update delete message  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/CUDMessageExample.java)      |
+| create update delete message  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/CrudMessageExample.java)     |
 | list message                  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/ListMessageExample.java)     |
-| create update delete document | [ListWorkspaceExample.java](example/src/main/java/example/datasets/document/CUDDocumentExample.java)      |
-| initial client                | [InitServiceExample.java](example/src/main/java/example/service/InitServiceExample.java)                      |
-| how to handle exception       | [HandlerExceptionExample.java](example/src/main/java/example/service/HandlerExceptionExample.java)             |
-| get request log id            | [GetLogExample.java](example/src/main/java/example/service/GetLogExample.java)                                    |
+| create update delete document | [ListWorkspaceExample.java](example/src/main/java/example/datasets/document/CrudDocumentExample.java)       |
+| initial client                | [InitServiceExample.java](example/src/main/java/example/service/InitClientExample.java)                     |
+| how to handle exception       | [HandlerExceptionExample.java](example/src/main/java/example/service/HandlerExceptionExample.java)          |
+| get request log id            | [GetLogExample.java](example/src/main/java/example/service/GetLogExample.java)                              |
+| set timeout                   | [SetRequestTimeoutExample.java](example/src/main/java/example/service/SetRequestTimeoutExample.java)        |
+
 ### Initialize the Coze client
 
 Firstly, you need to access https://www.coze.com/open/oauth/pats (for the cn environment,

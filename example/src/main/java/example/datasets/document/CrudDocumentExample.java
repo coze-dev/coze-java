@@ -1,4 +1,4 @@
-package example.knowledge.document;
+package example.datasets.document;
 
 import com.coze.openapi.client.dataset.document.*;
 import com.coze.openapi.client.dataset.document.model.Document;

@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import com.coze.openapi.service.utils.UserAgentInterceptor;
 import org.slf4j.Logger;
 
 import com.coze.openapi.api.*;
@@ -161,6 +163,7 @@ public class CozeAPI {
         private OkHttpClient parseClient(OkHttpClient client){
             boolean hasAuthInterceptor = false;
             boolean hasTimeoutInterceptor = false;
+            boolean hasUserAgentInterceptor = false;
             for(Interceptor interceptor :client.interceptors()){
                 if (interceptor instanceof AuthenticationInterceptor){
                     hasAuthInterceptor = true;
@@ -168,8 +171,11 @@ public class CozeAPI {
                 if (interceptor instanceof TimeoutInterceptor){
                     hasTimeoutInterceptor = true;
                 }
+                if (interceptor instanceof  UserAgentInterceptor){
+                    hasUserAgentInterceptor = true;
+                }
             }
-            if (hasAuthInterceptor && hasTimeoutInterceptor){
+            if (hasAuthInterceptor && hasTimeoutInterceptor && hasUserAgentInterceptor){
                 return client;
             }
             OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
@@ -178,6 +184,9 @@ public class CozeAPI {
             }
             if (!hasTimeoutInterceptor){
                 builder.addInterceptor(new TimeoutInterceptor());
+            }
+            if (!hasUserAgentInterceptor){
+                builder.addInterceptor(new UserAgentInterceptor());
             }
             return builder.build();
         }
@@ -190,6 +199,7 @@ public class CozeAPI {
                     .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
                     .addInterceptor(new AuthenticationInterceptor(this.auth)) // 添加拦截器，在请求头中增加 token
                     .addInterceptor(new TimeoutInterceptor()) // 添加拦截器，设置超时时间
+                    .addInterceptor(new UserAgentInterceptor()) // 添加拦截器，设置 user-agent
                     .build();
         }
 

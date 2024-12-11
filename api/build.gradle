@@ -1,5 +1,5 @@
 plugins {
-    id 'java-library'  // 添加这一行
+    id 'java-library'
 }
 
 dependencies {

@@ -15,8 +15,8 @@ public class CreateExample {
                 .auth(authCli)
                 .readTimeout(10000)
                 .build();
-        String botID = System.getenv("BOT_ID");
-        String voiceID = System.getenv("VOICE_ID");
+        String botID = System.getenv("COZE_BOT_ID");
+        String voiceID = System.getenv("COZE_VOICE_ID");
 
         CreateRoomReq req = CreateRoomReq.builder()
                                          .botID(botID)

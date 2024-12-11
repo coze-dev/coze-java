@@ -1,0 +1,24 @@
+name: Code Check
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          
+      - name: Code style check
+        run: |
+          ./gradlew spotlessCheck
+          ./gradlew checkstyleMain 

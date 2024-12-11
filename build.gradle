@@ -1,12 +1,11 @@
 plugins {
     id 'com.diffplug.spotless' version '6.11.0' apply false
-    id 'com.star-zero.gradle.githook' version '1.2.1'
 }
 
 allprojects {
     apply plugin: 'java'
 
-    group = 'com.yourcompany'
+    group = 'com.bytedance'
     version = '1.0-SNAPSHOT'
 
     repositories {
@@ -48,18 +47,5 @@ subprojects {
         toolVersion = '8.45.1'  // 使用支持 Java 8 的版本
         configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
         maxWarnings = 0
-    }
-}
-
-githook {
-    failOnMissingHooksDir = false  // 添加这行来避免缺少 hooks 目录时的错误
-    createHooksDirIfNotExist = true  // 如果 hooks 目录不存在则创建
-    hooks {
-        register('pre-commit') {  // 使用 register 方法替代直接声明
-            script {
-                tasks('spotlessApply')  // 使用 tasks 方法替代 task
-                tasks('checkstyleMain')
-            }
-        }
     }
 }

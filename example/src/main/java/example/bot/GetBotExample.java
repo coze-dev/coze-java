@@ -20,7 +20,7 @@ public class GetBotExample {
     public static void main(String[] args) throws IOException {
         // Get an access_token through personal access token or oauth.
         String token = System.getenv("COZE_API_TOKEN");
-        String botID = System.getenv("BOT_ID");
+        String botID = System.getenv("COZE_BOT_ID");
         TokenAuth authCli = new TokenAuth(token);
 
         // Init the Coze client through the access_token.

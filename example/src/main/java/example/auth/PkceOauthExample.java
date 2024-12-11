@@ -1,7 +1,7 @@
 package example.auth;
 
 import com.coze.openapi.client.auth.OAuthToken;
-import com.coze.openapi.client.auth.PKCEAuthParam;
+import com.coze.openapi.client.auth.GetPKCEAuthURLResp;
 import com.coze.openapi.service.auth.PKCEOAuthClient;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.config.Consts;
@@ -46,7 +46,7 @@ public class PKCEOAuthExample {
         In the SDK, we have wrapped up the code_challenge process of PKCE. Developers only need
         to select the code_challenge_method.
         * */
-        PKCEAuthParam oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
+        GetPKCEAuthURLResp oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
         System.out.println(oauthURL);
 
         /*
@@ -67,14 +67,15 @@ public class PKCEOAuthExample {
         /*
         After obtaining the code after redirection, the interface to exchange the code for a
         token can be invoked to generate the coze access_token of the authorized user.
+        The developer should use code verifier returned by genOAuthURL() method
         * */
-        OAuthToken resp = oauth.getAccessToken(code, redirectURI, "");
+        OAuthToken resp = oauth.getAccessToken(code, redirectURI, oauthURL.getCodeVerifier());
         System.out.println(resp);
 
         // use the access token to init Coze client
         CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
         // When the token expires, you can also refresh and re-obtain the token
         resp = oauth.refreshToken(resp.getRefreshToken());
-
+        System.out.println();
     }
 } 

@@ -18,7 +18,7 @@ public class CreateExample {
                 .readTimeout(10000)
                 .build();;
         String saveFilePath = System.getenv("SAVE_FILE_PATH");
-        String voiceID = System.getenv("VOICE_ID");
+        String voiceID = System.getenv("COZE_VOICE_ID");
         String content = "快来试一试吧";
 
         CreateSpeechReq req = CreateSpeechReq.builder()

@@ -1,4 +1,4 @@
-package example.knowledge.document;
+package example.datasets.document;
 
 import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.client.dataset.document.ListDocumentReq;

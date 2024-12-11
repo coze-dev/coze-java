@@ -25,7 +25,7 @@ public class CloneExample {
                                          .voiceName("your voice name")
                                          .audioFormat(AudioFormat.M4A)
                                          .language(LanguageCode.ZH)
-                                         .voiceID(System.getenv("VOICE_ID"))
+                                         .voiceID(System.getenv("COZE_VOICE_ID"))
                                          .text("your text")
                                          .previewText("your preview text")
                                          .build();
