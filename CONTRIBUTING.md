@@ -23,6 +23,12 @@ This project follows Google Java Style guidelines. In IntelliJ IDEA:
 1. Install the google-java-format plugin
 2. Enable google-java-format in settings
 
+You can run following command on the terminal to format code:
+
+```shell
+./gradlew spotlessApply
+```
+
 ## Git Hooks
 
 We use the Gradle spotless plugin to ensure code quality. The project is configured to run checks automatically before each commit.
