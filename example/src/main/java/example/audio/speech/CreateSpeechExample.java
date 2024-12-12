@@ -7,7 +7,7 @@ import com.coze.openapi.service.auth.TokenAuth;
 
 import java.io.IOException;
 
-public class CreateExample {
+public class CreateSpeechExample {
 
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");

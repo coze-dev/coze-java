@@ -20,7 +20,7 @@ https://www.coze.com/docs/developer_guides/oauth_device_code. For the cn environ
 accessed at https://www.coze.cn/docs/developer_guides/oauth_device_code.
 After the creation is completed, the client ID can be obtained.
 * */
-public class DevicesOAuthExample {
+public class DeviceOAuthExample {
 
     public static void main(String[] args) {
         String clientID = System.getenv("COZE_DEVICE_OAUTH_CLIENT_ID");
@@ -78,7 +78,10 @@ public class DevicesOAuthExample {
         codes. The developers only need to invoke getAccessToken.
         * */
         try {
-            OAuthToken resp = oauth.getAccessToken(codeResp.getDeviceCode());
+            /*
+            * if the developers set poll as true, the sdk will automatically handle pending and slow down exception
+            * */
+            OAuthToken resp = oauth.getAccessToken(codeResp.getDeviceCode(), true);
             System.out.println(resp);
 
 

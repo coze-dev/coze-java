@@ -7,7 +7,7 @@ import com.coze.openapi.client.audio.common.LanguageCode;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
-public class CloneExample {
+public class CloneVoiceExample {
 
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");

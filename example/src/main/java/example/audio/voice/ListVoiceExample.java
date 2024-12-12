@@ -8,7 +8,7 @@ import com.coze.openapi.service.auth.TokenAuth;
 
 import java.util.Iterator;
 
-public class ListExample {
+public class ListVoiceExample {
 
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");
