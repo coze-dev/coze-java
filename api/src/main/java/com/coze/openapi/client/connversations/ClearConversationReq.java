@@ -1,0 +1,26 @@
+package com.coze.openapi.client.connversations;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ClearConversationReq {
+    /**
+     * The ID of the conversation.
+     */
+    @NonNull
+    @JsonProperty("conversation_id")
+    private String conversationId;
+
+    public static ClearConversationReq of(String conversationId) {
+        return ClearConversationReq.builder().conversationId(conversationId).build();
+    }
+}

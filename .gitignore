@@ -1,3 +1,12 @@
+.idea
+.gradle
+.vscode
+*.iml
+**/.DS_Store
+**/build/*
+**/bin/*
+**/obj/*
+
 # Compiled class file
 *.class
 
@@ -12,6 +21,7 @@
 
 # Package Files #
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
@@ -19,6 +29,11 @@
 *.tar.gz
 *.rar
 
+# Log file
+*.log
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# BlueJ files
+*.ctxt
