@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.audio.voices;
 
 import java.util.List;
@@ -7,7 +8,6 @@ import com.coze.openapi.client.common.BaseResp;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ListVoiceResp extends BaseResp {
-    @JsonProperty("voice_list")
-    private List<Voice> voiceList;
+  @JsonProperty("voice_list")
+  private List<Voice> voiceList;
 }

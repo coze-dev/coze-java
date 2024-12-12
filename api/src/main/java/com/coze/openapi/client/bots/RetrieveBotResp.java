@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.bots;
 
 import com.coze.openapi.client.bots.model.Bot;
@@ -14,6 +15,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RetrieveBotResp extends BaseResp{
-    private Bot bot;
+public class RetrieveBotResp extends BaseResp {
+  private Bot bot;
 }

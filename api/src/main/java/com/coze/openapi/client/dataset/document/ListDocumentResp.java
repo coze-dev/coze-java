@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.dataset.document;
 
 import java.util.List;
@@ -17,10 +18,10 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ToString(callSuper = true)
-public class ListDocumentResp extends BaseResponse<List<Document>>{
-    @JsonProperty("total")
-    private Long total;
-    @JsonProperty("document_infos")
-    private List<Document> documentInfos;
-    
+public class ListDocumentResp extends BaseResponse<List<Document>> {
+  @JsonProperty("total")
+  private Long total;
+
+  @JsonProperty("document_infos")
+  private List<Document> documentInfos;
 }

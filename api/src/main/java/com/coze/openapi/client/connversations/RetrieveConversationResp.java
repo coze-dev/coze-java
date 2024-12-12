@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.connversations;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -14,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RetrieveConversationResp extends BaseResp{
-    private Conversation conversation;
+public class RetrieveConversationResp extends BaseResp {
+  private Conversation conversation;
 }
-

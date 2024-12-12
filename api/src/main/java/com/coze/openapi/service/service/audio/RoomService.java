@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.service.service.audio;
 
 import com.coze.openapi.api.AudioRoomAPI;
@@ -7,16 +8,16 @@ import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.service.utils.Utils;
 
 public class RoomService {
-    private final AudioRoomAPI roomApi;
+  private final AudioRoomAPI roomApi;
 
-    public RoomService(AudioRoomAPI roomApi) {
-        this.roomApi = roomApi;
-    }
+  public RoomService(AudioRoomAPI roomApi) {
+    this.roomApi = roomApi;
+  }
 
-    public CreateRoomResp create(CreateRoomReq req) {
-        BaseResponse<CreateRoomResp> resp = Utils.execute(roomApi.create(req, req));
-        CreateRoomResp data = resp.getData();
-        data.setLogID(resp.getLogID());
-        return data;
-    }
+  public CreateRoomResp create(CreateRoomReq req) {
+    BaseResponse<CreateRoomResp> resp = Utils.execute(roomApi.create(req, req));
+    CreateRoomResp data = resp.getData();
+    data.setLogID(resp.getLogID());
+    return data;
+  }
 }

@@ -1,50 +1,53 @@
+/* (C)2024 */
 package com.coze.openapi.client.bots.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bot {
-    @JsonProperty("bot_id")
-    private String botID;
+  @JsonProperty("bot_id")
+  private String botID;
 
-    @JsonProperty("name")
-    private String name;
+  @JsonProperty("name")
+  private String name;
 
-    @JsonProperty("description")
-    private String description;
+  @JsonProperty("description")
+  private String description;
 
-    @JsonProperty("icon_url")
-    private String iconURL;
+  @JsonProperty("icon_url")
+  private String iconURL;
 
-    @JsonProperty("create_time")
-    private Long createTime;
+  @JsonProperty("create_time")
+  private Long createTime;
 
-    @JsonProperty("update_time")
-    private Long updateTime;
+  @JsonProperty("update_time")
+  private Long updateTime;
 
-    @JsonProperty("version")
-    private String version;
+  @JsonProperty("version")
+  private String version;
 
-    @JsonProperty("prompt_info")
-    private BotPromptInfo promptInfo;
+  @JsonProperty("prompt_info")
+  private BotPromptInfo promptInfo;
 
-    @JsonProperty("onboarding_info")
-    private BotOnboardingInfo onboardingInfo;
+  @JsonProperty("onboarding_info")
+  private BotOnboardingInfo onboardingInfo;
 
-    @JsonProperty("bot_mode")
-    private BotMode botMode;
+  @JsonProperty("bot_mode")
+  private BotMode botMode;
 
-    @JsonProperty("plugin_info_list")
-    private List<BotPluginInfo> pluginInfoList;
+  @JsonProperty("plugin_info_list")
+  private List<BotPluginInfo> pluginInfoList;
 
-    @JsonProperty("model_info")
-    private BotModelInfo modelInfo;
-} 
+  @JsonProperty("model_info")
+  private BotModelInfo modelInfo;
+}

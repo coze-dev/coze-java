@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.workspace;
 
 import java.util.List;
@@ -17,10 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ListWorkspaceResp {
-    @JsonProperty("total_count")
-    private Integer totalCount;
+  @JsonProperty("total_count")
+  private Integer totalCount;
 
-    @JsonProperty("workspaces")
-    private List<Workspace> workspaces;
-
+  @JsonProperty("workspaces")
+  private List<Workspace> workspaces;
 }

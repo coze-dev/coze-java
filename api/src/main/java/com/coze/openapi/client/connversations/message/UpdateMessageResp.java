@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.connversations.message;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -18,6 +19,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class UpdateMessageResp extends BaseResp {
-    @JsonProperty("message")
-    private Message message;
+  @JsonProperty("message")
+  private Message message;
 }

@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.audio.rooms;
 
 import com.coze.openapi.client.audio.rooms.model.RoomConfig;
@@ -17,15 +18,16 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CreateRoomReq extends BaseReq {
-    @NonNull
-    @JsonProperty("bot_id")
-    private String botID;
-    @JsonProperty("conversation_id")
-    private String conversationID;
-    @JsonProperty("voice_id")
-    private String voiceID;
+  @NonNull
+  @JsonProperty("bot_id")
+  private String botID;
 
-    @JsonProperty("config")
-    private RoomConfig config;
+  @JsonProperty("conversation_id")
+  private String conversationID;
 
+  @JsonProperty("voice_id")
+  private String voiceID;
+
+  @JsonProperty("config")
+  private RoomConfig config;
 }

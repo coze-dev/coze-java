@@ -1,7 +1,8 @@
+/* (C)2024 */
 package com.coze.openapi.client.files.model;
 
-import com.coze.openapi.client.common.BaseResp;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,23 +12,24 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileInfo{
-    // The ID of the uploaded file.
-    @JsonProperty("id")
-    private String id;
-    public String getID() {
-        return id;
-    }
+public class FileInfo {
+  // The ID of the uploaded file.
+  @JsonProperty("id")
+  private String id;
 
-    // The total byte size of the file.
-    @JsonProperty("bytes")
-    private Integer bytes;
+  public String getID() {
+    return id;
+  }
 
-    // The upload time of the file, in the format of a 10-digit Unix timestamp in seconds (s).
-    @JsonProperty("created_at")
-    private Integer createdAt;
+  // The total byte size of the file.
+  @JsonProperty("bytes")
+  private Integer bytes;
 
-    // The name of the file.
-    @JsonProperty("file_name")
-    private String fileName;
+  // The upload time of the file, in the format of a 10-digit Unix timestamp in seconds (s).
+  @JsonProperty("created_at")
+  private Integer createdAt;
+
+  // The name of the file.
+  @JsonProperty("file_name")
+  private String fileName;
 }

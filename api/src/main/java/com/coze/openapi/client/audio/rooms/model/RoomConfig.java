@@ -1,5 +1,5 @@
+/* (C)2024 */
 package com.coze.openapi.client.audio.rooms.model;
-
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomConfig {
-    @JsonProperty("audio_config")
-    private RoomAudioConfig audioConfig;
+  @JsonProperty("audio_config")
+  private RoomAudioConfig audioConfig;
 
-    public static RoomConfig of(AudioCodec codec) {
-        return RoomConfig.builder().audioConfig(RoomAudioConfig.builder().codec(codec).build()).build();
-    }
+  public static RoomConfig of(AudioCodec codec) {
+    return RoomConfig.builder().audioConfig(RoomAudioConfig.builder().codec(codec).build()).build();
+  }
 }

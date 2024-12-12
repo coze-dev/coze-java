@@ -1,29 +1,7 @@
+/* (C)2024 */
 package com.coze.openapi.service.auth;
 
-import com.coze.openapi.api.CozeAuthAPI;
-import com.coze.openapi.client.auth.GetAccessTokenReq;
-import com.coze.openapi.client.auth.OAuthToken;
-import com.coze.openapi.client.common.BaseResp;
-import com.coze.openapi.client.auth.GrantType;
-import com.coze.openapi.client.exception.CozeError;
-import com.coze.openapi.client.exception.CozeAuthException;
-import com.coze.openapi.service.service.AuthenticationInterceptor;
-import com.coze.openapi.service.service.TimeoutInterceptor;
-import com.coze.openapi.service.utils.UserAgentInterceptor;
-import com.coze.openapi.service.utils.Utils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.reactivex.Single;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-
-import retrofit2.HttpException;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import static com.coze.openapi.service.config.Consts.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -36,279 +14,317 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import static com.coze.openapi.service.config.Consts.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+
+import com.coze.openapi.api.CozeAuthAPI;
+import com.coze.openapi.client.auth.GetAccessTokenReq;
+import com.coze.openapi.client.auth.GrantType;
+import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.common.BaseResp;
+import com.coze.openapi.client.exception.CozeAuthException;
+import com.coze.openapi.client.exception.CozeError;
+import com.coze.openapi.service.utils.UserAgentInterceptor;
+import com.coze.openapi.service.utils.Utils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.reactivex.Single;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public abstract class OAuthClient {
-    private static final String AuthorizeHeader ="Authorization";
-    private static final ObjectMapper mapper = Utils.defaultObjectMapper();
+  private static final String AuthorizeHeader = "Authorization";
+  private static final ObjectMapper mapper = Utils.defaultObjectMapper();
 
-    protected final String clientSecret;
-    protected final String clientID;
-    protected final String baseURL;
-    protected final CozeAuthAPI api;
-    protected final ExecutorService executorService;
+  protected final String clientSecret;
+  protected final String clientID;
+  protected final String baseURL;
+  protected final CozeAuthAPI api;
+  protected final ExecutorService executorService;
 
-    protected OAuthClient(OAuthBuilder<?> builder) {
-        builder.init();
-        this.clientSecret = builder.clientSecret;
-        this.clientID = builder.clientID;
-        this.baseURL = builder.baseURL;
+  protected OAuthClient(OAuthBuilder<?> builder) {
+    builder.init();
+    this.clientSecret = builder.clientSecret;
+    this.clientID = builder.clientID;
+    this.baseURL = builder.baseURL;
 
-        Retrofit retrofit = defaultRetrofit(builder.client, mapper, getBaseURL());
+    Retrofit retrofit = defaultRetrofit(builder.client, mapper, getBaseURL());
 
-        this.api = retrofit.create(CozeAuthAPI.class);
-        this.executorService = builder.client.dispatcher().executorService();
+    this.api = retrofit.create(CozeAuthAPI.class);
+    this.executorService = builder.client.dispatcher().executorService();
+  }
+
+  protected String getOAuthURL(@NotNull String redirectURI, String state) {
+    return this._getOAuthURL(redirectURI, state, null, null, null);
+  }
+
+  protected String getOAuthURL(
+      @NotNull String redirectURI, String state, @NotNull String codeChallenge) {
+    return this._getOAuthURL(redirectURI, state, codeChallenge, null, null);
+  }
+
+  protected String getOAuthURL(
+      @NotNull String redirectURI,
+      String state,
+      @NotNull String codeChallenge,
+      @NotNull String codeChallengeMethod) {
+    return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, null);
+  }
+
+  protected String getOAuthURL(
+      @NotNull String redirectURI,
+      String state,
+      @NotNull String codeChallenge,
+      @NotNull String codeChallengeMethod,
+      @NotNull String workspaceID) {
+    return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, workspaceID);
+  }
+
+  private String _getOAuthURL(
+      String redirectUri,
+      String state,
+      String codeChallenge,
+      String codeChallengeMethod,
+      String workspaceID) {
+
+    Map<String, String> params = new HashMap<>();
+    params.put("response_type", "code");
+    if (this.clientID != null) {
+      params.put("client_id", this.clientID);
+    }
+    if (redirectUri != null) {
+      params.put("redirect_uri", redirectUri);
+    }
+    if (state != null) {
+      params.put("state", state);
+    }
+    if (codeChallenge != null) {
+      params.put("code_challenge", codeChallenge);
+    }
+    if (codeChallengeMethod != null) {
+      params.put("code_challenge_method", codeChallengeMethod);
     }
 
-
-    protected String getOAuthURL(@NotNull String redirectURI, String state) {
-        return this._getOAuthURL(redirectURI, state, null, null, null);
+    String uri = baseURL + "/api/permission/oauth2/authorize";
+    if (workspaceID != null) {
+      uri =
+          baseURL + String.format("/api/permission/oauth2/workspace_id/%s/authorize", workspaceID);
     }
 
-    protected String getOAuthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge) {
-        return this._getOAuthURL(redirectURI, state, codeChallenge, null, null);
-    }
-
-    protected String getOAuthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull String codeChallengeMethod) {
-        return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, null);
-    }
-
-    protected String getOAuthURL(@NotNull String redirectURI, String state, @NotNull String codeChallenge, @NotNull String codeChallengeMethod, @NotNull String workspaceID) {
-        return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, workspaceID);
-    }
-
-    private String _getOAuthURL(
-            String redirectUri,
-            String state,
-            String codeChallenge,
-            String codeChallengeMethod,
-            String workspaceID){
-
-        Map<String, String> params = new HashMap<>();
-        params.put("response_type", "code");
-        if (this.clientID!= null){
-            params.put("client_id", this.clientID);
-        }
-        if (redirectUri != null) {
-            params.put("redirect_uri", redirectUri);
-        }
-        if (state != null){
-            params.put("state", state);
-        }
-        if (codeChallenge != null) {
-            params.put("code_challenge", codeChallenge);
-        }
-        if (codeChallengeMethod != null) {
-            params.put("code_challenge_method", codeChallengeMethod);
-        }
-
-        String uri = baseURL + "/api/permission/oauth2/authorize";
-        if (workspaceID != null) {
-            uri = baseURL + String.format("/api/permission/oauth2/workspace_id/%s/authorize", workspaceID);
-        }
-
-        String queryString = params.entrySet().stream()
-                .map(entry -> {
-                    try {
-                        return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()) + "=" +
-                                URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString());
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
+    String queryString =
+        params.entrySet().stream()
+            .map(
+                entry -> {
+                  try {
+                    return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString())
+                        + "="
+                        + URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString());
+                  } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                  }
                 })
-                .collect(Collectors.joining("&"));
+            .collect(Collectors.joining("&"));
 
-        return uri + "?" + queryString;
+    return uri + "?" + queryString;
+  }
+
+  protected Retrofit defaultRetrofit(OkHttpClient client, ObjectMapper mapper, String baseURL) {
+    return new Retrofit.Builder()
+        .baseUrl(baseURL)
+        .client(client)
+        .addConverterFactory(JacksonConverterFactory.create(mapper))
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build();
+  }
+
+  private String getBaseURL() {
+    return this.baseURL;
+  }
+
+  protected OAuthToken getAccessToken(
+      GrantType type, String code, String clientSecret, String redirectURI) {
+    return request(code, clientSecret, type, null, redirectURI);
+  }
+
+  protected OAuthToken getAccessToken(GrantType type, String clientSecret, String redirectURI) {
+    return request(null, clientSecret, type, null, redirectURI);
+  }
+
+  protected OAuthToken getAccessToken(String secret, GetAccessTokenReq req) {
+    Map<String, String> headers = new HashMap<>();
+    if (secret != null) {
+      headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
+    }
+    return execute(this.api.retrieve(headers, req));
+  }
+
+  protected OAuthToken refreshAccessToken(String refreshToken, String clientSecret) {
+    return request(null, clientSecret, GrantType.RefreshToken, refreshToken, null);
+  }
+
+  protected OAuthToken refreshAccessToken(String refreshToken) {
+    return request(null, null, GrantType.RefreshToken, refreshToken, null);
+  }
+
+  public void shutdownExecutor() {
+    Objects.requireNonNull(
+        this.executorService, "executorService must be set in order to shut down");
+    this.executorService.shutdown();
+  }
+
+  private OAuthToken request(
+      String code, String secret, GrantType grantType, String refreshToken, String redirectURI) {
+    GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
+    builder
+        .clientID(this.clientID)
+        .grantType(grantType.getValue())
+        .code(code)
+        .refreshToken(refreshToken)
+        .redirectUri(redirectURI);
+    GetAccessTokenReq req = builder.build();
+
+    Map<String, String> headers = new HashMap<>();
+    if (secret != null) {
+      headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
+    }
+    return execute(this.api.retrieve(headers, req));
+  }
+
+  protected static <T> T execute(Single<Response<T>> apiCall) {
+    try {
+      Response<T> response = apiCall.blockingGet();
+      if (!response.isSuccessful()) {
+        try (ResponseBody errorBody = response.errorBody()) {
+          if (errorBody == null) {
+            throw new HttpException(response);
+          }
+          String logID = Utils.getLogID(response);
+          String errStr = errorBody.string();
+          CozeError error = mapper.readValue(errStr, CozeError.class);
+          throw new CozeAuthException(error, new HttpException(response), response.code(), logID);
+        } catch (IOException ex) {
+          throw new HttpException(response);
+        }
+      }
+      T body = response.body();
+      if (body instanceof BaseResp) {
+        ((BaseResp) body).setLogID(Utils.getLogID(response));
+      }
+      return body;
+    } catch (HttpException e) {
+      try (ResponseBody errorBody = e.response().errorBody()) {
+        if (errorBody == null) {
+          throw e;
+        }
+        String logID = Utils.getLogID(e.response());
+
+        String errStr = e.response().errorBody().string();
+
+        CozeError error = mapper.readValue(errStr, CozeError.class);
+        throw new CozeAuthException(error, e, e.code(), logID);
+      } catch (IOException ex) {
+        // couldn't parse OpenAI error
+        throw e;
+      }
+    }
+  }
+
+  public abstract OAuthToken refreshToken(String refreshToken);
+
+  public abstract static class OAuthBuilder<T extends OAuthBuilder<T>> {
+    protected String clientID;
+    protected String clientSecret;
+    protected String baseURL;
+    protected int readTimeout;
+    protected int connectTimeout;
+    protected OkHttpClient client;
+    protected Logger logger;
+
+    @SuppressWarnings("unchecked")
+    protected T self() {
+      return (T) this;
     }
 
-    protected Retrofit defaultRetrofit(OkHttpClient client, ObjectMapper mapper, String baseURL) {
-        return new Retrofit.Builder()
-                .baseUrl(baseURL)
-                .client(client)
-                .addConverterFactory(JacksonConverterFactory.create(mapper))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+    public T clientID(String clientID) {
+      this.clientID = clientID;
+      return self();
     }
 
-    private String getBaseURL(){
-        return this.baseURL;
+    public T clientSecret(String clientSecret) {
+      this.clientSecret = clientSecret;
+      return self();
     }
 
-    protected OAuthToken getAccessToken(GrantType type, String code, String clientSecret, String redirectURI) {
-        return request(code, clientSecret, type, null, redirectURI);
+    public T baseURL(String baseURL) {
+      this.baseURL = baseURL;
+      return self();
     }
 
-    protected OAuthToken getAccessToken(GrantType type, String clientSecret, String redirectURI) {
-        return request(null, clientSecret, type, null, redirectURI);
+    public T readTimeout(int readTimeout) {
+      this.readTimeout = readTimeout;
+      return self();
     }
 
-    protected OAuthToken getAccessToken(String secret, GetAccessTokenReq req) {
-        Map<String, String> headers = new HashMap<>();
-        if (secret != null){
-            headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
-        }
-        return execute(this.api.retrieve(headers, req));
+    public T connectTimeout(int connectTimeout) {
+      this.connectTimeout = connectTimeout;
+      return self();
     }
 
-    protected OAuthToken refreshAccessToken(String refreshToken, String clientSecret) {
-        return request(null, clientSecret, GrantType.RefreshToken, refreshToken, null);
+    public T client(OkHttpClient client) {
+      this.client = client;
+      return self();
     }
 
-    protected OAuthToken refreshAccessToken(String refreshToken) {
-        return request(null, null, GrantType.RefreshToken, refreshToken, null);
+    public T logger(Logger logger) {
+      this.logger = logger;
+      return self();
     }
 
-    public void shutdownExecutor() {
-        Objects.requireNonNull(this.executorService, "executorService must be set in order to shut down");
-        this.executorService.shutdown();
+    public abstract OAuthClient build() throws Exception;
+
+    protected T init() {
+      if (this.logger != null) {
+        AuthLogFactory.setLogger(this.logger);
+      }
+      if (this.baseURL == null || this.baseURL.isEmpty()) {
+        this.baseURL = COZE_COM_BASE_URL;
+      }
+
+      if (this.readTimeout == 0) {
+        this.readTimeout = 5000;
+      }
+
+      if (this.connectTimeout == 0) {
+        this.connectTimeout = 5000;
+      }
+
+      if (this.client == null) {
+        this.client =
+            defaultClient(
+                Duration.ofMillis(this.readTimeout), Duration.ofMillis(this.connectTimeout));
+      } else {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
+        builder.addInterceptor(new UserAgentInterceptor());
+
+        this.client = builder.build();
+      }
+      return this.self();
     }
 
-
-    private OAuthToken request(String code, String secret, GrantType grantType, String refreshToken, String redirectURI){
-        GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
-        builder.clientID(this.clientID).
-                grantType(grantType.getValue()).
-                code(code).
-                refreshToken(refreshToken).
-                redirectUri(redirectURI);
-        GetAccessTokenReq req = builder.build();
-
-        Map<String, String> headers = new HashMap<>();
-        if (secret != null){
-            headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
-        }
-        return execute(this.api.retrieve(headers, req));
+    protected OkHttpClient defaultClient(Duration readTimeout, Duration connectTimeout) {
+      return new OkHttpClient.Builder()
+          .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
+          .readTimeout(readTimeout.toMillis(), TimeUnit.MILLISECONDS)
+          .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
+          .addInterceptor(new UserAgentInterceptor())
+          .build();
     }
-
-    protected static <T> T execute(Single<Response<T>> apiCall) {
-        try {
-            Response<T> response = apiCall.blockingGet();
-            if (!response.isSuccessful()) {
-                try (ResponseBody errorBody = response.errorBody()) {
-                    if (errorBody == null) {
-                        throw new HttpException(response);
-                    }
-                    String logID = Utils.getLogID(response);
-                    String errStr = errorBody.string();
-                    CozeError error = mapper.readValue(errStr, CozeError.class);
-                    throw new CozeAuthException(error, new HttpException(response), response.code(), logID);
-                } catch (IOException ex) {
-                    throw new HttpException(response);
-                }
-            }
-            T body = response.body();
-            if (body instanceof BaseResp) {
-                ((BaseResp) body).setLogID(Utils.getLogID(response));
-            }
-            return body;
-        } catch (HttpException e) {
-            try (ResponseBody errorBody = e.response().errorBody()){
-                if (errorBody == null) {
-                    throw e;
-                }
-                String logID = Utils.getLogID(e.response());
-
-                String errStr = e.response().errorBody().string();
-
-                CozeError error = mapper.readValue(errStr, CozeError.class);
-                throw new CozeAuthException(error, e, e.code(), logID);
-            } catch (IOException ex) {
-                // couldn't parse OpenAI error
-                throw e;
-            }
-        }
-    }
-
-    public abstract OAuthToken refreshToken(String refreshToken);
-
-    public static abstract class OAuthBuilder<T extends OAuthBuilder<T>> {
-        protected String clientID;
-        protected String clientSecret;
-        protected String baseURL;
-        protected int readTimeout;
-        protected int connectTimeout;
-        protected OkHttpClient client;
-        protected Logger logger;
-
-        @SuppressWarnings("unchecked")
-        protected T self() {
-            return (T) this;
-        }
-
-        public T clientID(String clientID) {
-            this.clientID = clientID;
-            return self();
-        }
-
-        public T clientSecret(String clientSecret) {
-            this.clientSecret = clientSecret;
-            return self();
-        }
-
-        public T baseURL(String baseURL) {
-            this.baseURL = baseURL;
-            return self();
-        }
-
-        public T readTimeout(int readTimeout) {
-            this.readTimeout = readTimeout;
-            return self();
-        }
-
-        public T connectTimeout(int connectTimeout) {
-            this.connectTimeout = connectTimeout;
-            return self();
-        }
-
-        public T client(OkHttpClient client) {
-            this.client = client;
-            return self();
-        }
-
-        public T logger(Logger logger) {
-            this.logger = logger;
-            return self();
-        }
-
-        public abstract OAuthClient build() throws Exception;
-        
-        protected T init() {
-            if (this.logger != null){
-                AuthLogFactory.setLogger(this.logger);
-            }
-            if (this.baseURL == null || this.baseURL.isEmpty()){
-                this.baseURL = COZE_COM_BASE_URL;
-            }
-            
-            if (this.readTimeout == 0){
-                this.readTimeout = 5000;    
-            }
-
-            if (this.connectTimeout == 0){
-                this.connectTimeout = 5000;
-            }
-
-            if (this.client == null){
-                this.client = defaultClient(Duration.ofMillis(this.readTimeout), Duration.ofMillis(this.connectTimeout));
-            }else {
-                OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
-                builder.addInterceptor(new UserAgentInterceptor());
-
-                this.client = builder.build();
-            }
-            return this.self();
-        }
-
-        protected OkHttpClient defaultClient(Duration readTimeout, Duration connectTimeout) {
-            return new OkHttpClient.Builder()
-                    .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
-                    .readTimeout(readTimeout.toMillis(), TimeUnit.MILLISECONDS)
-                    .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
-                    .addInterceptor(new UserAgentInterceptor())
-                    .build();
-        }
-    }
-
-    
-
+  }
 }

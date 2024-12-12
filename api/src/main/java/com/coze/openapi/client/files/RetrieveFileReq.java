@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.files;
 
 import com.coze.openapi.client.common.BaseReq;
@@ -14,9 +15,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class RetrieveFileReq extends BaseReq {
-    private String fileID;
+  private String fileID;
 
-    public static RetrieveFileReq of(String fileID) {
-        return RetrieveFileReq.builder().fileID(fileID).build();
-    }
+  public static RetrieveFileReq of(String fileID) {
+    return RetrieveFileReq.builder().fileID(fileID).build();
+  }
 }

@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.bots;
 
 import java.util.List;
@@ -14,9 +15,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class PublishBotReq extends BaseReq {
-    @NonNull
-    @JsonProperty("bot_id") 
-    private String botID;
-    @JsonProperty("connector_ids")
-    private List<String> connectorIDs;
+  @NonNull
+  @JsonProperty("bot_id")
+  private String botID;
+
+  @JsonProperty("connector_ids")
+  private List<String> connectorIDs;
 }

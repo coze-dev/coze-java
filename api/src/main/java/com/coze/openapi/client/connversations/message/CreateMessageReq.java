@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.connversations.message;
 
 import java.util.List;
@@ -22,48 +23,46 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CreateMessageReq extends BaseReq{
-    /*
-     * The ID of the conversation.
-     * */
-    @NonNull
-    @JsonProperty("conversation_id")
-    private String conversationID;
+public class CreateMessageReq extends BaseReq {
+  /*
+   * The ID of the conversation.
+   * */
+  @NonNull
+  @JsonProperty("conversation_id")
+  private String conversationID;
 
-    /*
-     * The entity that sent this message.
-     * */
-    @NonNull
-    private MessageRole role;
+  /*
+   * The entity that sent this message.
+   * */
+  @NonNull private MessageRole role;
 
-    /*
-     * The content of the message, supporting pure text, multimodal (mixed input of text, images, files),
-     * cards, and various types of content.
-     * */
-    @NonNull
-    private String content;
+  /*
+   * The content of the message, supporting pure text, multimodal (mixed input of text, images, files),
+   * cards, and various types of content.
+   * */
+  @NonNull private String content;
 
-    /*
-     * The type of message content.
-     * */
-    @NonNull
-    @JsonProperty("content_type")
-    private MessageContentType contentType;
+  /*
+   * The type of message content.
+   * */
+  @NonNull
+  @JsonProperty("content_type")
+  private MessageContentType contentType;
 
-    /*
-     * Additional information when creating a message, and this additional information will also be
-     * returned when retrieving messages.
-     * */
-    @JsonProperty("meta_data")
-    private Map<String, String> metadata;
-        
+  /*
+   * Additional information when creating a message, and this additional information will also be
+   * returned when retrieving messages.
+   * */
+  @JsonProperty("meta_data")
+  private Map<String, String> metadata;
 
-    public static abstract class CreateMessageReqBuilder<C extends CreateMessageReq, B extends CreateMessageReqBuilder<C, B>> extends BaseReqBuilder<C, B> {
-        public B objectContent(List<MessageObjectString> objects) {
-            this.content = Utils.toJson(objects);
-            this.contentType = MessageContentType.OBJECT_STRING;
-            return self();
-        }
+  public abstract static class CreateMessageReqBuilder<
+          C extends CreateMessageReq, B extends CreateMessageReqBuilder<C, B>>
+      extends BaseReqBuilder<C, B> {
+    public B objectContent(List<MessageObjectString> objects) {
+      this.content = Utils.toJson(objects);
+      this.contentType = MessageContentType.OBJECT_STRING;
+      return self();
     }
-
+  }
 }

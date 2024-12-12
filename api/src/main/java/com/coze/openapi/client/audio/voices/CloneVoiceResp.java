@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.audio.voices;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -17,6 +18,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class CloneVoiceResp extends BaseResp {
-    @JsonProperty("voice_id")
-    private String voiceID;
+  @JsonProperty("voice_id")
+  private String voiceID;
 }

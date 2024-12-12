@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.bots;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -17,6 +18,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class CreateBotResp extends BaseResp {
-    @JsonProperty("bot_id")
-    private String botID;
+  @JsonProperty("bot_id")
+  private String botID;
 }

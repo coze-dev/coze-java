@@ -11,6 +11,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
@@ -36,7 +37,7 @@ subprojects {
     spotless {
         java {
             removeUnusedImports()
-            googleJavaFormat('1.15.0')  // 指定一个兼容 Java 8 的版本
+            googleJavaFormat('1.7')
             endWithNewline()
             trimTrailingWhitespace()
             importOrder('java', 'javax', 'org', 'com', '')

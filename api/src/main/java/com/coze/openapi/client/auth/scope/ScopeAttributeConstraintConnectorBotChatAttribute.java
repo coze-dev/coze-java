@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.auth.scope;
 
 import java.util.List;
@@ -8,5 +9,5 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class ScopeAttributeConstraintConnectorBotChatAttribute {
-    private List<String> botIDList;
+  private List<String> botIDList;
 }

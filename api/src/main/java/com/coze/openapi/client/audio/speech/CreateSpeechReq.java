@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.audio.speech;
 
 import com.coze.openapi.client.audio.common.AudioFormat;
@@ -13,16 +14,19 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CreateSpeechReq extends BaseReq {
-    @NonNull
-    @JsonProperty("input")
-    private String input;
-    @NonNull
-    @JsonProperty("voice_id")
-    private String voiceID;
-    @Builder.Default
-    @JsonProperty("response_format")
-    private AudioFormat responseFormat = AudioFormat.MP3;
-    @JsonProperty("speed")
-    @Builder.Default    
-    private float speed = 1.0f;
+  @NonNull
+  @JsonProperty("input")
+  private String input;
+
+  @NonNull
+  @JsonProperty("voice_id")
+  private String voiceID;
+
+  @Builder.Default
+  @JsonProperty("response_format")
+  private AudioFormat responseFormat = AudioFormat.MP3;
+
+  @JsonProperty("speed")
+  @Builder.Default
+  private float speed = 1.0f;
 }

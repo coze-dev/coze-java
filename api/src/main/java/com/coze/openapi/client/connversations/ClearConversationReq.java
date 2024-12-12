@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.connversations;
 
 import com.coze.openapi.client.common.BaseReq;
@@ -16,14 +17,12 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ClearConversationReq extends BaseReq {
-    /**
-     * The ID of the conversation.
-     */
-    @NonNull
-    @JsonProperty("conversation_id")
-    private String conversationID;
+  /** The ID of the conversation. */
+  @NonNull
+  @JsonProperty("conversation_id")
+  private String conversationID;
 
-    public static ClearConversationReq of(String conversationID) {
-        return ClearConversationReq.builder().conversationID(conversationID).build();
-    }
+  public static ClearConversationReq of(String conversationID) {
+    return ClearConversationReq.builder().conversationID(conversationID).build();
+  }
 }

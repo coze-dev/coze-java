@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.workflows.run;
 
 import com.coze.openapi.client.common.BaseReq;
@@ -17,21 +18,21 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class RetrieveRunHistoryReq extends BaseReq {
 
-    /*
-    * The ID of the workflow.
-    * */
-    @NonNull
-    @JsonProperty("execute_id")
-    private String executeID;
+  /*
+   * The ID of the workflow.
+   * */
+  @NonNull
+  @JsonProperty("execute_id")
+  private String executeID;
 
-    /*
-     * The ID of the workflow async execute.
-     * */
-    @NonNull
-    @JsonProperty("workflow_id")
-    private String workflowID;
+  /*
+   * The ID of the workflow async execute.
+   * */
+  @NonNull
+  @JsonProperty("workflow_id")
+  private String workflowID;
 
-    public static RetrieveRunHistoryReq of(String workflowID, String executeID) {
-        return RetrieveRunHistoryReq.builder().executeID(executeID).workflowID(workflowID).build();
-    }
+  public static RetrieveRunHistoryReq of(String workflowID, String executeID) {
+    return RetrieveRunHistoryReq.builder().executeID(executeID).workflowID(workflowID).build();
+  }
 }

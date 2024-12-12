@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.service.service.chat;
 
 import java.util.List;
@@ -11,18 +12,15 @@ import com.coze.openapi.service.utils.Utils;
 
 public class ChatMessageService {
 
+  private final ChatMessageAPI chatMessageApi;
 
-    private final ChatMessageAPI chatMessageApi;
+  public ChatMessageService(ChatMessageAPI chatMessageApi) {
+    this.chatMessageApi = chatMessageApi;
+  }
 
-    public ChatMessageService(ChatMessageAPI chatMessageApi) {
-        this.chatMessageApi = chatMessageApi;
-    }
-
-     public ListMessageResp list(ListMessageReq req) {
-        BaseResponse<List<Message>> resp = Utils.execute(chatMessageApi.list(req.getConversationID(), req.getChatID(), req));
-        return ListMessageResp.builder()
-            .logID(resp.getLogID())
-            .messages(resp.getData())
-            .build();
-    }
+  public ListMessageResp list(ListMessageReq req) {
+    BaseResponse<List<Message>> resp =
+        Utils.execute(chatMessageApi.list(req.getConversationID(), req.getChatID(), req));
+    return ListMessageResp.builder().logID(resp.getLogID()).messages(resp.getData()).build();
+  }
 }

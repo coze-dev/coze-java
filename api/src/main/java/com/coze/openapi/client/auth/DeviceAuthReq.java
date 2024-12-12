@@ -1,8 +1,10 @@
+/* (C)2024 */
 package com.coze.openapi.client.auth;
 
 import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +18,6 @@ import lombok.experimental.SuperBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 public class DeviceAuthReq extends BaseReq {
-    @JsonProperty("client_id")
-    public String clientID;
+  @JsonProperty("client_id")
+  public String clientID;
 }

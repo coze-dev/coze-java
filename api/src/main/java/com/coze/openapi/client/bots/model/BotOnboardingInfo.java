@@ -1,20 +1,23 @@
+/* (C)2024 */
 package com.coze.openapi.client.bots.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
-@Data   
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BotOnboardingInfo {
-    @JsonProperty("prologue")
-    private String prologue;
+  @JsonProperty("prologue")
+  private String prologue;
 
-    @JsonProperty("suggested_questions")
-    private List<String> suggestedQuestions;
-} 
+  @JsonProperty("suggested_questions")
+  private List<String> suggestedQuestions;
+}

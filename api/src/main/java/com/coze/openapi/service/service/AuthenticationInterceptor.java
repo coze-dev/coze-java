@@ -1,28 +1,31 @@
+/* (C)2024 */
 package com.coze.openapi.service.service;
-
-import okhttp3.Interceptor;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.Objects;
 
 import com.coze.openapi.service.auth.Auth;
 
-public class AuthenticationInterceptor implements Interceptor{
-    private final Auth auth;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
-    AuthenticationInterceptor(Auth auth) {
-        Objects.requireNonNull(auth, "Auth required");
-        this.auth = auth;
-    }
+public class AuthenticationInterceptor implements Interceptor {
+  private final Auth auth;
 
-    @Override
-    public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request()
-                .newBuilder()
-                .header("Authorization", auth.tokenType() + " " + auth.token())
-                .build();
-        return chain.proceed(request);
-    }
+  AuthenticationInterceptor(Auth auth) {
+    Objects.requireNonNull(auth, "Auth required");
+    this.auth = auth;
+  }
+
+  @Override
+  public Response intercept(Chain chain) throws IOException {
+    Request request =
+        chain
+            .request()
+            .newBuilder()
+            .header("Authorization", auth.tokenType() + " " + auth.token())
+            .build();
+    return chain.proceed(request);
+  }
 }

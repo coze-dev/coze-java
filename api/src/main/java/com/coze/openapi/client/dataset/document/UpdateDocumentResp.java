@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.dataset.document;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -13,5 +14,4 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UpdateDocumentResp extends BaseResp{
-}
+public class UpdateDocumentResp extends BaseResp {}

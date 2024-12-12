@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.audio.rooms.model;
 
 import lombok.AllArgsConstructor;
@@ -10,6 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomAudioConfig {
-    @Builder.Default
-    private AudioCodec codec = AudioCodec.OPUS;
+  @Builder.Default private AudioCodec codec = AudioCodec.OPUS;
 }

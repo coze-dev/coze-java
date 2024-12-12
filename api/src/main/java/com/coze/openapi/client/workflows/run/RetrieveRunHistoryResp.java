@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.workflows.run;
 
 import java.util.List;
@@ -17,6 +18,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class RetrieveRunHistoryResp extends BaseResp {
-    private List<WorkflowRunHistory> histories;
-
+  private List<WorkflowRunHistory> histories;
 }

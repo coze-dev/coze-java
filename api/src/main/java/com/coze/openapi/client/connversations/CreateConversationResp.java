@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.connversations;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -12,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CreateConversationResp extends BaseResp{
+public class CreateConversationResp extends BaseResp {
 
-    private Conversation conversation;
+  private Conversation conversation;
 }

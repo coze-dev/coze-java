@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.audio.voices;
 
 import com.coze.openapi.client.common.BaseReq;
@@ -16,14 +17,14 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ListVoiceReq extends BaseReq {
-    @JsonProperty("filter_system_voice")
-    private Boolean filterSystemVoice;
+  @JsonProperty("filter_system_voice")
+  private Boolean filterSystemVoice;
 
-    @JsonProperty("page_num")
-    @Builder.Default
-    private Integer pageNum = 1;
+  @JsonProperty("page_num")
+  @Builder.Default
+  private Integer pageNum = 1;
 
-    @JsonProperty("page_size")
-    @Builder.Default
-    private Integer pageSize = 100;
+  @JsonProperty("page_size")
+  @Builder.Default
+  private Integer pageSize = 100;
 }

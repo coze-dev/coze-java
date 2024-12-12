@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.connversations.message;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -13,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class CreateMessageResp extends BaseResp {
-    private Message message;
+  private Message message;
 }

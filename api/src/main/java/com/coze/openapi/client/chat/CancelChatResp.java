@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.chat;
 
 import com.coze.openapi.client.chat.model.Chat;
@@ -14,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CancelChatResp extends BaseResp{
-    private Chat chat;
-    
+public class CancelChatResp extends BaseResp {
+  private Chat chat;
 }

@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.common;
 
 import lombok.Data;
@@ -8,5 +9,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public abstract class BaseResp {
-    private String logID;
+  private String logID;
 }

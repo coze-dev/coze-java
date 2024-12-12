@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.auth;
 
 import lombok.AllArgsConstructor;
@@ -8,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetPKCEAuthURLResp {
-    private String codeVerifier;
-    private String authorizationURL;
+  private String codeVerifier;
+  private String authorizationURL;
 }

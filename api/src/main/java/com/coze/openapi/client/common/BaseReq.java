@@ -1,3 +1,4 @@
+/* (C)2024 */
 package com.coze.openapi.client.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,10 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class BaseReq {
-    @JsonIgnore 
-    private Integer connectTimeout;
-    @JsonIgnore
-    private Integer readTimeout;
-    @JsonIgnore
-    private Integer writeTimeout;
+  @JsonIgnore private Integer connectTimeout;
+  @JsonIgnore private Integer readTimeout;
+  @JsonIgnore private Integer writeTimeout;
 }
