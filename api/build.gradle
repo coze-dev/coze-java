@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'jacoco'
 }
 
 dependencies {
@@ -27,6 +28,21 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = true
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport    // 测试完成后自动生成报告
 }
 
 test {
