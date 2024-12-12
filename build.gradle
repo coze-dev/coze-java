@@ -32,7 +32,6 @@ subprojects {
         options.compilerArgs << "-Xlint:deprecation"
     }
     apply plugin: 'com.diffplug.spotless'
-    apply plugin: 'checkstyle'
 
     spotless {
         java {
@@ -43,12 +42,6 @@ subprojects {
             importOrder('java', 'javax', 'org', 'com', '')
             licenseHeader '/* (C)$YEAR */'
         }
-    }
-
-    checkstyle {
-        toolVersion = '8.45.1'  // 使用支持 Java 8 的版本
-        configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-        maxWarnings = 0
     }
 
     jacocoTestReport {

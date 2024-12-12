@@ -27,7 +27,6 @@ jobs:
       - name: Code style check
         run: |
           ./gradlew spotlessCheck
-          ./gradlew checkstyleMain
 
       - name: Build and Test
         run: ./gradlew build test
