@@ -5,7 +5,6 @@ import com.coze.openapi.client.bots.model.BotOnboardingInfo;
 import com.coze.openapi.client.bots.model.BotPromptInfo;
 import com.coze.openapi.client.files.UploadFileReq;
 import com.coze.openapi.client.files.UploadFileResp;
-import com.coze.openapi.client.files.model.FileInfo;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
@@ -15,7 +14,7 @@ import java.util.Arrays;
 This example is for describing how to create a bot, update a bot and publish a bot to the API.
 The document for those interface:
 * */
-public class PublishBotExample {
+public class BotPublishExample {
 
     public static void main(String[] args) {
         // Get an access_token through personal access token or oauth.

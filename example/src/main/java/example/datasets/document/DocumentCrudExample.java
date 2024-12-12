@@ -3,7 +3,6 @@ package example.datasets.document;
 import com.coze.openapi.client.dataset.document.*;
 import com.coze.openapi.client.dataset.document.model.Document;
 import com.coze.openapi.client.dataset.document.model.DocumentBase;
-import com.coze.openapi.client.files.UploadFileResp;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -12,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CrudDocumentExample {
+public class DocumentCrudExample {
 
     public static void main(String[] args) {
 

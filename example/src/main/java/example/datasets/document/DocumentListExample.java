@@ -8,7 +8,7 @@ import com.coze.openapi.service.service.CozeAPI;
 
 import java.util.Iterator;
 
-public class ListDocumentExample {
+public class DocumentListExample {
     public static void main(String[] args) {
         // Get an access_token through personal access token or oauth.
         String token = System.getenv("COZE_API_TOKEN");

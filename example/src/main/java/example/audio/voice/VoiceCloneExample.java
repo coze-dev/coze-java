@@ -3,11 +3,10 @@ package example.audio.voice;
 import com.coze.openapi.client.audio.voices.CloneVoiceReq;
 import com.coze.openapi.client.audio.voices.CloneVoiceResp;
 import com.coze.openapi.client.audio.common.AudioFormat;
-import com.coze.openapi.client.audio.common.LanguageCode;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
-public class CloneVoiceExample {
+public class VoiceCloneExample {
 
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");
@@ -24,10 +23,6 @@ public class CloneVoiceExample {
                                          .filePath(voiceFilePath)
                                          .voiceName("your voice name")
                                          .audioFormat(AudioFormat.M4A)
-                                         .language(LanguageCode.ZH)
-                                         .voiceID(System.getenv("COZE_VOICE_ID"))
-                                         .text("your text")
-                                         .previewText("your preview text")
                                          .build();
         CloneVoiceResp resp = coze.audio().voices().clone(req);
         System.out.println(resp);

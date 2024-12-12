@@ -8,7 +8,7 @@ import com.coze.openapi.client.workspace.model.Workspace;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
-public class ListWorkspaceExample {
+public class WorkspaceListExample {
 
     public static void main(String[] args) {
         // Get an access_token through personal access token or oauth.

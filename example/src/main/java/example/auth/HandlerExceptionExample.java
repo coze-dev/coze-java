@@ -41,9 +41,8 @@ public class HandlerExceptionExample {
 
         /*
         * The space permissions for which the Access Token is granted can be specified. As following codes:
+        * oauthURL = oauth.getOAuthURL(redirectURI, null, "workspaceID");
         * */
-        oauthURL = oauth.getOAuthURL(redirectURI, null, "workspaceID");
-        System.out.println(oauthURL);
 
         /*
         After the user clicks the authorization consent button, the coze web page will redirect

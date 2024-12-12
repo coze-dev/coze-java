@@ -8,7 +8,7 @@ import com.coze.openapi.service.auth.TokenAuth;
 
 import java.util.Iterator;
 
-public class ListMessageExample {
+public class MessageListExample {
 
     public static void main(String[] args) {
         // Get an access_token through personal access token or oauth.

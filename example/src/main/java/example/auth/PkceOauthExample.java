@@ -51,10 +51,9 @@ public class PKCEOAuthExample {
 
         /*
          * The space permissions for which the Access Token is granted can be specified. As following codes:
+         * oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256, "workspaceID");
          * */
-        oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256, "workspaceID");
-        System.out.println(oauthURL);
-        
+
         /*
         After the user clicks the authorization consent button, the coze web page will redirect
         to the redirect address configured in the authorization link and carry the authorization

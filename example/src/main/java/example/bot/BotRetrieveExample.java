@@ -16,7 +16,7 @@ import java.util.Iterator;
 This example is for describing how to retrieve a bot, fetch published bot list from the API.
 The document for those interface:
 * */
-public class GetBotExample {
+public class BotRetrieveExample {
     public static void main(String[] args) throws IOException {
         // Get an access_token through personal access token or oauth.
         String token = System.getenv("COZE_API_TOKEN");

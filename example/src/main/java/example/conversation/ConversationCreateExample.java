@@ -18,7 +18,7 @@ import java.util.Arrays;
 /*
 * This example is about how to create conversation and retrieve.
 * */
-public class CreateConversationExample {
+public class ConversationCreateExample {
 
     public static void main(String[] args) {
         // Get an access_token through personal access token or oauth.

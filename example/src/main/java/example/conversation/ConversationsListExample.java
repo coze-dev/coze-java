@@ -8,7 +8,7 @@ import com.coze.openapi.service.service.CozeAPI;
 
 import java.util.Iterator;
 
-public class ListConversationsExample {
+public class ConversationsListExample {
 
     public static void main(String[] args) {
         // Get an access_token through personal access token or oauth.

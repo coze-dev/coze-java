@@ -5,7 +5,7 @@ import com.coze.openapi.client.audio.rooms.CreateRoomResp;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.auth.TokenAuth;
 
-public class CreateAudioRoomsExample {
+public class AudioRoomsCreateExample {
 
     public static void main(String[] args) {
         String token = System.getenv("COZE_API_TOKEN");

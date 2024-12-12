@@ -58,8 +58,8 @@ public class DeviceOAuthExample {
 
         /*
          * The space permissions for which the Access Token is granted can be specified. As following codes:
+         * DeviceAuthResp wCodeResp = oauth.getDeviceCode("workspaceID");
          * */
-        DeviceAuthResp wCodeResp = oauth.getDeviceCode("workspaceID");
 
 
         /*
