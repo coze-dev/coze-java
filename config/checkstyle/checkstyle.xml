@@ -13,6 +13,10 @@
         <property name="max" value="1000"/>
     </module>
 
+    <module name="SuppressWarningsFilter">
+        <property name="id" value="ignoreAllWarnings"/>
+    </module>
+
     <module name="TreeWalker">
         <!-- 导入语句检查 -->
         <module name="AvoidStarImport"/>
@@ -67,5 +71,10 @@
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>
+
+        <module name="SuppressWarnings">
+            <property name="id" value="ignoreAllWarnings"/>
+            <property name="checks" value="*"/>
+        </module>
     </module>
 </module>

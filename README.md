@@ -57,7 +57,7 @@ Please store it in a secure environment to prevent this personal access
 token from being disclosed.
 
 ```java
-public voic example() {
+public void example() {
        // Get an access_token through personal access token or oauth.
     String token = System.getenv("COZE_API_TOKEN");
     TokenAuth authCli = new TokenAuth(token);
@@ -85,7 +85,7 @@ polling, and obtaining the messages of the chat. Developers can use createAndPol
 simplify the process.
 
 ```java
-public voic example() throws Exception {
+public void example() throws Exception {
     String token = System.getenv("COZE_API_TOKEN");
     String botID = System.getenv("PUBLISHED_BOT_ID");
     String uid = System.getenv("USER_ID");
@@ -119,7 +119,7 @@ chat event and handle them.
 
 ```java
 
-public voic example() {
+public void example() {
     String token = System.getenv("COZE_API_TOKEN");
     String botID = System.getenv("PUBLISHED_BOT_ID");
     String userID = System.getenv("USER_ID");
@@ -151,7 +151,7 @@ public voic example() {
 You can create, update, publish and get the list of bots via api.
 
 ```java
-public voic example() {
+public void example() {
     // Get an access_token through personal access token or oauth.
     String token = System.getenv("COZE_API_TOKEN");
     TokenAuth authCli = new TokenAuth(token);
@@ -218,7 +218,7 @@ etc. on conversations.
 
 ```java
 
-public voic example() {
+public void example() {
     // Get an access_token through personal access token or oauth.
     String token = System.getenv("COZE_API_TOKEN");
     TokenAuth authCli = new TokenAuth(token);
@@ -291,7 +291,7 @@ Coze enables users to upload pictures and files. The uploaded pictures and files
 can be utilized in the bot avatar and multimodal conversations.
 
 ```java
-public voic example() {
+public void example() {
     String token = System.getenv("COZE_API_TOKEN");
     TokenAuth authCli = new TokenAuth(token);
     CozeAPI coze = new CozeAPI.Builder()
