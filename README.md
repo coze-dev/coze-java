@@ -19,10 +19,10 @@ your projects.
 | Example                       | File                                                                                                        |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------|
 | pat auth                      | [TokenAuthExample.java](example/src/main/java/example/auth/TokenAuthExample.java)                           |
-| oauth by web code             | [WebOAuthExample.java](example/src/main/java/example/auth/WebOAuthExample.java)                             |
-| oauth by jwt flow             | [JWTsOauthExample.java](example/src/main/java/example/auth/JWTOAuthExample.java)                            |
-| oauth by pkce flow            | [PKCEOauthExample.java](example/src/main/java/example/auth/PKCEOAuthExample.java)                           |
-| oauth by device flow          | [DevicesOAuthExample.java](example/src/main/java/example/auth/DevicesOAuthExample.java)                     |
+| oAuth by web code             | [WebOAuthExample.java](example/src/main/java/example/auth/WebOAuthExample.java)                             |
+| oAuth by jwt flow             | [JWTsOauthExample.java](example/src/main/java/example/auth/JWTOAuthExample.java)                            |
+| oAuth by pkce flow            | [PKCEOauthExample.java](example/src/main/java/example/auth/PKCEOAuthExample.java)                           |
+| oAuth by device flow          | [DevicesOAuthExample.java](example/src/main/java/example/auth/DevicesOAuthExample.java)                     |
 | handle auth exception         | [HandlerExceptionExample.java](example/src/main/java/example/auth/HandlerExceptionExample.java)             |
 | bot create, publish and chat  | [PublishBotExample.java](example/src/main/java/example/bot/PublishBotExample.java)                          |
 | get bot and bot list          | [GetBotExample.java](example/src/main/java/example/bot/GetBotExample.java)                                  |
@@ -455,7 +455,7 @@ to avoid leakage.
         cozeAPIBase = Consts.COZE_COM_BASE_URL;
     }
     
-    WebOAuthClient oauth = new WebOAuthClient.WebOAuthBuilder()
+    WebOAuthClient oAuth = new WebOAuthClient.WebOAuthBuilder()
             .clientID(clientID)
             .clientSecret(clientSecret)
             .baseURL(cozeAPIBase)
@@ -530,23 +530,23 @@ keep it securely to avoid leakage.
    String jwtOauthPrivateKey = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY");
    String jwtOauthPrivateKeyFilePath = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY_FILE_PATH");
    String jwtOauthPublicKeyID = System.getenv("COZE_JWT_OAUTH_PUBLIC_KEY_ID");
-    JWTOAuthClient oauth = null;
+    JWTOAuthClient oAuth = null;
     try {
         jwtOauthPrivateKey = new String(Files.readAllBytes(Paths.get(jwtOauthPrivateKeyFilePath)), StandardCharsets.UTF_8);
     } catch (IOException e) {
         e.printStackTrace();
     }
     /*
-    The jwt oauth type requires using private to be able to issue a jwt token, and through
+    The jwt oAuth type requires using private to be able to issue a jwt token, and through
     the jwt token, apply for an access_token from the coze service. The sdk encapsulates
     this procedure, and only needs to use get_access_token to obtain the access_token under
-    the jwt oauth process.
+    the jwt oAuth process.
     Generate the authorization token
     The default ttl is 900s, and developers can customize the expiration time, which can be
     set up to 24 hours at most.
     * */
     try {
-        oauth = new JWTOAuthClient.JWTOAuthBuilder()
+        oAuth = new JWTOAuthClient.JWTOAuthBuilder()
                 .clientID(jwtOauthClientID)
                 .privateKey(jwtOauthPrivateKey)
                 .publicKey(jwtOauthPublicKeyID)
@@ -559,11 +559,11 @@ keep it securely to avoid leakage.
  }
 ```
 
-The jwt oauth type requires using private to be able to issue a jwt token, and through
+The jwt oAuth type requires using private to be able to issue a jwt token, and through
 the jwt token, apply for an access_token from the coze service.
 
 The sdk encapsulates this procedure, and only needs to use get_access_token to obtain
-the access_token under the jwt oauth process.
+the access_token under the jwt oAuth process.
 
 ```java
 # The jwt process does not require any other operations, you can directly apply for a token
@@ -606,14 +606,14 @@ After the creation is completed, three parameters, namely the client ID can be o
     if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
         cozeAPIBase = Consts.COZE_COM_BASE_URL;
     }
-    PKCEOAuthClient oauth = new PKCEOAuthClient.PKCEOAuthBuilder()
+    PKCEOAuthClient oAuth = new PKCEOAuthClient.PKCEOAuthBuilder()
             .clientID(clientID)
             .baseURL(cozeAPIBase)
             .build();
  }
 ```
 
-In the pkce oauth process, first, need to select a suitable code_challenge_method.
+In the pkce oAuth process, first, need to select a suitable code_challenge_method.
 Coze supports two types: plain and s256.
 
 Then, based on the selected code_challenge_method type, hash the code_verifier into
@@ -683,14 +683,14 @@ After the creation is completed, three parameters, namely the client ID can be o
     if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
         cozeAPIBase = Consts.COZE_COM_BASE_URL;
     }
-    DeviceOAuthClient oauth = new DeviceOAuthClient.DeviceOAuthBuilder()
+    DeviceOAuthClient oAuth = new DeviceOAuthClient.DeviceOAuthBuilder()
         .clientID(clientID)
         .baseURL(cozeAPIBase)
         .build();
  }
 ```
 
-In the device oauth authorization process, developers need to first call the interface
+In the device oAuth authorization process, developers need to first call the interface
 of Coze to generate the device code to obtain the user_code and device_code.
 
 Then generate the authorization link through the user_code, guide the user to open the
