@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import javax.lang.model.type.ArrayType;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +57,7 @@ class DocumentServiceTest {
 
         // 创建 mock Call 对象
         Call<CreateDocumentResp> call = mock(Call.class);
-        when(documentAPI.CreateDocument(any(CreateDocumentReq.class), any(CreateDocumentReq.class)))
+        when(documentAPI.create(any(CreateDocumentReq.class), any(CreateDocumentReq.class)))
                 .thenReturn(call);
         when(call.execute()).thenReturn(Response.success(createResp, Utils.getCommonHeader()));
 
@@ -87,7 +86,7 @@ class DocumentServiceTest {
 
         // 创建 mock Call 对象
         Call<BaseResponse<Void>> call = mock(Call.class);
-        when(documentAPI.UpdateDocument(any(UpdateDocumentReq.class), any(UpdateDocumentReq.class)))
+        when(documentAPI.update(any(UpdateDocumentReq.class), any(UpdateDocumentReq.class)))
                 .thenReturn(call);
         when(call.execute()).thenReturn(Response.success(baseResponse, Utils.getCommonHeader()));
 
@@ -114,7 +113,7 @@ class DocumentServiceTest {
 
         // 创建 mock Call 对象
         Call<BaseResponse<Void>> call = mock(Call.class);
-        when(documentAPI.DeleteDocument(any(DeleteDocumentReq.class), any(DeleteDocumentReq.class)))
+        when(documentAPI.delete(any(DeleteDocumentReq.class), any(DeleteDocumentReq.class)))
                 .thenReturn(call);
         when(call.execute()).thenReturn(Response.success(baseResponse, Utils.getCommonHeader()));
 
@@ -148,7 +147,7 @@ class DocumentServiceTest {
 
         // 创建 mock Call 对象
         Call<ListDocumentResp> call = mock(Call.class);
-        when(documentAPI.ListDocument(any(ListDocumentReq.class), any(ListDocumentReq.class)))
+        when(documentAPI.list(any(ListDocumentReq.class), any(ListDocumentReq.class)))
                 .thenReturn(call);
         when(call.execute()).thenReturn(Response.success(listResp, Utils.getCommonHeader()));
 

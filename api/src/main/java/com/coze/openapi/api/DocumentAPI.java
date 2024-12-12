@@ -9,9 +9,7 @@ import com.coze.openapi.client.dataset.document.ListDocumentResp;
 import com.coze.openapi.client.dataset.document.UpdateDocumentReq;
 import com.coze.openapi.client.common.BaseReq;
 
-import io.reactivex.Single;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -21,17 +19,17 @@ public interface DocumentAPI {
 
     @POST("/open_api/knowledge/document/create")
     @Headers({"Content-Type: application/json","Agw-Js-Conv: str"})
-    Call<CreateDocumentResp> CreateDocument(@Body CreateDocumentReq req, @Tag BaseReq baseReq);
+    Call<CreateDocumentResp> create(@Body CreateDocumentReq req, @Tag BaseReq baseReq);
 
     @POST("/open_api/knowledge/document/update")
     @Headers({"Content-Type: application/json","Agw-Js-Conv: str"})
-    Call<BaseResponse<Void>> UpdateDocument(@Body UpdateDocumentReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<Void>> update(@Body UpdateDocumentReq req, @Tag BaseReq baseReq);
 
     @POST("/open_api/knowledge/document/delete")
     @Headers({"Content-Type: application/json","Agw-Js-Conv: str"})
-    Call<BaseResponse<Void>> DeleteDocument(@Body DeleteDocumentReq req, @Tag BaseReq baseReq);
+    Call<BaseResponse<Void>> delete(@Body DeleteDocumentReq req, @Tag BaseReq baseReq);
 
     @POST("/open_api/knowledge/document/list")
     @Headers({"Content-Type: application/json","Agw-Js-Conv: str"})
-    Call<ListDocumentResp> ListDocument(@Body ListDocumentReq req, @Tag BaseReq baseReq);
+    Call<ListDocumentResp> list(@Body ListDocumentReq req, @Tag BaseReq baseReq);
 }

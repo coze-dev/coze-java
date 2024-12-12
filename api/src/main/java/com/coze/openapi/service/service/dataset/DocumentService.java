@@ -27,7 +27,7 @@ public class DocumentService {
     }
 
     public CreateDocumentResp create(CreateDocumentReq req) {
-        return Utils.execute(api.CreateDocument(req, req));
+        return Utils.execute(api.create(req, req));
     }
 
     /*
@@ -37,7 +37,7 @@ public class DocumentService {
         docs zh: https://www.coze.cn/docs/developer_guides/modify_knowledge_files
     * */
     public UpdateDocumentResp update(UpdateDocumentReq req) {
-        String logID = Utils.execute(api.UpdateDocument(req, req)).getLogID();
+        String logID = Utils.execute(api.update(req, req)).getLogID();
         return UpdateDocumentResp.builder().logID(logID).build();
     }
 
@@ -48,7 +48,7 @@ public class DocumentService {
         docs zh: https://www.coze.cn/docs/developer_guides/delete_knowledge_files
     * */
     public DeleteDocumentResp delete(DeleteDocumentReq req) {
-        String logID = Utils.execute(api.DeleteDocument(req, req)).getLogID();
+        String logID = Utils.execute(api.delete(req, req)).getLogID();
         return DeleteDocumentResp.builder().logID(logID).build();
     }
 
@@ -68,7 +68,7 @@ public class DocumentService {
 
         // 创建分页获取器
         PageFetcher<Document> pageFetcher = request -> {
-            ListDocumentResp resp = Utils.execute(api.ListDocument(ListDocumentReq.of(req.getDatasetID(), request.getPageNum(), request.getPageSize()), req));
+            ListDocumentResp resp = Utils.execute(api.list(ListDocumentReq.of(req.getDatasetID(), request.getPageNum(), request.getPageSize()), req));
             return PageResponse.<Document>builder()
                     .hasMore(resp.getDocumentInfos().size() == request.getPageSize())
                     .data(resp.getDocumentInfos())
