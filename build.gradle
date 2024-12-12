@@ -1,5 +1,6 @@
 plugins {
     id 'com.diffplug.spotless' version '6.11.0' apply false
+    id 'jacoco'
 }
 
 allprojects {
@@ -47,5 +48,16 @@ subprojects {
         toolVersion = '8.45.1'  // 使用支持 Java 8 的版本
         configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
         maxWarnings = 0
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = true    // 生成 XML 报告供 Codecov 使用
+            html.required = true   // 可选：生成 HTML 报告便于本地查看
+        }
+    }
+
+    test {
+        finalizedBy jacocoTestReport    // 测试完成后自动生成报告
     }
 }

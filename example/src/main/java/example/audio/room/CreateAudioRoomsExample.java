@@ -23,5 +23,8 @@ public class CreateAudioRoomsExample {
                                          .voiceID(voiceID)
                                          .build();
         CreateRoomResp resp = coze.audio().rooms().create(req);
+        System.out.println(resp);
+        System.out.println(resp.getRoomID());
+        System.out.println(resp.getLogID());
     }
 } 

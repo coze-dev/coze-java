@@ -15,10 +15,24 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '8'
+          java-version: '17'
           distribution: 'temurin'
+          cache: 'gradle'
+          
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
           
       - name: Code style check
         run: |
           ./gradlew spotlessCheck
-          ./gradlew checkstyleMain 
+          ./gradlew checkstyleMain
+          
+      - name: Run tests with coverage
+        run: ./gradlew test
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests
+          fail_ci_if_error: true
