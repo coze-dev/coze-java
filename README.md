@@ -2,14 +2,14 @@
 
 ## Introduction
 
-The Coze API SDK for Java is a versatile tool for integrating Coze's open APIs into
-your projects.
+The Coze API SDK for Java is a powerful tool designed to seamlessly integrate Coze's open APIs into your projects.
 
-- Supports all Coze open APIs and authentication APIs
-- Supports both synchronous and asynchronous SDK calls
-- Optimized for streaming apis, returning Stream objects
-- Optimized for list apis, returning Iterator Page objects
-- Features a simple and user-friendly API design for ease of use
+Key Features:
+- Full support for Coze open APIs and authentication APIs
+- Both synchronous and asynchronous SDK calls
+- Optimized streaming APIs with Stream object returns  
+- Optimized list APIs with Iterator Page object returns
+- Simple and intuitive API design for ease of use
 
 
 ## Usage
@@ -19,10 +19,10 @@ your projects.
 | Example                       | File                                                                                                        |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------|
 | pat auth                      | [TokenAuthExample.java](example/src/main/java/example/auth/TokenAuthExample.java)                           |
-| oAuth by web code             | [WebOAuthExample.java](example/src/main/java/example/auth/WebOAuthExample.java)                             |
-| oAuth by jwt flow             | [JWTsOauthExample.java](example/src/main/java/example/auth/JWTOAuthExample.java)                            |
-| oAuth by pkce flow            | [PKCEOauthExample.java](example/src/main/java/example/auth/PKCEOAuthExample.java)                           |
-| oAuth by device flow          | [DevicesOAuthExample.java](example/src/main/java/example/auth/DevicesOAuthExample.java)                     |
+| oauth by web code             | [WebOAuthExample.java](example/src/main/java/example/auth/WebOAuthExample.java)                             |
+| oauth by jwt flow             | [JWTsOauthExample.java](example/src/main/java/example/auth/JWTOAuthExample.java)                            |
+| oauth by pkce flow            | [PKCEOauthExample.java](example/src/main/java/example/auth/PKCEOAuthExample.java)                           |
+| oauth by device flow          | [DevicesOAuthExample.java](example/src/main/java/example/auth/DevicesOAuthExample.java)                     |
 | handle auth exception         | [HandlerExceptionExample.java](example/src/main/java/example/auth/HandlerExceptionExample.java)             |
 | bot create, publish and chat  | [PublishBotExample.java](example/src/main/java/example/bot/PublishBotExample.java)                          |
 | get bot and bot list          | [GetBotExample.java](example/src/main/java/example/bot/GetBotExample.java)                                  |
@@ -44,26 +44,22 @@ your projects.
 | get request log id            | [GetLogExample.java](example/src/main/java/example/service/GetLogExample.java)                              |
 | set timeout                   | [SetRequestTimeoutExample.java](example/src/main/java/example/service/SetRequestTimeoutExample.java)        |
 
-### Initialize the Coze client
+### Initialize the Coze Client 
 
-Firstly, you need to access https://www.coze.com/open/oauth/pats (for the cn environment,
-visit https://www.coze.cn/open/oauth/pats).
+To get started, visit https://www.coze.com/open/oauth/pats (or https://www.coze.cn/open/oauth/pats for the CN environment).
 
-Click to add a new token. After setting the
-appropriate name, expiration time, and permissions, click OK to generate your personal
-access token.
+Create a new token by clicking "Add Token". Configure the token name, expiration time, and required permissions. Click OK to generate your personal access token.
 
-Please store it in a secure environment to prevent this personal access
-token from being disclosed.
+Important: Store your personal access token securely to prevent unauthorized access.
 
 ```java
 public void example() {
-       // Get an access_token through personal access token or oauth.
+    // Get an access_token through personal access token or oauth.
     String token = System.getenv("COZE_API_TOKEN");
     TokenAuth authCli = new TokenAuth(token);
     /*
-     * The default access is api.coze.com, but if you neeed to access api.coze.cn
-     * please use baseUrl to configure the api endpoint to access
+     * The default access is api.coze.com, but if you need to access api.coze.cn
+     * please use baseUrl to configure the API endpoint to access
      */
     String baseUrl = System.getenv("COZE_API_BASE");
     CozeAPI coze = new CozeAPI.Builder()
@@ -76,13 +72,11 @@ public void example() {
 
 ### Chat
 
-Create a bot instance in Coze, copy the last number from the web link as the bot's ID.
+First, create a bot instance in Coze. The bot ID is the last number in the web link URL.
 
-#### Non-stream Chat
+#### Non-Stream Chat
 
-To simplify the call, the SDK provides a wrapped function to complete non-streaming chat,
-polling, and obtaining the messages of the chat. Developers can use createAndPoll to
-simplify the process.
+The SDK provides a convenient wrapper function for non-streaming chat operations. It handles polling and message retrieval automatically. Use createAndPoll to simplify the process:
 
 ```java
 public void example() throws Exception {
@@ -104,18 +98,16 @@ public void example() throws Exception {
         System.out.println(message.content);
     }
     if (chat.chat.status == ChatStatus.COMPLETED) {
-        System.out.println("token usage:" + chat.chat.usage.token_count);
+        System.out.println("token usage:" + chat.chat.usage.tokenCount);
     }
 }
 
 ```
 
 
-#### Stream Chat
+#### Stream Chat 
 
-Call the coze.chat.stream method to create a chat. The create method is a streaming
-chat and will return a Chat Iterator. Developers should iterate the iterator to get
-chat event and handle them.
+Use coze.chat.stream() to create a streaming chat session. This returns a Chat Iterator that you can use to process chat events as they arrive:
 
 ```java
 
@@ -148,7 +140,7 @@ public void example() {
 
 ### Bots
 
-You can create, update, publish and get the list of bots via api.
+The SDK enables you to programmatically create, update, publish and list bots:
 
 ```java
 public void example() {
@@ -211,10 +203,13 @@ public void example() {
 
 ```
 
-### Conversations
+### Conversations 
 
-Users can create conversations, and conduct conversations, inquire about messages,
-etc. on conversations.
+The SDK provides comprehensive conversation management capabilities, including:
+- Creating new conversations
+- Conducting chat sessions
+- Retrieving message history
+- Managing conversation state
 
 ```java
 
@@ -287,8 +282,9 @@ public void example() {
 
 ### Files
 
-Coze enables users to upload pictures and files. The uploaded pictures and files
-can be utilized in the bot avatar and multimodal conversations.
+The SDK supports file and image uploads. You can use uploaded files for:
+- Bot avatars
+- Multimodal conversations 
 
 ```java
 public void example() {
@@ -433,34 +429,33 @@ public static void main(String[] args) {
 
 #### Web OAuth App
 
-Firstly, users need to access https://www.coze.com/open/oauth/apps. For the cn environment,
-users need to access https://www.coze.cn/open/oauth/apps to create an OAuth App of the type
-of Web application.
+To create a Web OAuth application:
 
-The specific creation process can be referred to in the document:
-https://www.coze.com/docs/developer_guides/oauth_code. For the cn environment, it can be
-accessed at https://www.coze.cn/docs/developer_guides/oauth_code.
+1. Visit https://www.coze.com/open/oauth/apps (or https://www.coze.cn/open/oauth/apps for CN environment)
+2. Create a new OAuth App of type "Web application" 
+3. Follow the setup guide at https://www.coze.com/docs/developer_guides/oauth_code
 
-After the creation is completed, three parameters, namely the client ID, client secret,
-and redirect link, can be obtained. For the client secret, users need to keep it securely
-to avoid leakage.
+Upon completion, you'll receive three critical parameters:
+- Client ID
+- Client secret (store securely)
+- Redirect URI
 
 ```java
- public initOAuthClient() {
+public void initOAuthClient() {
     String clientSecret = System.getenv("COZE_WEB_OAUTH_CLIENT_SECRET");
     String clientID = System.getenv("COZE_WEB_OAUTH_CLIENT_ID");
     
     String cozeAPIBase = System.getenv("COZE_API_BASE");
-    if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
+    if (cozeAPIBase == null || cozeAPIBase.isEmpty()) {
         cozeAPIBase = Consts.COZE_COM_BASE_URL;
     }
     
-    WebOAuthClient oAuth = new WebOAuthClient.WebOAuthBuilder()
+    WebOAuthClient oauth = new WebOAuthClient.WebOAuthBuilder()
             .clientID(clientID)
             .clientSecret(clientSecret)
             .baseURL(cozeAPIBase)
             .build();
- }
+}
 ```
 
 The WebOAuth authorization process is to first generate a coze authorization link and
@@ -470,7 +465,7 @@ Once the coze user opens the link, they can see the authorization consent button
 
 ```java
 
-public void genAuthorLink(){
+public void genAuthLink() {
     String redirectURI = System.getenv("COZE_WEB_OAUTH_REDIRECT_URI");
     // Generate the authorization link and direct the user to open it.
     String oauthURL = oauth.getOAuthURL(redirectURI, null);
@@ -482,23 +477,23 @@ to the redirect address configured in the authorization link and carry the autho
 code and state parameters in the address via the query string.
 
 ```java
-public void getAccessToken(){
-     /*
-    After the user clicks the authorization consent button, the coze web page will redirect
+public void getAccessToken() {
+    /*
+    After the user clicks the authorization consent button, the Coze web page will redirect
     to the redirect address configured in the authorization link and carry the authorization
     code and state parameters in the address via the query string.
     Get from the query of the redirect interface: query.get('code')
-    * */
+    */
     String code = "mock code";
 
     /*
     After obtaining the code after redirection, the interface to exchange the code for a
-    token can be invoked to generate the coze access_token of the authorized user.
-    * */
+    token can be invoked to generate the Coze access_token of the authorized user.
+    */
     OAuthToken resp = oauth.getAccessToken(code, redirectURI);
     System.out.println(resp);
 
-    // use the access token to init Coze client
+    // Use the access token to init Coze client
     CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
 
     // When the token expires, you can also refresh and re-obtain the token
@@ -521,32 +516,32 @@ and public key id, can be obtained. For the client secret and public key id, use
 keep it securely to avoid leakage.
 
 ```java
- public initOAuthClient() {
+public void initOAuthClient() {
     String cozeAPIBase = System.getenv("COZE_API_BASE");
-    if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
+    if (cozeAPIBase == null || cozeAPIBase.isEmpty()) {
         cozeAPIBase = "api.coze.cn";
     }
-   String jwtOauthClientID = System.getenv("COZE_JWT_OAUTH_CLIENT_ID");
-   String jwtOauthPrivateKey = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY");
-   String jwtOauthPrivateKeyFilePath = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY_FILE_PATH");
-   String jwtOauthPublicKeyID = System.getenv("COZE_JWT_OAUTH_PUBLIC_KEY_ID");
-    JWTOAuthClient oAuth = null;
+    String jwtOauthClientID = System.getenv("COZE_JWT_OAUTH_CLIENT_ID");
+    String jwtOauthPrivateKey = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY");
+    String jwtOauthPrivateKeyFilePath = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY_FILE_PATH");
+    String jwtOauthPublicKeyID = System.getenv("COZE_JWT_OAUTH_PUBLIC_KEY_ID");
+    JWTOAuthClient oauth = null;
     try {
         jwtOauthPrivateKey = new String(Files.readAllBytes(Paths.get(jwtOauthPrivateKeyFilePath)), StandardCharsets.UTF_8);
     } catch (IOException e) {
         e.printStackTrace();
     }
     /*
-    The jwt oAuth type requires using private to be able to issue a jwt token, and through
+    The jwt oauth type requires using private to be able to issue a jwt token, and through
     the jwt token, apply for an access_token from the coze service. The sdk encapsulates
     this procedure, and only needs to use get_access_token to obtain the access_token under
-    the jwt oAuth process.
+    the jwt oauth process.
     Generate the authorization token
     The default ttl is 900s, and developers can customize the expiration time, which can be
     set up to 24 hours at most.
-    * */
+    */
     try {
-        oAuth = new JWTOAuthClient.JWTOAuthBuilder()
+        oauth = new JWTOAuthClient.JWTOAuthBuilder()
                 .clientID(jwtOauthClientID)
                 .privateKey(jwtOauthPrivateKey)
                 .publicKey(jwtOauthPublicKeyID)
@@ -556,24 +551,24 @@ keep it securely to avoid leakage.
         e.printStackTrace();
         return;
     }
- }
+}
 ```
 
-The jwt oAuth type requires using private to be able to issue a jwt token, and through
+The jwt oauth type requires using private to be able to issue a jwt token, and through
 the jwt token, apply for an access_token from the coze service.
 
 The sdk encapsulates this procedure, and only needs to use get_access_token to obtain
-the access_token under the jwt oAuth process.
+the access_token under the jwt oauth process.
 
 ```java
 # The jwt process does not require any other operations, you can directly apply for a token
 oauth_token = jwt_oauth_app.get_access_token(ttl=3600)
 
-public void getAccessToken(){
+public void getAccessToken() {
     // The jwt process does not require any other operations, you can directly apply for a token
     OAuthToken resp = oauth.getAccessToken(3600);
 
-    // use the access token to init Coze client
+    // Use the access token to init Coze client
     CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
 
 }
@@ -596,24 +591,24 @@ accessed at https://www.coze.cn/docs/developer_guides/oauth_pkce.
 After the creation is completed, three parameters, namely the client ID can be obtained.
 
 ```java
- public initOAuthClient() {
+public void initOAuthClient() {
     String clientID = System.getenv("COZE_PKCE_OAUTH_CLIENT_ID");
     /*
      * The default access is api.coze.com, but if you need to access api.coze.cn,
      * please use base_url to configure the api endpoint to access
      */
     String cozeAPIBase = System.getenv("COZE_API_BASE");
-    if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
+    if (cozeAPIBase == null || cozeAPIBase.isEmpty()) {
         cozeAPIBase = Consts.COZE_COM_BASE_URL;
     }
-    PKCEOAuthClient oAuth = new PKCEOAuthClient.PKCEOAuthBuilder()
+    PKCEOAuthClient oauth = new PKCEOAuthClient.PKCEOAuthBuilder()
             .clientID(clientID)
             .baseURL(cozeAPIBase)
             .build();
- }
+}
 ```
 
-In the pkce oAuth process, first, need to select a suitable code_challenge_method.
+In the pkce oauth process, first, need to select a suitable code_challenge_method.
 Coze supports two types: plain and s256.
 
 Then, based on the selected code_challenge_method type, hash the code_verifier into
@@ -624,10 +619,10 @@ The sdk will automatically handle the code_challenge process, and return the cod
 
 ```java
 
-public void genAuthorLink(){
+public void genAuthLink() {
     String redirectURI = System.getenv("COZE_WEB_OAUTH_REDIRECT_URI");
     PKCEAuthParam oauthURL = oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
-        System.out.println(oauthURL);
+    System.out.println(oauthURL);
 }
 ```
 
@@ -637,19 +632,19 @@ When the user consents to the authorization, Coze will redirect with the code to
 callback address configured by the developer, and the developer can obtain this code.
 
 ```java
-public void getAccessToken(){
+public void getAccessToken() {
     /*
     Open the authorization link in your browser and authorize this OAuth App
     After authorization, you can exchange code_verifier for access token
-    * */
+    */
     String code = "mock code";
     /*
     After obtaining the code after redirection, the interface to exchange the code for a
-    token can be invoked to generate the coze access_token of the authorized user.
-    * */
+    token can be invoked to generate the Coze access_token of the authorized user.
+    */
     OAuthToken resp = oauth.getAccessToken(code, redirectURI, "");
     System.out.println(resp);
-    // use the access token to init Coze client
+    // Use the access token to init Coze client
     CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
     // When the token expires, you can also refresh and re-obtain the token
     resp = oauth.refreshToken(resp.getRefreshToken());
@@ -658,9 +653,7 @@ public void getAccessToken(){
 
 #### Device OAuth App
 
-The OAuth 2.0 device flow, also known as the device authorization grant, is an extension to t
-e OAuth 2.0 protocol designed for devices that have limited input capabilities or lack a suitable
-browser.
+The Device Flow is designed for devices with limited input capabilities or no browser access. This OAuth 2.0 extension enables secure authorization for IoT devices, CLI tools, and other limited-input scenarios.
 
 Firstly, users need to access https://www.coze.com/open/oauth/apps. For the cn environment,
 users need to access https://www.coze.cn/open/oauth/apps to create an OAuth App of the type
@@ -673,24 +666,24 @@ accessed at https://www.coze.cn/docs/developer_guides/oauth_device_code.
 After the creation is completed, three parameters, namely the client ID can be obtained.
 
 ```java
- public initOAuthClient() {
+public void initOAuthClient() {
     String clientID = System.getenv("COZE_PKCE_OAUTH_CLIENT_ID");
     /*
      * The default access is api.coze.com, but if you need to access api.coze.cn,
      * please use base_url to configure the api endpoint to access
      */
     String cozeAPIBase = System.getenv("COZE_API_BASE");
-    if(cozeAPIBase==null|| cozeAPIBase.isEmpty()){
+    if (cozeAPIBase == null || cozeAPIBase.isEmpty()) {
         cozeAPIBase = Consts.COZE_COM_BASE_URL;
     }
-    DeviceOAuthClient oAuth = new DeviceOAuthClient.DeviceOAuthBuilder()
+    DeviceOAuthClient oauth = new DeviceOAuthClient.DeviceOAuthBuilder()
         .clientID(clientID)
         .baseURL(cozeAPIBase)
         .build();
- }
+}
 ```
 
-In the device oAuth authorization process, developers need to first call the interface
+In the device oauth authorization process, developers need to first call the interface
 of Coze to generate the device code to obtain the user_code and device_code.
 
 Then generate the authorization link through the user_code, guide the user to open the
@@ -723,7 +716,7 @@ try {
     OAuthToken resp = oauth.getAccessToken(codeResp.getDeviceCode());
     System.out.println(resp);
 
-    // use the access token to init Coze client
+    // Use the access token to init Coze client
     CozeAPI coze = new CozeAPI.Builder().auth(new TokenAuth(resp.getAccessToken())).baseURL(cozeAPIBase).build();
     // When the token expires, you can also refresh and re-obtain the token
     resp = oauth.refreshToken(resp.getRefreshToken());
@@ -733,13 +726,13 @@ try {
             /*
             The user rejected the authorization.
             Developers need to guide the user to open the authorization link again.
-            * */
+            */
             break;
         case ExpiredToken:
             /*
             The token has expired. Developers need to guide the user to open
             the authorization link again.
-            * */
+            */
         default:
             e.printStackTrace();
             break;
@@ -795,7 +788,7 @@ resp.blockingForEach(event -> {
 workflow streaming example:
 
 ```java
-public streamRun() {
+public void streamRun() {
     // Get an access_token through personal access token or oauth.
     String token = System.getenv("COZE_API_TOKEN");
     TokenAuth authCli = new TokenAuth(token);
@@ -820,9 +813,9 @@ public streamRun() {
     handleEvent(flowable, coze, workflowID);
 }
 
-private void handleEvent(Flowable<WorkflowEvent> events, CozeAPI coze, String workflowID){
+private void handleEvent(Flowable<WorkflowEvent> events, CozeAPI coze, String workflowID) {
     events.subscribe(event -> {
-        switch (event.getEvent()){
+        switch (event.getEvent()) {
             case MESSAGE:
                 System.out.println("Got message" + event.getMessage());
                 break;
@@ -876,7 +869,7 @@ PageResult<SimpleBot> botList = coze.bots().list(listBotReq);
 
 // the api provides two ways for developers to turn pages for all paging interfaces.
 // 1. The first way is to let developers manually call the API to request the next page.
-while (botList.getHasMore()){
+while (botList.getHasMore()) {
     pageNum++;
     listBotReq.setPageNum(pageNum);
     botList = coze.bots().list(listBotReq);
