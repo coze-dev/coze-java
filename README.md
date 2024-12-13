@@ -1,5 +1,7 @@
 # Coze Java API SDK
 
+[![codecov](https://codecov.io/github/coze-dev/coze-java/graph/badge.svg?token=UXitaQ0wp7)](https://codecov.io/github/coze-dev/coze-java)
+
 ## Introduction
 
 The Coze API SDK for Java is a powerful tool designed to seamlessly integrate Coze's open APIs into your projects.

@@ -52,7 +52,7 @@ public class UserAgentInterceptor implements Interceptor {
     String osName = System.getProperty("os.name").toLowerCase();
     String osVersion = getOsVersion();
 
-    return String.format("cozepy/%s java/%s %s/%s", VERSION, javaVersion, osName, osVersion)
+    return String.format("cozejava/%s java/%s %s/%s", VERSION, javaVersion, osName, osVersion)
         .toLowerCase();
   }
 

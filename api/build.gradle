@@ -21,6 +21,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+    testImplementation 'junit:junit:4.12'
     testImplementation 'org.junit.platform:junit-platform-commons:1.8.2'
     testImplementation 'org.mockito:mockito-core:4.11.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.11.0'
@@ -39,14 +40,28 @@ jacocoTestReport {
         xml.required = true
         csv.required = true
     }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/openapi/client/**',
+            ])
+        }))
+    }
 }
 
-test {
-    finalizedBy jacocoTestReport    // 测试完成后自动生成报告
-}
+//jacocoTestCoverageVerification {
+//    violationRules {
+//        rule {
+//            limit {
+//                minimum = 0.8
+//            }
+//        }
+//    }
+//}
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport    // 测试完成后自动生成报告
 }
 
 sourceSets {

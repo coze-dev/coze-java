@@ -65,9 +65,8 @@ public abstract class OAuthClient {
     return this._getOAuthURL(redirectURI, state, null, null, null);
   }
 
-  protected String getOAuthURL(
-      @NotNull String redirectURI, String state, @NotNull String codeChallenge) {
-    return this._getOAuthURL(redirectURI, state, codeChallenge, null, null);
+  protected String getOAuthURL(@NotNull String redirectURI, String state, String workspace) {
+    return this._getOAuthURL(redirectURI, state, null, null, workspace);
   }
 
   protected String getOAuthURL(
