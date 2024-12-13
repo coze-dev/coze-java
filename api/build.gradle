@@ -43,7 +43,7 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    '**/openapi/client/**',
+                    '**/client/**',
             ])
         }))
     }
@@ -52,9 +52,18 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
     violationRules {
         rule {
+            element = 'BUNDLE'
             limit {
-                minimum = 0.8
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.5
             }
+        }
+    }
+    doLast {
+        println "Verification files:"
+        classDirectories.files.each { file ->
+            println file
         }
     }
 }

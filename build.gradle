@@ -1,6 +1,5 @@
 plugins {
     id 'com.diffplug.spotless' version '6.11.0' apply false
-    id 'jacoco'
 }
 
 allprojects {
@@ -44,48 +43,6 @@ subprojects {
             trimTrailingWhitespace()
             importOrder('java', 'javax', 'org', 'com', '')
             licenseHeader '/* (C)$YEAR */'
-        }
-    }
-
-    test {
-        useJUnitPlatform()
-        finalizedBy jacocoTestReport
-    }
-
-    jacoco {
-        toolVersion = "0.8.7"
-    }
-
-    jacocoTestReport {
-        dependsOn test
-        
-        reports {
-            xml.required = false
-            csv.required = false
-            html.required = true
-            html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-        }
-
-        afterEvaluate {
-            classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: [
-                    'com/coze/openapi/service/client/**',
-                    '**/AudioClient.class',
-                    '**/ChatClient.class',
-                    '**/ConversationClient.class',
-                    // 添加其他需要排除的具体类
-                ])
-            }))
-        }
-    }
-
-    jacocoTestCoverageVerification {
-        violationRules {
-            rule {
-                limit {
-                    minimum = 0.8
-                }
-            }
         }
     }
 }
