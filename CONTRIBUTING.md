@@ -53,5 +53,5 @@ dependencies {
 Make sure to run tests before committing:
 
 ```shell
-./gradlew test
+./gradlew test jacocoTestReport jacocoTestCoverageVerification
 ```
