@@ -134,11 +134,11 @@ class DeviceOAuthClientTest {
                 "{\"error_code\":\"authorization_pending\",\"error_message\":\"Authorization pending\"}",
                 okhttp3.MediaType.get("application/json")));
     Response<OAuthToken> slowDownResponse =
-            Response.error(
-                    400,
-                    okhttp3.ResponseBody.create(
-                            "{\"error_code\":\"slow_down\",\"error_message\":\"Slow Down\"}",
-                            okhttp3.MediaType.get("application/json")));
+        Response.error(
+            400,
+            okhttp3.ResponseBody.create(
+                "{\"error_code\":\"slow_down\",\"error_message\":\"Slow Down\"}",
+                okhttp3.MediaType.get("application/json")));
 
     // 设置模拟行为 - 第一次返回 pending，第二次返回 slow down，第三次成功
     when(mockApi.retrieve(any(), any()))
