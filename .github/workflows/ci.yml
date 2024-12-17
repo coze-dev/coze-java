@@ -26,35 +26,29 @@ jobs:
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v1
         with:
-         java-version: ${{ matrix.java-version }}
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          java-version: ${{ matrix.java-version }}
 
       - name: Code style check
-        run: |
-          ./gradlew spotlessCheck
+        run: mvn spotless:check
 
       - name: Build and Test
-        run: ./gradlew build test
+        run: mvn clean verify
 
       - name: Generate JaCoCo Report
-        run: ./gradlew jacocoTestReport
+        run: mvn jacoco:report
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./build/reports/jacoco/test/jacocoTestReport.xml
+          files: ./target/site/jacoco/jacoco.xml
           flags: unittests
           fail_ci_if_error: true
 
-      - name: Cache Gradle packages
+      - name: Cache Maven packages
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-m2-

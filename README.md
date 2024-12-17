@@ -13,6 +13,24 @@ Key Features:
 - Optimized list APIs with Iterator Page object returns
 - Simple and intuitive API design for ease of use
 
+## Importing
+
+### Gradle
+```groovy
+dependencies {
+    implementation 'com.coze:coze-api:+'
+}
+```
+
+### Maven
+```xml
+<dependency>
+    <groupId>com.coze</groupId>
+    <artifactId>coze-api</artifactId>
+    <version>version</version>
+</dependency>
+
+```
 
 ## Usage
 
@@ -24,10 +42,10 @@ Key Features:
 | oauth by web code             | [WebOAuthExample.java](example/src/main/java/example/auth/WebOAuthExample.java)                             |
 | oauth by jwt flow             | [JWTsOauthExample.java](example/src/main/java/example/auth/JWTOAuthExample.java)                            |
 | oauth by pkce flow            | [PKCEOauthExample.java](example/src/main/java/example/auth/PKCEOAuthExample.java)                           |
-| oauth by device flow          | [DevicesOAuthExample.java](example/src/main/java/example/auth/DevicesOAuthExample.java)                     |
+| oauth by device flow          | [DevicesOAuthExample.java](example/src/main/java/example/auth/DeviceOAuthExample.java)                      |
 | handle auth exception         | [HandlerExceptionExample.java](example/src/main/java/example/auth/HandlerExceptionExample.java)             |
-| bot create, publish and chat  | [PublishBotExample.java](example/src/main/java/example/bot/PublishBotExample.java)                          |
-| get bot and bot list          | [GetBotExample.java](example/src/main/java/example/bot/GetBotExample.java)                                  |
+| bot create, publish and chat  | [PublishBotExample.java](example/src/main/java/example/bot/BotPublishExample.java)                          |
+| get bot and bot list          | [GetBotExample.java](example/src/main/java/example/bot/BotRetrieveExample.java)                             |
 | non-stream chat               | [ChatExample.java](example/src/main/java/example/chat/ChatExample.java)                                     |
 | steam chat                    | [StreamChatExample.java](example/src/main/java/example/chat/StreamChatExample.java)                         |
 | chat with local plugin        | [SubmitToolOutputExample.java](example/src/main/java/example/chat/SubmitToolOutputExample.java)             |
@@ -35,12 +53,12 @@ Key Features:
 | non-stream workflow chat      | [RunWorkflowExample.java](example/src/main/java/example/workflow/RunWorkflowExample.java)                   |
 | stream workflow chat          | [StreamWorkflowExample.java](example/src/main/java/example/workflow/StreamWorkflowExample.java)             |
 | async workflow run            | [AsyncRunWorkflowExample.java](example/src/main/java/example/workflow/AsyncRunWorkflowExample.java)         |
-| conversation                  | [CreateConversationExample.java](example/src/main/java/example/conversation/CreateConversationExample.java) |
-| list conversation             | [ListConversationsExample.java](example/src/main/java/example/conversation/ListConversationsExample.java)   |
-| workspace                     | [ListWorkspaceExample.java](example/src/main/java/example/workspace/ListWorkspaceExample.java)              |
-| create update delete message  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/CrudMessageExample.java)     |
-| list message                  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/ListMessageExample.java)     |
-| create update delete document | [ListWorkspaceExample.java](example/src/main/java/example/datasets/document/CrudDocumentExample.java)       |
+| conversation                  | [CreateConversationExample.java](example/src/main/java/example/conversation/ConversationCreateExample.java) |
+| list conversation             | [ListConversationsExample.java](example/src/main/java/example/conversation/ConversationsListExample.java)   |
+| workspace                     | [ListWorkspaceExample.java](example/src/main/java/example/workspace/WorkspaceListExample.java)              |
+| create update delete message  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/MessageCrudExample.java)     |
+| list message                  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/MessageListExample.java)     |
+| create update delete document | [ListWorkspaceExample.java](example/src/main/java/example/datasets/document/DocumentCrudExample.java)       |
 | initial client                | [InitServiceExample.java](example/src/main/java/example/service/InitClientExample.java)                     |
 | how to handle exception       | [HandlerExceptionExample.java](example/src/main/java/example/service/HandlerExceptionExample.java)          |
 | get request log id            | [GetLogExample.java](example/src/main/java/example/service/GetLogExample.java)                              |

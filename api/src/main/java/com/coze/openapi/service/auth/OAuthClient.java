@@ -48,12 +48,23 @@ public abstract class OAuthClient {
   protected final String baseURL;
   protected final CozeAuthAPI api;
   protected final ExecutorService executorService;
+  protected final String hostName;
 
   protected OAuthClient(OAuthBuilder<?> builder) {
     builder.init();
     this.clientSecret = builder.clientSecret;
     this.clientID = builder.clientID;
     this.baseURL = builder.baseURL;
+    if (this.baseURL != null && !this.baseURL.isEmpty()) {
+      try {
+        java.net.URL url = new java.net.URL(this.baseURL);
+        this.hostName = url.getHost();
+      } catch (Exception e) {
+        throw new RuntimeException("Invalid base URL: " + this.baseURL, e);
+      }
+    } else {
+      throw new RuntimeException("Base URL is required");
+    }
 
     Retrofit retrofit = defaultRetrofit(builder.client, mapper, getBaseURL());
 

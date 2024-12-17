@@ -2,19 +2,19 @@
 
 Ensure your development environment has:
 - JDK 1.8 (Java 8)
-- Gradle 8.x
+- Maven 3.x
 
 ## Building the Project
 
 After cloning the project, run in the project root:
 
 ```shell
-./gradlew build
+mvn build
 ```
 
 ## IDE Setup
 
-IntelliJ IDEA is recommended. When importing the project, select import as a Gradle project.
+IntelliJ IDEA is recommended. When importing the project, select import as a Maven project.
 
 ## Code Style
 
@@ -26,32 +26,34 @@ This project follows Google Java Style guidelines. In IntelliJ IDEA:
 You can run following command on the terminal to format code:
 
 ```shell
-./gradlew spotlessApply
+mvn spotless:apply
 ```
 
 ## Git Hooks
 
-We use the Gradle spotless plugin to ensure code quality. The project is configured to run checks automatically before each commit.
+We use the Maven spotless plugin to ensure code quality. The project is configured to run checks automatically before each commit.
 
 To manually format code, run:
 
 ```shell
-./gradlew spotlessApply
+mvn spotless:apply
 ```
 
 ## Dependency Management
 
-This project uses Gradle for dependency management. To add new dependencies, modify the `build.gradle` file.
+This project uses Maven for dependency management. To add new dependencies, modify the `build.gradle` file.
 
 Example:
-```groovy
-dependencies {
-    implementation 'com.example:library:1.0.0'
-}
+```xml
+<dependency>
+    <groupId>com.example</groupId>
+    <artifactId>example</artifactId>
+    <version>version</version>
+</dependency>
 ```
 
 Make sure to run tests before committing:
 
 ```shell
-./gradlew test jacocoTestReport jacocoTestCoverageVerification
+mvn clean test jacoco:report jacoco:check
 ```

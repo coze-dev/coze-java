@@ -90,7 +90,7 @@ public class JWTOAuthClient extends OAuthClient {
           Jwts.builder()
               .setHeader(header)
               .setIssuer(this.clientID)
-              .setAudience("api.coze.cn")
+              .setAudience(this.hostName)
               .setIssuedAt(new Date(now * 1000))
               .setExpiration(new Date((now + ttl) * 1000))
               .setId(Utils.genRandomSign(16))
