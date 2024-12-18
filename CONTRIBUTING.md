@@ -55,5 +55,5 @@ Example:
 Make sure to run tests before committing:
 
 ```shell
-mvn clean test jacoco:report jacoco:check
+mvn -pl api test jacoco:report
 ```
