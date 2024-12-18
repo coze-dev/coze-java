@@ -44,18 +44,14 @@ public class ConversationCreateExample {
     System.out.println("retrieve conversations:" + getResp);
 
     // you can manually create message for conversation
-    CreateMessageReq createMessageReq = CreateMessageReq.builder()
-        .role(MessageRole.USER)
-        .conversationID(conversationID)
-        .build();
-    createMessageReq.setObjectContent(Arrays.asList(
-        MessageObjectString.buildText("hello"),
-        MessageObjectString.buildImageByURL(System.getenv("IMAGE_FILE_PATH")),
-        MessageObjectString.buildFileByURL(System.getenv("FILE_URL"))));  
-    CreateMessageResp msgs =
-        coze.conversations()
-            .messages()
-            .create(createMessageReq);
+    CreateMessageReq createMessageReq =
+        CreateMessageReq.builder().role(MessageRole.USER).conversationID(conversationID).build();
+    createMessageReq.setObjectContent(
+        Arrays.asList(
+            MessageObjectString.buildText("hello"),
+            MessageObjectString.buildImageByURL(System.getenv("IMAGE_FILE_PATH")),
+            MessageObjectString.buildFileByURL(System.getenv("FILE_URL"))));
+    CreateMessageResp msgs = coze.conversations().messages().create(createMessageReq);
     System.out.println(msgs);
 
     ClearConversationResp clearResp =
