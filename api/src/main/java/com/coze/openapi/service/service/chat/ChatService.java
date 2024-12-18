@@ -58,6 +58,7 @@ public class ChatService {
     BaseResponse<Chat> resp = Utils.execute(chatAPI.chat(conversationID, req, req));
     return CreateChatResp.builder().chat(resp.getData()).logID(resp.getLogID()).build();
   }
+
   /*
    * Call the Chat API with non-streaming to send messages to a published Coze bot and
    * fetch chat status & message.

@@ -24,6 +24,7 @@ public class UpdateDocumentReq extends BaseReq {
   @NonNull
   @JsonProperty("document_id")
   private Long documentID;
+
   /** The new name of the knowledge base file. */
   @JsonProperty("document_name")
   private String documentName;

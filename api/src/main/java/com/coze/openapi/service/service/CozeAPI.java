@@ -194,6 +194,7 @@ public class CozeAPI {
           chatAPI,
           audioAPI);
     }
+
     // 确保加上了 Auth 拦截器
     private OkHttpClient parseClient(OkHttpClient client) {
       boolean hasAuthInterceptor = false;

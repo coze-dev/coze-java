@@ -50,13 +50,8 @@ public class UpdateMessageReq extends BaseReq {
   @JsonProperty("content_type")
   private MessageContentType contentType;
 
-  public abstract static class UpdateMessageReqBuilder<
-          C extends UpdateMessageReq, B extends UpdateMessageReqBuilder<C, B>>
-      extends BaseReqBuilder<C, B> {
-    public B objectContent(List<MessageObjectString> objects) {
-      this.content = Utils.toJson(objects);
-      this.contentType = MessageContentType.OBJECT_STRING;
-      return self();
-    }
+  public void setObjectContent(List<MessageObjectString> objects) {
+    this.content = Utils.toJson(objects);
+    this.contentType = MessageContentType.OBJECT_STRING;
   }
 }

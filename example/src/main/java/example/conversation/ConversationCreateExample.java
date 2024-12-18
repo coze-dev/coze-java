@@ -44,21 +44,18 @@ public class ConversationCreateExample {
     System.out.println("retrieve conversations:" + getResp);
 
     // you can manually create message for conversation
+    CreateMessageReq createMessageReq = CreateMessageReq.builder()
+        .role(MessageRole.USER)
+        .conversationID(conversationID)
+        .build();
+    createMessageReq.setObjectContent(Arrays.asList(
+        MessageObjectString.buildText("hello"),
+        MessageObjectString.buildImageByURL(System.getenv("IMAGE_FILE_PATH")),
+        MessageObjectString.buildFileByURL(System.getenv("FILE_URL"))));  
     CreateMessageResp msgs =
         coze.conversations()
             .messages()
-            .create(
-                CreateMessageReq.builder()
-                    .role(MessageRole.USER)
-                    .conversationID(conversationID)
-                    // if you want to create object content, you can use followed method to simplify
-                    // your code
-                    .objectContent(
-                        Arrays.asList(
-                            MessageObjectString.buildText("hello"),
-                            MessageObjectString.buildImageByURL(System.getenv("IMAGE_FILE_PATH")),
-                            MessageObjectString.buildFileByURL(System.getenv("FILE_URL"))))
-                    .build());
+            .create(createMessageReq);
     System.out.println(msgs);
 
     ClearConversationResp clearResp =

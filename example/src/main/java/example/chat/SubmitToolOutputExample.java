@@ -1,5 +1,6 @@
 /* (C)2024 */
 package example.chat;
+
 /*
  * This use case teaches you how to use local plugin.
  * */

@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <lombok.version>1.18.20</lombok.version>
+        <lombok.version>1.18.4</lombok.version>
         <junit.version>5.8.2</junit.version>
     </properties>
 
@@ -42,6 +42,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -50,30 +51,19 @@
                 <version>2.43.0</version>
                 <configuration>
                     <java>
-                        <!-- 配置 Java 代码格式化 -->
                         <includes>
                             <include>src/main/java/**/*.java</include>
                             <include>src/test/java/**/*.java</include>
                         </includes>
-
-                        <!-- 使用 Google Java 格式化规则 -->
                         <googleJavaFormat>
-                            <version>1.15.0</version>
+                            <version>1.17.0</version>
                             <style>GOOGLE</style>
                         </googleJavaFormat>
-
-                        <!-- 移除未使用的 imports -->
                         <removeUnusedImports />
-
-                        <!-- 确保文件以新行结束 -->
                         <endWithNewline />
-
-                        <!-- 自定义导入顺序 -->
                         <importOrder>
                             <order>java,javax,org,com,</order>
                         </importOrder>
-
-                        <!-- 添加许可证头 -->
                         <licenseHeader>
                             <content>/* (C)$YEAR */</content>
                         </licenseHeader>
@@ -81,7 +71,6 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <!-- 在验证阶段检查格式 -->
                         <id>spotless-check</id>
                         <phase>validate</phase>
                         <goals>

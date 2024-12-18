@@ -56,13 +56,8 @@ public class CreateMessageReq extends BaseReq {
   @JsonProperty("meta_data")
   private Map<String, String> metadata;
 
-  public abstract static class CreateMessageReqBuilder<
-          C extends CreateMessageReq, B extends CreateMessageReqBuilder<C, B>>
-      extends BaseReqBuilder<C, B> {
-    public B objectContent(List<MessageObjectString> objects) {
-      this.content = Utils.toJson(objects);
-      this.contentType = MessageContentType.OBJECT_STRING;
-      return self();
-    }
+  public void setObjectContent(List<MessageObjectString> objects) {
+    this.content = Utils.toJson(objects);
+    this.contentType = MessageContentType.OBJECT_STRING;
   }
 }
