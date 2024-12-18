@@ -39,13 +39,21 @@ jobs:
           mvn -pl api clean test-compile
           mvn -pl api test jacoco:report
 
-      - name: Debug Test Results
-        if: always()
+      - name: Debug Test Results (Unix)
+        if: runner.os != 'Windows'
         run: |
           echo "Test Results:"
           find . -name "TEST-*.xml" -exec cat {} \;
           echo "JaCoCo Report Location:"
           ls -la api/target/site/jacoco/
+          
+      - name: Debug Test Results (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "Test Results:"
+          Get-ChildItem -Recurse -Filter "TEST-*.xml" | Get-Content
+          echo "JaCoCo Report Location:"
+          Get-ChildItem -Path "api\target\site\jacoco" -Force
           
       - name: Generate JaCoCo Report
         run: mvn -pl api jacoco:report
