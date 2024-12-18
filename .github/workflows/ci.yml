@@ -32,7 +32,7 @@ jobs:
         run: mvn spotless:check
 
       - name: Build and Test
-        run: mvn clean verify
+        run: mvn clean verify -Dgpg.skip=true
 
       - name: Generate JaCoCo Report
         run: mvn jacoco:report
