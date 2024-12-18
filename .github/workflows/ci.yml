@@ -18,20 +18,23 @@ jobs:
         os: [ "ubuntu-latest" ]
         os-label: [ "Ubuntu" ]
         include:
-          - { java-version: "11", os: "windows-latest", os-label: "Windows" }
-          - { java-version: "11", os: "macos-latest", os-label: "macOS" }
+          - { java-version: "8", os: "windows-latest", os-label: "Windows" }
+          - { java-version: "8", os: "macos-latest", os-label: "macOS" }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      
       - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
+          distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
+          cache: 'maven'
 
       - name: Code style check
         run: mvn spotless:check
 
-      - name: Build and Test
+      - name: Build and Test with Coverage
         run: mvn -pl api clean verify
 
       - name: Generate JaCoCo Report
@@ -41,7 +44,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./target/site/jacoco/jacoco.xml
+          files: ./api/target/site/jacoco/jacoco.xml
           flags: unittests
           fail_ci_if_error: true
 
