@@ -9,7 +9,7 @@ Ensure your development environment has:
 After cloning the project, run in the project root:
 
 ```shell
-mvn build
++mvn clean install
 ```
 
 ## IDE Setup
