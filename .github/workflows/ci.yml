@@ -18,8 +18,8 @@ jobs:
         os: [ "ubuntu-latest" ]
         os-label: [ "Ubuntu" ]
         include:
-          - { java-version: "8", os: "windows-latest", os-label: "Windows" }
-          - { java-version: "8", os: "macos-latest", os-label: "macOS" }
+          - { java-version: "11", os: "windows-latest", os-label: "Windows" }
+          - { java-version: "11", os: "macos-latest", os-label: "macOS" }
 
     steps:
       - uses: actions/checkout@v4
@@ -35,8 +35,18 @@ jobs:
         run: mvn spotless:check
 
       - name: Build and Test with Coverage
-        run: mvn -pl api clean verify
+        run: |
+          mvn -pl api clean test-compile
+          mvn -pl api test jacoco:report
 
+      - name: Debug Test Results
+        if: always()
+        run: |
+          echo "Test Results:"
+          find . -name "TEST-*.xml" -exec cat {} \;
+          echo "JaCoCo Report Location:"
+          ls -la api/target/site/jacoco/
+          
       - name: Generate JaCoCo Report
         run: mvn -pl api jacoco:report
 
@@ -47,6 +57,7 @@ jobs:
           files: ./api/target/site/jacoco/jacoco.xml
           flags: unittests
           fail_ci_if_error: true
+          verbose: true
 
       - name: Cache Maven packages
         uses: actions/cache@v4
