@@ -38,7 +38,7 @@
 
     <parent>
         <groupId>com.coze</groupId>
-        <artifactId>coze-sdk</artifactId>
+        <artifactId>coze</artifactId>
         <version>0.1.0</version>
     </parent>
 

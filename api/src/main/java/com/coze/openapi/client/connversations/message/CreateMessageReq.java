@@ -40,7 +40,7 @@ public class CreateMessageReq extends BaseReq {
    * The content of the message, supporting pure text, multimodal (mixed input of text, images, files),
    * cards, and various types of content.
    * */
-  @NonNull private String content;
+  private String content;
 
   /*
    * The type of message content.

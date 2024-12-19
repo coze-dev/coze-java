@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.coze</groupId>
-        <artifactId>coze-sdk</artifactId>
+        <artifactId>coze</artifactId>
         <version>0.1.0</version>
     </parent>
 
@@ -16,7 +16,6 @@
         <dependency>
             <groupId>com.coze</groupId>
             <artifactId>coze-api</artifactId>
-            <version>0.1.1</version>
         </dependency>
     </dependencies>
 </project> 

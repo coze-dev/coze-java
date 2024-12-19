@@ -26,7 +26,8 @@ public class ListMessageReq extends BaseReq {
 
   /** The sorting method for the message list. */
   @JsonProperty("order")
-  private String order;
+  @Builder.Default
+  private String order = Sort.DESC.getValue();
 
   /** The ID of the Chat. */
   @JsonProperty("chat_id")
@@ -47,8 +48,4 @@ public class ListMessageReq extends BaseReq {
 
   @JsonProperty("bot_id")
   private String botID;
-
-  @JsonProperty("order")
-  @Builder.Default
-  private Sort sort = Sort.DESC;
 }
