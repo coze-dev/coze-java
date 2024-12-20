@@ -11,6 +11,7 @@ import com.coze.openapi.client.connversations.RetrieveConversationReq;
 import com.coze.openapi.client.connversations.RetrieveConversationResp;
 import com.coze.openapi.client.connversations.message.CreateMessageReq;
 import com.coze.openapi.client.connversations.message.CreateMessageResp;
+import com.coze.openapi.client.connversations.message.model.MessageContentType;
 import com.coze.openapi.client.connversations.message.model.MessageObjectString;
 import com.coze.openapi.client.connversations.message.model.MessageRole;
 import com.coze.openapi.service.auth.TokenAuth;
@@ -45,7 +46,11 @@ public class ConversationCreateExample {
 
     // you can manually create message for conversation
     CreateMessageReq createMessageReq =
-        CreateMessageReq.builder().role(MessageRole.USER).conversationID(conversationID).build();
+        CreateMessageReq.builder()
+            .role(MessageRole.USER)
+            .contentType(MessageContentType.OBJECT_STRING)
+            .conversationID(conversationID)
+            .build();
     createMessageReq.setObjectContent(
         Arrays.asList(
             MessageObjectString.buildText("hello"),
