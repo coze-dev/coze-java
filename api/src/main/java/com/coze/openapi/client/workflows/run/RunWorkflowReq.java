@@ -50,4 +50,10 @@ public class RunWorkflowReq extends BaseReq {
    * */
   @JsonProperty("is_async")
   private Boolean isAsync;
+
+  /*
+   * The application ID where the workflow is located.
+   * */
+  @JsonProperty("app_id")
+  private String appId;
 }
