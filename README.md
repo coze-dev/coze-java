@@ -1,5 +1,6 @@
 # Coze Java API SDK
 
+[![Maven Central Version](https://img.shields.io/maven-central/v/com.coze/coze-api)](https://central.sonatype.com/artifact/com.coze/coze-api)
 [![codecov](https://codecov.io/github/coze-dev/coze-java/graph/badge.svg?token=UXitaQ0wp7)](https://codecov.io/github/coze-dev/coze-java)
 
 ## Introduction
