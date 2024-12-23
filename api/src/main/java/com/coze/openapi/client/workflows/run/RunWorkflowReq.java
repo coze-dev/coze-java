@@ -55,5 +55,5 @@ public class RunWorkflowReq extends BaseReq {
    * The application ID where the workflow is located.
    * */
   @JsonProperty("app_id")
-  private String appId;
+  private String appID;
 }
