@@ -1,7 +1,6 @@
 /* (C)2024 */
 package com.coze.openapi.service.utils;
 
-import static com.coze.openapi.service.utils.UserAgentInterceptor.VERSION;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
