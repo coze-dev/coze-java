@@ -1,6 +1,7 @@
 /* (C)2024 */
 package com.coze.openapi.service.utils;
 
+import static com.coze.openapi.service.utils.UserAgentInterceptor.VERSION;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -64,7 +65,8 @@ public class UserAgentInterceptorTest {
                     String cozeClientUserAgent = request.header("X-Coze-Client-User-Agent");
 
                     // 验证 User-Agent 格式
-                    String expectedUserAgent = "cozejava/1.0.0 java/17 windows 10/10.0";
+                    String expectedUserAgent =
+                        String.format("cozejava/%s java/17 windows 10/10.0", VERSION).toLowerCase();
                     assertEquals(expectedUserAgent, userAgent);
 
                     // 验证 X-Coze-Client-User-Agent 是有效的 JSON
@@ -133,7 +135,8 @@ public class UserAgentInterceptorTest {
               String userAgent = request.header("User-Agent");
 
               // 直接验证完整的 User-Agent 字符串
-              String expectedUserAgent = "cozejava/1.0.0 java/17 windows 10/10.0";
+              String expectedUserAgent =
+                  String.format("cozejava/%s java/17 windows 10/10.0", VERSION).toLowerCase();
               assertEquals(expectedUserAgent, userAgent);
 
               return new Response.Builder()
