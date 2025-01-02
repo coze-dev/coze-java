@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.audio.room;
 
 import com.coze.openapi.client.audio.rooms.CreateRoomReq;

@@ -2,7 +2,7 @@ package com.coze.openapi.service.service.dataset;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.coze.openapi.api.DocumentAPI;
+import com.coze.openapi.api.DatasetDocumentAPI;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
 import com.coze.openapi.client.common.pagination.PageRequest;
@@ -20,9 +20,9 @@ import com.coze.openapi.client.dataset.document.model.Document;
 import com.coze.openapi.service.utils.Utils;
 
 public class DocumentService {
-  private final DocumentAPI api;
+  private final DatasetDocumentAPI api;
 
-  public DocumentService(DocumentAPI api) {
+  public DocumentService(DatasetDocumentAPI api) {
     this.api = api;
   }
 

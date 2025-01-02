@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.workflows.run.model;
 
 import com.coze.openapi.service.utils.Utils;

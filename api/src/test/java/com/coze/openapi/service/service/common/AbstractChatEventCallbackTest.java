@@ -22,7 +22,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
-class AbstractEventCallbackTest {
+class AbstractChatEventCallbackTest {
 
   @Mock private FlowableEmitter<String> emitter;
 

@@ -3,31 +3,26 @@ package com.coze.openapi.client.dataset.document.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum DocumentUpdateType {
-  /** Do not automatically update 不自动更新 */
-  NO_AUTO_UPDATE(0),
+import lombok.Getter;
 
-  /** Automatically update 自动更新 */
-  AUTO_UPDATE(1);
+@Getter
+public class DocumentUpdateType {
+  public static final DocumentUpdateType NO_AUTO_UPDATE = new DocumentUpdateType(0);
+  public static final DocumentUpdateType AUTO_UPDATE = new DocumentUpdateType(1);
 
-  private final int value;
+  @JsonValue private final Integer value;
 
-  DocumentUpdateType(int value) {
+  private DocumentUpdateType(Integer value) {
     this.value = value;
   }
 
-  @JsonValue
-  public int getValue() {
-    return value;
-  }
-
   @JsonCreator
-  public static DocumentUpdateType fromValue(int value) {
-    for (DocumentUpdateType updateType : DocumentUpdateType.values()) {
-      if (updateType.value == value) {
-        return updateType;
-      }
+  public static DocumentUpdateType fromValue(Integer value) {
+    if (value == 0) {
+      return NO_AUTO_UPDATE;
+    } else if (value == 1) {
+      return AUTO_UPDATE;
     }
-    throw new IllegalArgumentException("Unknown DocumentUpdateType value: " + value);
+    return new DocumentUpdateType(value);
   }
 }
