@@ -4,10 +4,7 @@ import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -16,9 +13,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UpdateImageReq extends BaseReq {
-  @JsonIgnore private String datasetID;
+  @JsonIgnore @NonNull private String datasetID;
 
-  @JsonIgnore private String documentID;
+  @JsonIgnore @NonNull private String documentID;
 
   /*
    * The description of the image.

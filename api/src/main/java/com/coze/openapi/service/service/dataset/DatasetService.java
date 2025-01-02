@@ -3,6 +3,7 @@ package com.coze.openapi.service.service.dataset;
 import com.coze.openapi.api.DatasetAPI;
 import com.coze.openapi.api.DatasetDocumentAPI;
 import com.coze.openapi.api.DatasetImageAPI;
+import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
 import com.coze.openapi.client.common.pagination.PageRequest;
@@ -113,7 +114,9 @@ public class DatasetService {
     if (req.getDatasetID() == null) {
       throw new IllegalArgumentException("datasetID is required");
     }
-    return Utils.execute(api.update(req.getDatasetID(), req, req)).getData();
+    BaseResponse<UpdateDatasetResp> result =
+        Utils.execute(api.update(req.getDatasetID(), req, req));
+    return UpdateDatasetResp.builder().logID(result.getLogID()).build();
   }
 
   /*
@@ -123,10 +126,8 @@ public class DatasetService {
    * docs zh: https://www.coze.cn/docs/developer_guides/delete_dataset
    */
   public DeleteDatasetResp delete(DeleteDatasetReq req) {
-    if (req.getDatasetID() == null) {
-      throw new IllegalArgumentException("datasetID is required");
-    }
-    return Utils.execute(api.delete(req.getDatasetID(), req)).getData();
+    BaseResponse<DeleteDatasetResp> result = Utils.execute(api.delete(req.getDatasetID(), req));
+    return DeleteDatasetResp.builder().logID(result.getLogID()).build();
   }
 
   /*
@@ -136,9 +137,6 @@ public class DatasetService {
    * docs zh: https://www.coze.cn/docs/developer_guides/get_dataset_progress
    */
   public ProcessDatasetResp process(ProcessDatasetReq req) {
-    if (req.getDatasetID() == null) {
-      throw new IllegalArgumentException("datasetID is required");
-    }
     return Utils.execute(api.process(req.getDatasetID(), req, req)).getData();
   }
 }

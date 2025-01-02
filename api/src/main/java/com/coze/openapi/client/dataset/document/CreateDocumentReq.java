@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.dataset.document.model.DocumentBase;
 import com.coze.openapi.client.dataset.document.model.DocumentChunkStrategy;
+import com.coze.openapi.client.dataset.document.model.DocumentFormatType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -45,4 +46,7 @@ public class CreateDocumentReq extends BaseReq {
    */
   @JsonProperty("chunk_strategy")
   private DocumentChunkStrategy chunkStrategy;
+
+  @JsonProperty("format_type")
+  private DocumentFormatType formatType;
 }
