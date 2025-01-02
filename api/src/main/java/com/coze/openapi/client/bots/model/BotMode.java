@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.bots.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;

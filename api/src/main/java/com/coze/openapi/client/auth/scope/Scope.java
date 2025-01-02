@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.auth.scope;
 
 import java.util.Collections;

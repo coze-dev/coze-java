@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.api;
 
 import com.coze.openapi.client.common.BaseReq;
@@ -16,7 +15,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Tag;
 
-public interface DocumentAPI {
+public interface DatasetDocumentAPI {
 
   @POST("/open_api/knowledge/document/create")
   @Headers({"Content-Type: application/json", "Agw-Js-Conv: str"})

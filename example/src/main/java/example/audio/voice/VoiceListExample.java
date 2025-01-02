@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.audio.voice;
 
 import java.util.Iterator;

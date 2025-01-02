@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.conversation.message;
 
 import com.coze.openapi.client.connversations.message.CreateMessageReq;

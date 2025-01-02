@@ -3,34 +3,29 @@ package com.coze.openapi.client.dataset.document.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum DocumentStatus {
-  /** Processing 处理中 */
-  PROCESSING(0),
+import lombok.Getter;
 
-  /** Completed 处理完毕 */
-  COMPLETED(1),
+@Getter
+public class DocumentStatus {
+  public static final DocumentStatus PROCESSING = new DocumentStatus(0);
+  public static final DocumentStatus COMPLETED = new DocumentStatus(1);
+  public static final DocumentStatus FAILED = new DocumentStatus(9);
 
-  /** Processing failed, it is recommended to re-upload 处理失败，建议重新上传 */
-  FAILED(9);
+  @JsonValue private final Integer value;
 
-  private final int value;
-
-  DocumentStatus(int value) {
+  private DocumentStatus(Integer value) {
     this.value = value;
   }
 
-  @JsonValue
-  public int getValue() {
-    return value;
-  }
-
   @JsonCreator
-  public static DocumentStatus fromValue(int value) {
-    for (DocumentStatus status : DocumentStatus.values()) {
-      if (status.value == value) {
-        return status;
-      }
+  public static DocumentStatus fromValue(Integer value) {
+    if (value == 0) {
+      return PROCESSING;
+    } else if (value == 1) {
+      return COMPLETED;
+    } else if (value == 9) {
+      return FAILED;
     }
-    throw new IllegalArgumentException("Unknown DocumentStatus value: " + value);
+    return new DocumentStatus(value);
   }
 }

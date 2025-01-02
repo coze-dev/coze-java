@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.datasets.document;
 
 import java.util.ArrayList;

@@ -3,34 +3,29 @@ package com.coze.openapi.client.dataset.document.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum DocumentFormatType {
-  /** Document type, such as txt, pdf, online web pages, etc. 文档类型，例如 txt 、pdf 、在线网页等格式均属于文档类型。 */
-  DOCUMENT(0),
+import lombok.Getter;
 
-  /** Spreadsheet type, such as xls spreadsheets, etc. 表格类型，例如 xls 表格等格式属于表格类型。 */
-  SPREADSHEET(1),
+@Getter
+public class DocumentFormatType {
+  public static final DocumentFormatType TEXT = new DocumentFormatType(0);
+  public static final DocumentFormatType TABLE = new DocumentFormatType(1);
+  public static final DocumentFormatType IMAGE = new DocumentFormatType(2);
 
-  /** Photo type, such as png images, etc. 照片类型，例如 png 图片等格式属于照片类型。 */
-  IMAGE(2);
+  @JsonValue private final Integer value;
 
-  private final int value;
-
-  DocumentFormatType(int value) {
+  private DocumentFormatType(Integer value) {
     this.value = value;
   }
 
-  @JsonValue
-  public int getValue() {
-    return value;
-  }
-
   @JsonCreator
-  public static DocumentFormatType fromValue(int value) {
-    for (DocumentFormatType type : DocumentFormatType.values()) {
-      if (type.value == value) {
-        return type;
-      }
+  public static DocumentFormatType fromValue(Integer value) {
+    if (value == 0) {
+      return TEXT;
+    } else if (value == 1) {
+      return TABLE;
+    } else if (value == 2) {
+      return IMAGE;
     }
-    throw new IllegalArgumentException("Unknown DocumentFormatType value: " + value);
+    return new DocumentFormatType(value);
   }
 }
