@@ -1,6 +1,7 @@
 package com.coze.openapi.service.service.dataset;
 
 import com.coze.openapi.api.DatasetImageAPI;
+import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
 import com.coze.openapi.client.common.pagination.PageRequest;
@@ -27,10 +28,9 @@ public class ImageService {
    * docs zh: https://www.coze.cn/docs/developer_guides/update_image_caption
    */
   public UpdateImageResp update(UpdateImageReq req) {
-    if (req.getDatasetID() == null || req.getDocumentID() == null) {
-      throw new IllegalArgumentException("datasetID and documentID are required");
-    }
-    return Utils.execute(api.update(req.getDatasetID(), req.getDocumentID(), req, req)).getData();
+    BaseResponse<UpdateImageResp> result =
+        Utils.execute(api.update(req.getDatasetID(), req.getDocumentID(), req, req));
+    return UpdateImageResp.builder().logID(result.getLogID()).build();
   }
 
   /*

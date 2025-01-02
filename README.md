@@ -53,13 +53,20 @@ dependencies {
 | chat with image               | [ChatWithImageExample.java](example/src/main/java/example/chat/ChatWithImageExample.java)                   |
 | non-stream workflow chat      | [RunWorkflowExample.java](example/src/main/java/example/workflow/RunWorkflowExample.java)                   |
 | stream workflow chat          | [StreamWorkflowExample.java](example/src/main/java/example/workflow/StreamWorkflowExample.java)             |
+| stream workflow chat with rx  | [StreamWorkflowChatExample.java](example/src/main/java/example/workflow/StreamWorkflowChatExample.java)    |
 | async workflow run            | [AsyncRunWorkflowExample.java](example/src/main/java/example/workflow/AsyncRunWorkflowExample.java)         |
 | conversation                  | [CreateConversationExample.java](example/src/main/java/example/conversation/ConversationCreateExample.java) |
 | list conversation             | [ListConversationsExample.java](example/src/main/java/example/conversation/ConversationsListExample.java)   |
 | workspace                     | [ListWorkspaceExample.java](example/src/main/java/example/workspace/WorkspaceListExample.java)              |
 | create update delete message  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/MessageCrudExample.java)     |
 | list message                  | [ListWorkspaceExample.java](example/src/main/java/example/conversation/message/MessageListExample.java)     |
-| create update delete document | [ListWorkspaceExample.java](example/src/main/java/example/datasets/document/DocumentCrudExample.java)       |
+| create update delete document | [DocumentCrudExample.java](example/src/main/java/example/datasets/document/DocumentCrudExample.java)        |
+| list document                 | [DocumentListExample.java](example/src/main/java/example/datasets/document/DocumentListExample.java)        |
+| create update delete dataset  | [DatasetCrudExample.java](example/src/main/java/example/datasets/DatasetCrudExample.java)                   |
+| list dataset                  | [DatasetListExample.java](example/src/main/java/example/datasets/DatasetListExample.java)                   |
+| update image caption          | [ImageCrudExample.java](example/src/main/java/example/datasets/image/ImageCrudExample.java)                 |
+| list image                    | [ImageListExample.java](example/src/main/java/example/datasets/image/ImageListExample.java)                 |
+| duplicate template           | [TemplateDuplicateExample.java](example/src/main/java/example/template/TemplateDuplicateExample.java)      |
 | initial client                | [InitServiceExample.java](example/src/main/java/example/service/InitClientExample.java)                     |
 | how to handle exception       | [HandlerExceptionExample.java](example/src/main/java/example/service/HandlerExceptionExample.java)          |
 | get request log id            | [GetLogExample.java](example/src/main/java/example/service/GetLogExample.java)                              |

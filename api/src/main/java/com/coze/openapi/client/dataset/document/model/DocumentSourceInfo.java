@@ -30,6 +30,9 @@ public class DocumentSourceInfo {
   @JsonProperty("document_source")
   private Integer documentSource;
 
+  @JsonProperty("source_file_id")
+  private Long sourceFileID;
+
   public static DocumentSourceInfo buildLocalFile(String content, String fileType) {
     String encodedContent = Base64.getEncoder().encodeToString(content.getBytes());
     DocumentSourceInfo info = new DocumentSourceInfo();
@@ -42,6 +45,13 @@ public class DocumentSourceInfo {
     DocumentSourceInfo info = new DocumentSourceInfo();
     info.setWebUrl(url);
     info.setDocumentSource(1);
+    return info;
+  }
+
+  public static DocumentSourceInfo buildImage(Long fileID) {
+    DocumentSourceInfo info = new DocumentSourceInfo();
+    info.setSourceFileID(fileID);
+    info.setDocumentSource(5);
     return info;
   }
 }

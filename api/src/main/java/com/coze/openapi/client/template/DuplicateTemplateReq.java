@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -19,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class DuplicateTemplateReq extends BaseReq {
   @JsonIgnore private String templateID;
 
+  @NonNull
   @JsonProperty("workspace_id")
   private String workspaceID;
 

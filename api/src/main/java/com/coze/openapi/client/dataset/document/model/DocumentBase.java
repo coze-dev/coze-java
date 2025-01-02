@@ -45,4 +45,11 @@ public class DocumentBase {
         .sourceInfo(DocumentSourceInfo.buildLocalFile(content, fileType))
         .build();
   }
+
+  public static DocumentBase buildImage(String name, Long fileID) {
+    return DocumentBase.builder()
+        .name(name)
+        .sourceInfo(DocumentSourceInfo.buildImage(fileID))
+        .build();
+  }
 }
