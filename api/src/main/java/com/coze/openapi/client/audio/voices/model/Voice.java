@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.audio.voices.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

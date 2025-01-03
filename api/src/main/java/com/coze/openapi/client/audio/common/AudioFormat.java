@@ -1,21 +1,22 @@
-/* (C)2024 */
 package com.coze.openapi.client.audio.common;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Audio format types. */
-public enum AudioFormat {
-  WAV("wav"),
-  PCM("pcm"),
-  OGG_OPUS("ogg_opus"),
-  M4A("m4a"),
-  AAC("aac"),
-  MP3("mp3");
+import lombok.Getter;
+
+@Getter
+public class AudioFormat {
+  public static final AudioFormat WAV = new AudioFormat("wav");
+  public static final AudioFormat PCM = new AudioFormat("pcm");
+  public static final AudioFormat OGG_OPUS = new AudioFormat("ogg_opus");
+  public static final AudioFormat M4A = new AudioFormat("m4a");
+  public static final AudioFormat AAC = new AudioFormat("aac");
+  public static final AudioFormat MP3 = new AudioFormat("mp3");
 
   private final String value;
 
-  AudioFormat(String value) {
+  private AudioFormat(String value) {
     this.value = value;
   }
 
@@ -26,11 +27,12 @@ public enum AudioFormat {
 
   @JsonCreator
   public static AudioFormat fromString(String value) {
-    for (AudioFormat format : AudioFormat.values()) {
+    AudioFormat[] formats = {WAV, PCM, OGG_OPUS, M4A, AAC, MP3};
+    for (AudioFormat format : formats) {
       if (format.value.equals(value)) {
         return format;
       }
     }
-    throw new IllegalArgumentException("Unknown AudioFormat: " + value);
+    return new AudioFormat(value);
   }
 }

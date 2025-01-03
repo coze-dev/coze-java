@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.auth;
 
 public class TokenAuth extends Auth {
