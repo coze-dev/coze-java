@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.chat;
 
 import com.coze.openapi.client.chat.model.Chat;

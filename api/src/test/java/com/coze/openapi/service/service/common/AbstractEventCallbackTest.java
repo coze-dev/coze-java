@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.service.common;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.auth;
 
 import static com.coze.openapi.service.config.Consts.*;

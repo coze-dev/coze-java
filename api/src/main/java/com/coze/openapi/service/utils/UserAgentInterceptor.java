@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.utils;
 
 import java.io.IOException;

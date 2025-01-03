@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.conversation;
 
 import java.util.Arrays;

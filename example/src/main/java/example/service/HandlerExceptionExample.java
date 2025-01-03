@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.service;
 
 import com.coze.openapi.client.exception.CozeApiExcetion;

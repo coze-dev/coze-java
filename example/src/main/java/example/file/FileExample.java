@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.file;
 
 import com.coze.openapi.client.files.RetrieveFileReq;

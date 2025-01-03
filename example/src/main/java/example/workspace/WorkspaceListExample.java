@@ -1,4 +1,3 @@
-/* (C)2024 */
 package example.workspace;
 
 import java.util.Iterator;
