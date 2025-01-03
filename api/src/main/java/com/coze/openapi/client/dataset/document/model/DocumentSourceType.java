@@ -28,8 +28,7 @@ public class DocumentSourceType {
   /** Lark Web Lark网页 */
   public static final DocumentSourceType LARK_WEB = new DocumentSourceType(104);
 
-  @JsonValue 
-  private final Integer value;
+  @JsonValue private final Integer value;
 
   private DocumentSourceType(Integer value) {
     this.value = value;
@@ -37,7 +36,18 @@ public class DocumentSourceType {
 
   @JsonCreator
   public static DocumentSourceType fromValue(Integer value) {
-    DocumentSourceType[] types = {LOCAL_FILE, ONLINE_WEB, CUSTOM, THIRD_PARTY, FRONT_CRAWL, UPLOAD_FILE_ID, NOTION, GOOGLE_DRIVE, FEISHU_WEB, LARK_WEB};
+    DocumentSourceType[] types = {
+      LOCAL_FILE,
+      ONLINE_WEB,
+      CUSTOM,
+      THIRD_PARTY,
+      FRONT_CRAWL,
+      UPLOAD_FILE_ID,
+      NOTION,
+      GOOGLE_DRIVE,
+      FEISHU_WEB,
+      LARK_WEB
+    };
     for (DocumentSourceType type : types) {
       if (type.value.equals(value)) {
         return type;
