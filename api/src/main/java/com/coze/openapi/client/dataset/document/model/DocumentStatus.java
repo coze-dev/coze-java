@@ -22,12 +22,11 @@ public class DocumentStatus {
 
   @JsonCreator
   public static DocumentStatus fromValue(Integer value) {
-    if (value == 0) {
-      return PROCESSING;
-    } else if (value == 1) {
-      return COMPLETED;
-    } else if (value == 9) {
-      return FAILED;
+    DocumentStatus[] statuses = {PROCESSING, COMPLETED, FAILED};
+    for (DocumentStatus status : statuses) {
+      if (status.value.equals(value)) {
+        return status;
+      }
     }
     return new DocumentStatus(value);
   }

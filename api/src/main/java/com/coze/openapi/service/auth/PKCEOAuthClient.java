@@ -92,7 +92,7 @@ public class PKCEOAuthClient extends OAuthClient {
     GetAccessTokenReq req =
         GetAccessTokenReq.builder()
             .clientID(this.clientID)
-            .grantType(GrantType.AuthorizationCode.getValue())
+            .grantType(GrantType.AUTHORIZATION_CODE.getValue())
             .code(code)
             .redirectUri(redirectURI)
             .codeVerifier(codeVerifier)

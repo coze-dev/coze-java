@@ -70,7 +70,7 @@ public class JWTOAuthClient extends OAuthClient {
 
   private OAuthToken doGetAccessToken(Integer ttl, Scope scope, String sessionName) {
     GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
-    builder.grantType(GrantType.JWTCode.getValue()).durationSeconds(ttl).scope(scope);
+    builder.grantType(GrantType.JWT_CODE.getValue()).durationSeconds(ttl).scope(scope);
 
     return getAccessToken(this.generateJWT(ttl, sessionName), builder.build());
   }

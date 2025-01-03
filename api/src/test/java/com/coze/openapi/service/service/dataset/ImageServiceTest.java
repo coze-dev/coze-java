@@ -22,7 +22,7 @@ import com.coze.openapi.client.dataset.image.ListImageReq;
 import com.coze.openapi.client.dataset.image.ListImageResp;
 import com.coze.openapi.client.dataset.image.UpdateImageReq;
 import com.coze.openapi.client.dataset.image.UpdateImageResp;
-import com.coze.openapi.client.dataset.image.model.Photo;
+import com.coze.openapi.client.dataset.image.model.Image;
 import com.coze.openapi.utils.Utils;
 
 import retrofit2.Call;
@@ -75,14 +75,14 @@ class ImageServiceTest {
     ListImageReq req =
         ListImageReq.builder().datasetID("dataset_1").pageNum(1).pageSize(10).build();
 
-    List<Photo> photos =
+    List<Image> images =
         Arrays.asList(
-            Photo.builder().documentID("1").caption("photo1").build(),
-            Photo.builder().documentID("2").caption("photo2").build());
+            Image.builder().documentID("1").caption("image1").build(),
+            Image.builder().documentID("2").caption("image2").build());
 
     ListImageResp respData =
         ListImageResp.builder()
-            .photoInfos(photos)
+            .imageInfos(images)
             .totalCount(5) // 总共5条数据
             .logID(Utils.TEST_LOG_ID)
             .build();
@@ -101,7 +101,7 @@ class ImageServiceTest {
     when(call.execute()).thenReturn(Response.success(baseResponse, Utils.getCommonHeader()));
 
     // 执行测试
-    PageResp<Photo> result = service.list(req);
+    PageResp<Image> result = service.list(req);
 
     // 验证结果
     assertNotNull(result);
@@ -109,7 +109,7 @@ class ImageServiceTest {
     assertEquals(2, result.getItems().size());
     assertEquals(Utils.TEST_LOG_ID, result.getLogID());
     assertEquals("1", result.getItems().get(0).getDocumentID());
-    assertEquals("photo1", result.getItems().get(0).getCaption());
+    assertEquals("image1", result.getItems().get(0).getCaption());
   }
 
   @Test

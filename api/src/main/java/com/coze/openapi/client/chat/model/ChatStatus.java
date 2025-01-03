@@ -3,29 +3,26 @@ package com.coze.openapi.client.chat.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** The running status of the session. */
-public enum ChatStatus {
+import lombok.Getter;
+
+@Getter
+public class ChatStatus {
   /** The session has been created. */
-  CREATED("created"),
-
+  public static final ChatStatus CREATED = new ChatStatus("created");
   /** The Bot is processing. */
-  IN_PROGRESS("in_progress"),
-
+  public static final ChatStatus IN_PROGRESS = new ChatStatus("in_progress");
   /** The Bot has finished processing, and the session has ended. */
-  COMPLETED("completed"),
-
+  public static final ChatStatus COMPLETED = new ChatStatus("completed");
   /** The session has failed. */
-  FAILED("failed"),
-
+  public static final ChatStatus FAILED = new ChatStatus("failed");
   /** The session is interrupted and requires further processing. */
-  REQUIRES_ACTION("requires_action"),
-
+  public static final ChatStatus REQUIRES_ACTION = new ChatStatus("requires_action");
   /** The session is user cancelled chat. */
-  CANCELLED("canceled");
+  public static final ChatStatus CANCELLED = new ChatStatus("canceled");
 
   private final String value;
 
-  ChatStatus(String value) {
+  private ChatStatus(String value) {
     this.value = value;
   }
 
@@ -36,11 +33,12 @@ public enum ChatStatus {
 
   @JsonCreator
   public static ChatStatus fromString(String value) {
-    for (ChatStatus status : ChatStatus.values()) {
+    ChatStatus[] statuses = {CREATED, IN_PROGRESS, COMPLETED, FAILED, REQUIRES_ACTION, CANCELLED};
+    for (ChatStatus status : statuses) {
       if (status.value.equals(value)) {
         return status;
       }
     }
-    throw new IllegalArgumentException("Unknown ChatStatus: " + value);
+    return new ChatStatus(value);
   }
 }
