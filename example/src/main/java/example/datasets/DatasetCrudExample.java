@@ -35,7 +35,7 @@ public class DatasetCrudExample {
         CreateDatasetReq.builder()
             .name("test dataset")
             .spaceID(spaceID)
-            .formatType(DocumentFormatType.TEXT)
+            .formatType(DocumentFormatType.DOCUMENT)
             .description("test dataset description")
             .build();
     CreateDatasetResp createResp = coze.datasets().create(createReq);

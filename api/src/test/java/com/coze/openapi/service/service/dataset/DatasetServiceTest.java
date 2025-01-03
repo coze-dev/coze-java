@@ -56,7 +56,7 @@ class DatasetServiceTest {
         CreateDatasetReq.builder()
             .name("test")
             .spaceID("space_1")
-            .formatType(DocumentFormatType.TEXT)
+            .formatType(DocumentFormatType.DOCUMENT)
             .build();
 
     CreateDatasetResp respData =

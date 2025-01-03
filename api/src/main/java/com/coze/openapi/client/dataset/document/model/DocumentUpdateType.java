@@ -7,7 +7,9 @@ import lombok.Getter;
 
 @Getter
 public class DocumentUpdateType {
+  /** Do not automatically update 不自动更新 */
   public static final DocumentUpdateType NO_AUTO_UPDATE = new DocumentUpdateType(0);
+  /** Automatically update 自动更新 */
   public static final DocumentUpdateType AUTO_UPDATE = new DocumentUpdateType(1);
 
   @JsonValue private final Integer value;
