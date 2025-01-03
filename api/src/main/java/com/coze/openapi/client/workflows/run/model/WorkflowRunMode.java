@@ -3,35 +3,33 @@ package com.coze.openapi.client.workflows.run.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import lombok.Getter;
+
 /** Run mode of the workflow. */
-public enum WorkflowRunMode {
+@Getter
+public class WorkflowRunMode {
   /** Synchronous operation. */
-  SYNCHRONOUS(0),
-
+  public static final WorkflowRunMode SYNCHRONOUS = new WorkflowRunMode(0);
   /** Streaming operation. */
-  STREAMING(1),
-
+  public static final WorkflowRunMode STREAMING = new WorkflowRunMode(1);
   /** Asynchronous operation. */
-  ASYNCHRONOUS(2);
+  public static final WorkflowRunMode ASYNCHRONOUS = new WorkflowRunMode(2);
 
-  private final int value;
+  @JsonValue
+  private final Integer value;
 
-  WorkflowRunMode(int value) {
+  private WorkflowRunMode(Integer value) {
     this.value = value;
   }
 
-  @JsonValue
-  public int getValue() {
-    return value;
-  }
-
   @JsonCreator
-  public static WorkflowRunMode fromValue(int value) {
-    for (WorkflowRunMode mode : WorkflowRunMode.values()) {
-      if (mode.value == value) {
+  public static WorkflowRunMode fromValue(Integer value) {
+    WorkflowRunMode[] modes = {SYNCHRONOUS, STREAMING, ASYNCHRONOUS};
+    for (WorkflowRunMode mode : modes) {
+      if (mode.value.equals(value)) {
         return mode;
       }
     }
-    throw new IllegalArgumentException("Unknown WorkflowRunMode: " + value);
+    return new WorkflowRunMode(value);
   }
 }
