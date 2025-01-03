@@ -98,7 +98,7 @@ public class Dataset {
    * The total size of all files in the dataset
    */
   @JsonProperty("all_file_size")
-  private Integer allFileSize;
+  private String allFileSize;
 
   /*
    * The chunk strategy of the dataset
