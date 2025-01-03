@@ -14,8 +14,7 @@ public class BotMode {
   /** Single agent workflow mode */
   public static final BotMode SINGLE_AGENT_WORKFLOW = new BotMode(2);
 
-  @JsonValue
-  private final Integer value;
+  @JsonValue private final Integer value;
 
   private BotMode(Integer value) {
     this.value = value;

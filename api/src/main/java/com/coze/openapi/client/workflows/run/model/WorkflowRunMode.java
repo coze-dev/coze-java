@@ -15,8 +15,7 @@ public class WorkflowRunMode {
   /** Asynchronous operation. */
   public static final WorkflowRunMode ASYNCHRONOUS = new WorkflowRunMode(2);
 
-  @JsonValue
-  private final Integer value;
+  @JsonValue private final Integer value;
 
   private WorkflowRunMode(Integer value) {
     this.value = value;
