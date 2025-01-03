@@ -3,17 +3,19 @@ package com.coze.openapi.client.connversations.message.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum MessageRole {
-  UNKNOWN("unknown"),
-  // Indicates that the content of the message is sent by the user.
-  USER("user"),
+import lombok.Getter;
 
-  // Indicates that the content of the message is sent by the bot.
-  ASSISTANT("assistant");
+@Getter
+public class MessageRole {
+  public static final MessageRole UNKNOWN = new MessageRole("unknown");
+  /** Indicates that the content of the message is sent by the user. */
+  public static final MessageRole USER = new MessageRole("user");
+  /** Indicates that the content of the message is sent by the bot. */
+  public static final MessageRole ASSISTANT = new MessageRole("assistant");
 
   private final String value;
 
-  MessageRole(String value) {
+  private MessageRole(String value) {
     this.value = value;
   }
 
@@ -22,9 +24,10 @@ public enum MessageRole {
     return value;
   }
 
-  @JsonCreator // 反序列化时使用这个方法
+  @JsonCreator
   public static MessageRole fromString(String value) {
-    for (MessageRole role : MessageRole.values()) {
+    MessageRole[] roles = {UNKNOWN, USER, ASSISTANT};
+    for (MessageRole role : roles) {
       if (role.value.equals(value)) {
         return role;
       }
