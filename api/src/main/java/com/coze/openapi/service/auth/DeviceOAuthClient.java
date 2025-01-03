@@ -39,7 +39,7 @@ public class DeviceOAuthClient extends OAuthClient {
     GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
     builder
         .clientID(this.clientID)
-        .grantType(GrantType.DeviceCode.getValue())
+        .grantType(GrantType.DEVICE_CODE.getValue())
         .deviceCode(deviceCode);
     if (!poll) {
       return super.getAccessToken(null, builder.build()); // secret 放进去

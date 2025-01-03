@@ -20,10 +20,11 @@ public class DocumentUpdateType {
 
   @JsonCreator
   public static DocumentUpdateType fromValue(Integer value) {
-    if (value == 0) {
-      return NO_AUTO_UPDATE;
-    } else if (value == 1) {
-      return AUTO_UPDATE;
+    DocumentUpdateType[] types = {NO_AUTO_UPDATE, AUTO_UPDATE};
+    for (DocumentUpdateType type : types) {
+      if (type.value.equals(value)) {
+        return type;
+      }
     }
     return new DocumentUpdateType(value);
   }

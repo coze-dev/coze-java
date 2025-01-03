@@ -6,19 +6,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-public class PhotoStatus {
-  public static final PhotoStatus IN_PROCESSING = new PhotoStatus(0); // In processing
-  public static final PhotoStatus COMPLETED = new PhotoStatus(1); // Completed
-  public static final PhotoStatus PROCESSING_FAILED = new PhotoStatus(9); // Processing failed
+public class ImageStatus {
+  public static final ImageStatus IN_PROCESSING = new ImageStatus(0); // In processing
+  public static final ImageStatus COMPLETED = new ImageStatus(1); // Completed
+  public static final ImageStatus PROCESSING_FAILED = new ImageStatus(9); // Processing failed
 
   @JsonValue private final Integer value;
 
-  private PhotoStatus(Integer value) {
+  private ImageStatus(Integer value) {
     this.value = value;
   }
 
   @JsonCreator
-  public static PhotoStatus fromValue(Integer value) {
+  public static ImageStatus fromValue(Integer value) {
     if (value == 0) {
       return IN_PROCESSING;
     } else if (value == 1) {
@@ -26,6 +26,6 @@ public class PhotoStatus {
     } else if (value == 9) {
       return PROCESSING_FAILED;
     }
-    return new PhotoStatus(value);
+    return new ImageStatus(value);
   }
 }

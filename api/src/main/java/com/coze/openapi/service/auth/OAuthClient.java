@@ -175,11 +175,11 @@ public abstract class OAuthClient {
   }
 
   protected OAuthToken refreshAccessToken(String refreshToken, String clientSecret) {
-    return request(null, clientSecret, GrantType.RefreshToken, refreshToken, null);
+    return request(null, clientSecret, GrantType.REFRESH_TOKEN, refreshToken, null);
   }
 
   protected OAuthToken refreshAccessToken(String refreshToken) {
-    return request(null, null, GrantType.RefreshToken, refreshToken, null);
+    return request(null, null, GrantType.REFRESH_TOKEN, refreshToken, null);
   }
 
   public void shutdownExecutor() {

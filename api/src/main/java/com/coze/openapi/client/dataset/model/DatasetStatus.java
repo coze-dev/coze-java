@@ -7,10 +7,11 @@ import lombok.Getter;
 
 @Getter
 public class DatasetStatus {
-  public static final DatasetStatus ENABLED = new DatasetStatus(1);
-  public static final DatasetStatus DISABLED = new DatasetStatus(3);
+  public static final DatasetStatus ENABLE = new DatasetStatus(1);
+  public static final DatasetStatus DISABLE = new DatasetStatus(3);
 
-  @JsonValue private final Integer value;
+  @JsonValue 
+  private final Integer value;
 
   private DatasetStatus(Integer value) {
     this.value = value;
@@ -18,10 +19,11 @@ public class DatasetStatus {
 
   @JsonCreator
   public static DatasetStatus fromValue(Integer value) {
-    if (value == 1) {
-      return ENABLED;
-    } else if (value == 3) {
-      return DISABLED;
+    DatasetStatus[] statuses = {ENABLE, DISABLE};
+    for (DatasetStatus status : statuses) {
+      if (status.value.equals(value)) {
+        return status;
+      }
     }
     return new DatasetStatus(value);
   }

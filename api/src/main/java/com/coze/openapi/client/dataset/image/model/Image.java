@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Photo {
+public class Image {
   /*
    * The ID of the image.
    */
@@ -47,7 +47,7 @@ public class Photo {
    * Status of the file. Values include: 0: In processing, 1: Completed, 9: Processing failed, it is recommended to re-upload
    */
   @JsonProperty("status")
-  private PhotoStatus status;
+  private ImageStatus status;
 
   /*
    * Image description information.

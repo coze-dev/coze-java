@@ -23,7 +23,7 @@ public class WebOAuthClient extends OAuthClient {
   }
 
   public OAuthToken getAccessToken(String code, String redirectURI) {
-    return super.getAccessToken(GrantType.AuthorizationCode, code, this.clientSecret, redirectURI);
+    return super.getAccessToken(GrantType.AUTHORIZATION_CODE, code, this.clientSecret, redirectURI);
   }
 
   @Override

@@ -11,7 +11,7 @@ public class DocumentFormatType {
   public static final DocumentFormatType DOCUMENT = new DocumentFormatType(0);
   /** Spreadsheet type, such as xls spreadsheets, etc. 表格类型，例如 xls 表格等格式属于表格类型。 */
   public static final DocumentFormatType SPREADSHEET = new DocumentFormatType(1);
-  /** Photo type, such as png images, etc. 照片类型，例如 png 图片等格式属于照片类型。 */
+  /** Image type, such as png images, etc. 照片类型，例如 png 图片等格式属于照片类型。 */
   public static final DocumentFormatType IMAGE = new DocumentFormatType(2);
 
   @JsonValue private final Integer value;
@@ -22,12 +22,11 @@ public class DocumentFormatType {
 
   @JsonCreator
   public static DocumentFormatType fromValue(Integer value) {
-    if (value == 0) {
-      return DOCUMENT;
-    } else if (value == 1) {
-      return SPREADSHEET;
-    } else if (value == 2) {
-      return IMAGE;
+    DocumentFormatType[] types = {DOCUMENT, SPREADSHEET, IMAGE};
+    for (DocumentFormatType type : types) {
+      if (type.value.equals(value)) {
+        return type;
+      }
     }
     return new DocumentFormatType(value);
   }

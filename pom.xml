@@ -108,6 +108,9 @@
                         <importOrder>
                             <order>java,javax,org,com,</order>
                         </importOrder>
+                        <licenseHeader>
+                            <content></content>
+                        </licenseHeader>
                     </java>
                 </configuration>
                 <executions>
