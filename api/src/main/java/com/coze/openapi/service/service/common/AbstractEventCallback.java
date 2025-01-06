@@ -40,7 +40,8 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
         logger.warn("HTTP error: " + response.code() + " " + response.message());
         String errStr = response.errorBody().string();
         CozeError error = mapper.readValue(errStr, CozeError.class);
-        throw new CozeApiException(Integer.valueOf(response.code()), error.getErrorMessage(), logID);
+        throw new CozeApiException(
+            Integer.valueOf(response.code()), error.getErrorMessage(), logID);
       }
 
       // 检查 response body 是否为 BaseResponse 格式
