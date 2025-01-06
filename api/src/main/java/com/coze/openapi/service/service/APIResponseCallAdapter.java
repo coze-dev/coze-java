@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coze.openapi.client.common.BaseResponse;
-import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeApiException;
 import com.coze.openapi.service.utils.Utils;
 
 import okhttp3.Request;
@@ -42,13 +42,13 @@ public class APIResponseCallAdapter<R> implements CallAdapter<R, Call<R>> {
             if (errorBody != null) {
               errStr = errorBody.string();
               BaseResponse<?> baseResponse = Utils.fromJson(errStr, BaseResponse.class);
-              throw new CozeApiExcetion(
+              throw new CozeApiException(
                   baseResponse.getCode(), baseResponse.getMsg(), Utils.getLogID(response));
             }
-            throw new CozeApiExcetion(response.code(), "http exception", Utils.getLogID(response));
+            throw new CozeApiException(response.code(), "http exception", Utils.getLogID(response));
           } catch (Exception e) {
             // 解析json 失败会走到这，直接返回全量信息
-            throw new CozeApiExcetion(response.code(), errStr, Utils.getLogID(response));
+            throw new CozeApiException(response.code(), errStr, Utils.getLogID(response));
           }
         }
 
@@ -57,7 +57,7 @@ public class APIResponseCallAdapter<R> implements CallAdapter<R, Call<R>> {
           BaseResponse<?> baseResponse = (BaseResponse<?>) body;
           if (baseResponse.getCode() != 0) {
             logger.warn("API error: " + baseResponse.getCode() + " " + baseResponse.getMsg());
-            throw new CozeApiExcetion(
+            throw new CozeApiException(
                 baseResponse.getCode(), baseResponse.getMsg(), Utils.getLogID(response));
           }
         }

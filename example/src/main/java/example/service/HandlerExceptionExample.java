@@ -1,6 +1,6 @@
 package example.service;
 
-import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeApiException;
 import com.coze.openapi.client.exception.CozeAuthException;
 import com.coze.openapi.client.workspace.ListWorkspaceReq;
 import com.coze.openapi.service.auth.TokenAuth;
@@ -24,7 +24,7 @@ public class HandlerExceptionExample {
 
     try {
       coze.workspaces().list(ListWorkspaceReq.of(1, 10));
-    } catch (CozeApiExcetion e) {
+    } catch (CozeApiException e) {
       /*
        * You can locate error information based on the code in the exception, see the meaning of codes at:
        * cn: https://www.coze.cn/docs/developer_guides/coze_error_codes

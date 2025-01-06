@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 
 import com.coze.openapi.client.common.BaseResponse;
-import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeApiException;
 import com.coze.openapi.client.exception.CozeError;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +40,7 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
         logger.warn("HTTP error: " + response.code() + " " + response.message());
         String errStr = response.errorBody().string();
         CozeError error = mapper.readValue(errStr, CozeError.class);
-        throw new CozeApiExcetion(Integer.valueOf(response.code()), error.getErrorMessage(), logID);
+        throw new CozeApiException(Integer.valueOf(response.code()), error.getErrorMessage(), logID);
       }
 
       // 检查 response body 是否为 BaseResponse 格式
@@ -50,7 +50,7 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
         BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
         if (baseResp.getCode() != 0) {
           logger.warn("API error: {} {}", baseResp.getCode(), baseResp.getMsg());
-          throw new CozeApiExcetion(baseResp.getCode(), baseResp.getMsg(), logID);
+          throw new CozeApiException(baseResp.getCode(), baseResp.getMsg(), logID);
         }
         return;
       }

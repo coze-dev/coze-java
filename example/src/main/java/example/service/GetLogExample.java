@@ -2,7 +2,7 @@ package example.service;
 
 import com.coze.openapi.client.bots.RetrieveBotReq;
 import com.coze.openapi.client.bots.RetrieveBotResp;
-import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeApiException;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -30,7 +30,7 @@ public class GetLogExample {
        * For all response objects, you can get the request logID by calling the getLogID method.
        */
       System.out.println(resp.getLogID());
-    } catch (CozeApiExcetion e) {
+    } catch (CozeApiException e) {
       System.out.println(e.getLogID());
     }
   }

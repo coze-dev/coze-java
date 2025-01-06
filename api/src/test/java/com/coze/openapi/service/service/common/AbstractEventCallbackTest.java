@@ -1,6 +1,5 @@
 package com.coze.openapi.service.service.common;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
@@ -12,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.client.common.BaseResponse;
-import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeApiException;
 import com.coze.openapi.client.exception.CozeError;
 import com.coze.openapi.utils.Utils;
 
@@ -80,7 +79,7 @@ class AbstractEventCallbackTest {
     callback.onResponse(call, response);
 
     // 验证结果
-    verify(emitter).onError(any(CozeApiExcetion.class));
+    verify(emitter).onError(any(CozeApiException.class));
   }
 
   @Test
@@ -117,7 +116,7 @@ class AbstractEventCallbackTest {
     callback.onResponse(call, response);
 
     // 验证结果
-    verify(emitter).onError(any(CozeApiExcetion.class));
+    verify(emitter).onError(any(CozeApiException.class));
   }
 
   @Test
