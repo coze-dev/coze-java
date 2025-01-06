@@ -104,7 +104,7 @@ class JWTOAuthClientTest {
             anyMap(),
             argThat(
                 req -> {
-                  assertEquals(GrantType.JWTCode.getValue(), req.getGrantType());
+                  assertEquals(GrantType.JWT_CODE.getValue(), req.getGrantType());
                   assertEquals(900, req.getDurationSeconds());
                   return true;
                 }));
@@ -146,7 +146,7 @@ class JWTOAuthClientTest {
             anyMap(),
             argThat(
                 req -> {
-                  assertEquals(GrantType.JWTCode.getValue(), req.getGrantType());
+                  assertEquals(GrantType.JWT_CODE.getValue(), req.getGrantType());
                   assertEquals(1800, req.getDurationSeconds());
                   return true;
                 }));
@@ -190,7 +190,7 @@ class JWTOAuthClientTest {
             anyMap(),
             argThat(
                 req -> {
-                  assertEquals(GrantType.JWTCode.getValue(), req.getGrantType());
+                  assertEquals(GrantType.JWT_CODE.getValue(), req.getGrantType());
                   assertEquals("test.scope", req.getScope().toString());
                   return true;
                 }));
