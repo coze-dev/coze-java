@@ -18,7 +18,7 @@ public class WorkflowService {
     return runService;
   }
 
-  public WorkflowChatService chats() {
+  public WorkflowChatService chat() {
     return chatService;
   }
 }

@@ -43,7 +43,7 @@ public class StreamWorkflowChatExample {
                 Collections.singletonList(Message.buildUserQuestionText("who are you")))
             .build();
 
-    Flowable<ChatEvent> events = coze.workflows().chats().stream(req);
+    Flowable<ChatEvent> events = coze.workflows().chat().stream(req);
     events.blockingForEach(
         event -> {
           if (ChatEventType.CONVERSATION_MESSAGE_DELTA.equals(event.getEvent())) {
