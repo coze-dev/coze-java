@@ -8,10 +8,7 @@ import java.util.Base64;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.coze.openapi.client.auth.GetAccessTokenReq;
-import com.coze.openapi.client.auth.GetPKCEAuthURLResp;
-import com.coze.openapi.client.auth.GrantType;
-import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.*;
 import com.coze.openapi.service.utils.Utils;
 
 import lombok.Getter;
@@ -34,6 +31,14 @@ public class PKCEOAuthClient extends OAuthClient {
 
   protected PKCEOAuthClient(PKCEOAuthBuilder builder) {
     super(builder);
+  }
+
+  public static PKCEOAuthClient loadFromFile(String configFilePath) {
+    OAuthConfig config = OAuthConfig.load(configFilePath);
+    return new PKCEOAuthClient.PKCEOAuthBuilder()
+        .clientID(config.getClientId())
+        .baseURL(config.getCozeApiBase())
+        .build();
   }
 
   public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state) {
