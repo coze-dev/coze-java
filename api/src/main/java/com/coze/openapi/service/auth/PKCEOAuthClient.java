@@ -33,7 +33,7 @@ public class PKCEOAuthClient extends OAuthClient {
     super(builder);
   }
 
-  public static PKCEOAuthClient loadFromFile(LoadAuthConfig loadConfig) {
+  public static PKCEOAuthClient loadFromConfig(LoadAuthConfig loadConfig) {
     OAuthConfig config = OAuthConfig.load(loadConfig);
     return new PKCEOAuthClient.PKCEOAuthBuilder()
         .clientID(config.getClientId())

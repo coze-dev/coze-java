@@ -15,7 +15,7 @@ public class DeviceOAuthClient extends OAuthClient {
     super(builder);
   }
 
-  public static DeviceOAuthClient loadFromFile(LoadAuthConfig loadConfig) {
+  public static DeviceOAuthClient loadFromConfig(LoadAuthConfig loadConfig) {
     OAuthConfig config = OAuthConfig.load(loadConfig);
     return new DeviceOAuthClient.DeviceOAuthBuilder()
         .clientID(config.getClientId())

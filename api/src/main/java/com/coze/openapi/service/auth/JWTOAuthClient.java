@@ -29,7 +29,7 @@ public class JWTOAuthClient extends OAuthClient {
     this.ttl = builder.ttl;
   }
 
-  public static JWTOAuthClient loadFromFile(LoadAuthConfig loadConfig) throws Exception {
+  public static JWTOAuthClient loadFromConfig(LoadAuthConfig loadConfig) throws Exception {
     OAuthConfig config = OAuthConfig.load(loadConfig);
     return new JWTOAuthClient.JWTOAuthBuilder()
         .privateKey(config.getPrivateKey())

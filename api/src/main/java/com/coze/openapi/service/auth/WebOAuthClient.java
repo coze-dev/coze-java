@@ -13,7 +13,7 @@ public class WebOAuthClient extends OAuthClient {
     super(builder);
   }
 
-  public static WebOAuthClient loadFromFile(LoadAuthConfig loadConfig) {
+  public static WebOAuthClient loadFromConfig(LoadAuthConfig loadConfig) {
     OAuthConfig config = OAuthConfig.load(loadConfig);
     return new WebOAuthClient.WebOAuthBuilder()
         .clientID(config.getClientId())
