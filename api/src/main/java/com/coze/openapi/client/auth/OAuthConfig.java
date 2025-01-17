@@ -41,8 +41,8 @@ public class OAuthConfig {
   @JsonProperty("coze_www_base")
   private String cozeWwwBase;
 
-  public static OAuthConfig load(String configFilePath) {
-    return doLoad(configFilePath);
+  public static OAuthConfig load(LoadAuthConfig config) {
+    return doLoad(config.getFilePath());
   }
 
   private static OAuthConfig doLoad(String configFilePath) {

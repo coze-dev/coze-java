@@ -1,5 +1,6 @@
 package com.coze.openapi.service.auth;
 
+import com.coze.openapi.client.auth.LoadAuthConfig;
 import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.client.auth.GrantType;
@@ -12,8 +13,8 @@ public class WebOAuthClient extends OAuthClient {
     super(builder);
   }
 
-  public static WebOAuthClient loadFromFile(String configFilePath) {
-    OAuthConfig config = OAuthConfig.load(configFilePath);
+  public static WebOAuthClient loadFromFile(LoadAuthConfig loadConfig) {
+    OAuthConfig config = OAuthConfig.load(loadConfig);
     return new WebOAuthClient.WebOAuthBuilder()
         .clientID(config.getClientId())
         .clientSecret(config.getClientSecret())

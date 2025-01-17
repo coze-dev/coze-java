@@ -8,10 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.coze.openapi.client.auth.GetAccessTokenReq;
-import com.coze.openapi.client.auth.GrantType;
-import com.coze.openapi.client.auth.OAuthConfig;
-import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.*;
 import com.coze.openapi.client.auth.scope.Scope;
 import com.coze.openapi.service.utils.Utils;
 
@@ -32,8 +29,8 @@ public class JWTOAuthClient extends OAuthClient {
     this.ttl = builder.ttl;
   }
 
-  public static JWTOAuthClient loadFromFile(String configFilePath) throws Exception {
-    OAuthConfig config = OAuthConfig.load(configFilePath);
+  public static JWTOAuthClient loadFromFile(LoadAuthConfig loadConfig) throws Exception {
+    OAuthConfig config = OAuthConfig.load(loadConfig);
     return new JWTOAuthClient.JWTOAuthBuilder()
         .privateKey(config.getPrivateKey())
         .publicKey(config.getPublicKeyId())

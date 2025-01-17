@@ -15,8 +15,8 @@ public class DeviceOAuthClient extends OAuthClient {
     super(builder);
   }
 
-  public static DeviceOAuthClient loadFromFile(String configFilePath) {
-    OAuthConfig config = OAuthConfig.load(configFilePath);
+  public static DeviceOAuthClient loadFromFile(LoadAuthConfig loadConfig) {
+    OAuthConfig config = OAuthConfig.load(loadConfig);
     return new DeviceOAuthClient.DeviceOAuthBuilder()
         .clientID(config.getClientId())
         .baseURL(config.getCozeApiBase())

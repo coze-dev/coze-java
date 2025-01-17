@@ -33,8 +33,8 @@ public class PKCEOAuthClient extends OAuthClient {
     super(builder);
   }
 
-  public static PKCEOAuthClient loadFromFile(String configFilePath) {
-    OAuthConfig config = OAuthConfig.load(configFilePath);
+  public static PKCEOAuthClient loadFromFile(LoadAuthConfig loadConfig) {
+    OAuthConfig config = OAuthConfig.load(loadConfig);
     return new PKCEOAuthClient.PKCEOAuthBuilder()
         .clientID(config.getClientId())
         .baseURL(config.getCozeApiBase())
