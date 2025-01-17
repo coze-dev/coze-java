@@ -1,9 +1,9 @@
 package com.coze.openapi.service.auth;
 
-import com.coze.openapi.client.auth.LoadAuthConfig;
 import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.client.auth.GrantType;
+import com.coze.openapi.client.auth.LoadAuthConfig;
 import com.coze.openapi.client.auth.OAuthConfig;
 import com.coze.openapi.client.auth.OAuthToken;
 

@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoadAuthConfig {
-    private String filePath;
+  private String filePath;
 }
