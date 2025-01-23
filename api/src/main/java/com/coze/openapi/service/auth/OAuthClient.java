@@ -28,6 +28,7 @@ import com.coze.openapi.service.utils.UserAgentInterceptor;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.lang.Strings;
 import io.reactivex.Single;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -45,6 +46,7 @@ public abstract class OAuthClient {
   protected final String clientSecret;
   protected final String clientID;
   protected final String baseURL;
+  protected final String wwwURL;
   protected final CozeAuthAPI api;
   protected final ExecutorService executorService;
   protected final String hostName;
@@ -54,6 +56,7 @@ public abstract class OAuthClient {
     this.clientSecret = builder.clientSecret;
     this.clientID = builder.clientID;
     this.baseURL = builder.baseURL;
+    this.wwwURL = Strings.replace(baseURL, "api.", "www.");
     if (this.baseURL != null && !this.baseURL.isEmpty()) {
       try {
         java.net.URL url = new java.net.URL(this.baseURL);
@@ -121,10 +124,9 @@ public abstract class OAuthClient {
       params.put("code_challenge_method", codeChallengeMethod);
     }
 
-    String uri = baseURL + "/api/permission/oauth2/authorize";
+    String uri = wwwURL + "/api/permission/oauth2/authorize";
     if (workspaceID != null) {
-      uri =
-          baseURL + String.format("/api/permission/oauth2/workspace_id/%s/authorize", workspaceID);
+      uri = wwwURL + String.format("/api/permission/oauth2/workspace_id/%s/authorize", workspaceID);
     }
 
     String queryString =

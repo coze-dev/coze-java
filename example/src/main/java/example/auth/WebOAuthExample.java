@@ -47,13 +47,13 @@ public class WebOAuthExample {
             .build();
 
     // Generate the authorization link and direct the user to open it.
-    String oauthURL = oauth.getOAuthURL(redirectURI, null);
+    String oauthURL = oauth.getOAuthURL(redirectURI, "state");
     System.out.println(oauthURL);
 
     /*
      * The space permissions for which the Access Token is granted can be specified. As following codes:
      * */
-    oauthURL = oauth.getOAuthURL(redirectURI, null, "workspaceID");
+    oauthURL = oauth.getOAuthURL(redirectURI, "state", "workspaceID");
     System.out.println(oauthURL);
 
     /*
