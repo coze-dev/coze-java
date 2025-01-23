@@ -28,7 +28,6 @@ import com.coze.openapi.service.utils.UserAgentInterceptor;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.jsonwebtoken.lang.Strings;
 import io.reactivex.Single;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -59,7 +58,7 @@ public abstract class OAuthClient {
     if (builder.wwwURL != null) {
       this.wwwURL = builder.wwwURL;
     } else {
-      this.wwwURL = Strings.replace(baseURL, "api.", "www.");
+      this.wwwURL = builder.baseURL.replace("api.", "www.");
     }
     if (this.baseURL != null && !this.baseURL.isEmpty()) {
       try {
