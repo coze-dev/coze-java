@@ -56,7 +56,11 @@ public abstract class OAuthClient {
     this.clientSecret = builder.clientSecret;
     this.clientID = builder.clientID;
     this.baseURL = builder.baseURL;
-    this.wwwURL = Strings.replace(baseURL, "api.", "www.");
+    if (builder.wwwURL != null) {
+      this.wwwURL = builder.wwwURL;
+    }else {
+      this.wwwURL = Strings.replace(baseURL, "api.", "www.");
+    }
     if (this.baseURL != null && !this.baseURL.isEmpty()) {
       try {
         java.net.URL url = new java.net.URL(this.baseURL);
@@ -253,6 +257,7 @@ public abstract class OAuthClient {
     protected String clientID;
     protected String clientSecret;
     protected String baseURL;
+    protected String wwwURL;
     protected int readTimeout;
     protected int connectTimeout;
     protected OkHttpClient client;
@@ -275,6 +280,11 @@ public abstract class OAuthClient {
 
     public T baseURL(String baseURL) {
       this.baseURL = baseURL;
+      return self();
+    }
+
+    public T wwwURL(String wwwURL) {
+      this.wwwURL = wwwURL;
       return self();
     }
 
