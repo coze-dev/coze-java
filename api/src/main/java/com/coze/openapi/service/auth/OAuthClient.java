@@ -58,7 +58,7 @@ public abstract class OAuthClient {
     this.baseURL = builder.baseURL;
     if (builder.wwwURL != null) {
       this.wwwURL = builder.wwwURL;
-    }else {
+    } else {
       this.wwwURL = Strings.replace(baseURL, "api.", "www.");
     }
     if (this.baseURL != null && !this.baseURL.isEmpty()) {
