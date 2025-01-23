@@ -22,16 +22,6 @@
         <junit.version>5.8.2</junit.version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.coze</groupId>
-                <artifactId>coze-api</artifactId>
-                <version>0.1.5</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -118,9 +108,6 @@
                         <importOrder>
                             <order>java,javax,org,com,</order>
                         </importOrder>
-                        <licenseHeader>
-                            <content>/* (C)$YEAR */</content>
-                        </licenseHeader>
                     </java>
                 </configuration>
                 <executions>

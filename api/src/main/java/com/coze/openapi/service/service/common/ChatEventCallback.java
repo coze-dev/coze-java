@@ -1,5 +1,4 @@
-/* (C)2024 */
-package com.coze.openapi.service.service.chat;
+package com.coze.openapi.service.service.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,13 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.coze.openapi.client.chat.model.ChatEvent;
-import com.coze.openapi.service.service.common.AbstractEventCallback;
 
 import io.reactivex.FlowableEmitter;
 
-public class EventCallback extends AbstractEventCallback<ChatEvent> {
+public class ChatEventCallback extends AbstractEventCallback<ChatEvent> {
 
-  public EventCallback(FlowableEmitter<ChatEvent> emitter) {
+  public ChatEventCallback(FlowableEmitter<ChatEvent> emitter) {
     super(emitter);
   }
 

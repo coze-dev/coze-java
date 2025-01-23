@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.service.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,7 +15,7 @@ import com.coze.openapi.client.workflows.run.model.WorkflowEvent;
 
 import io.reactivex.FlowableEmitter;
 
-class EventCallbackTest {
+class ChatEventCallbackTest {
 
   @Mock private FlowableEmitter<WorkflowEvent> emitter;
 

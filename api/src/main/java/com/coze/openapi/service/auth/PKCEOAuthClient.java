@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.auth;
 
 import java.nio.charset.StandardCharsets;
@@ -9,10 +8,7 @@ import java.util.Base64;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.coze.openapi.client.auth.GetAccessTokenReq;
-import com.coze.openapi.client.auth.GetPKCEAuthURLResp;
-import com.coze.openapi.client.auth.GrantType;
-import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.*;
 import com.coze.openapi.service.utils.Utils;
 
 import lombok.Getter;
@@ -35,6 +31,14 @@ public class PKCEOAuthClient extends OAuthClient {
 
   protected PKCEOAuthClient(PKCEOAuthBuilder builder) {
     super(builder);
+  }
+
+  public static PKCEOAuthClient loadFromConfig(LoadAuthConfig loadConfig) {
+    OAuthConfig config = OAuthConfig.load(loadConfig);
+    return new PKCEOAuthClient.PKCEOAuthBuilder()
+        .clientID(config.getClientId())
+        .baseURL(config.getCozeApiBase())
+        .build();
   }
 
   public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state) {
@@ -93,7 +97,7 @@ public class PKCEOAuthClient extends OAuthClient {
     GetAccessTokenReq req =
         GetAccessTokenReq.builder()
             .clientID(this.clientID)
-            .grantType(GrantType.AuthorizationCode.getValue())
+            .grantType(GrantType.AUTHORIZATION_CODE.getValue())
             .code(code)
             .redirectUri(redirectURI)
             .codeVerifier(codeVerifier)

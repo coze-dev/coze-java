@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.service;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.client.common.BaseResponse;
-import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeApiException;
 
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -70,7 +69,7 @@ public class APIResponseCallAdapterTest {
   @Test
   void testErrorResponse() {
     assertThrows(
-        CozeApiExcetion.class,
+        CozeApiException.class,
         () -> {
           // 准备错误响应
           String errorJson = "{\"code\":400,\"msg\":\"Bad Request\"}";
@@ -94,7 +93,7 @@ public class APIResponseCallAdapterTest {
   @Test
   void testBusinessErrorResponse() {
     assertThrows(
-        CozeApiExcetion.class,
+        CozeApiException.class,
         () -> {
           // 准备业务错误响应
           BaseResponse<String> errorResponse = new BaseResponse<>();

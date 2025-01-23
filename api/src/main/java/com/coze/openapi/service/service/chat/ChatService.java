@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.service.chat;
 
 import java.util.Objects;
@@ -23,13 +22,11 @@ import com.coze.openapi.client.chat.model.ChatEvent;
 import com.coze.openapi.client.chat.model.ChatPoll;
 import com.coze.openapi.client.chat.model.ChatStatus;
 import com.coze.openapi.client.common.BaseResponse;
+import com.coze.openapi.service.service.common.ChatStream;
 import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.utils.Utils;
 
-import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class ChatService {
 
@@ -160,7 +157,7 @@ public class ChatService {
     String conversationID = req.getConversationID();
     String chatID = req.getChatID();
     req.clearBeforeReq();
-    return stream(chatAPI.streamSubmitToolOutputs(conversationID, chatID, req, req));
+    return ChatStream.stream(chatAPI.streamSubmitToolOutputs(conversationID, chatID, req, req));
   }
 
   /*
@@ -172,11 +169,6 @@ public class ChatService {
     req.enableStream();
     String conversationID = req.getConversationID();
     req.clearBeforeReq();
-    return stream(chatAPI.stream(conversationID, req, req));
-  }
-
-  public static Flowable<ChatEvent> stream(Call<ResponseBody> apiCall) {
-    return Flowable.create(
-        emitter -> apiCall.enqueue(new EventCallback(emitter)), BackpressureStrategy.BUFFER);
+    return ChatStream.stream(chatAPI.stream(conversationID, req, req));
   }
 }

@@ -1,20 +1,22 @@
-/* (C)2024 */
 package com.coze.openapi.client.connversations.message.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import lombok.Getter;
+
 /** The content type of the multimodal message. */
-public enum MessageObjectStringType {
-  UNKNOWN("unknown"),
-  TEXT("text"),
-  FILE("file"),
-  IMAGE("image"),
-  AUDIO("audio");
+@Getter
+public class MessageObjectStringType {
+  public static final MessageObjectStringType UNKNOWN = new MessageObjectStringType("unknown");
+  public static final MessageObjectStringType TEXT = new MessageObjectStringType("text");
+  public static final MessageObjectStringType FILE = new MessageObjectStringType("file");
+  public static final MessageObjectStringType IMAGE = new MessageObjectStringType("image");
+  public static final MessageObjectStringType AUDIO = new MessageObjectStringType("audio");
 
   private final String value;
 
-  MessageObjectStringType(String value) {
+  private MessageObjectStringType(String value) {
     this.value = value;
   }
 
@@ -23,9 +25,10 @@ public enum MessageObjectStringType {
     return value;
   }
 
-  @JsonCreator // 反序列化时使用这个方法
+  @JsonCreator
   public static MessageObjectStringType fromString(String value) {
-    for (MessageObjectStringType type : MessageObjectStringType.values()) {
+    MessageObjectStringType[] types = {UNKNOWN, TEXT, FILE, IMAGE, AUDIO};
+    for (MessageObjectStringType type : types) {
       if (type.value.equals(value)) {
         return type;
       }

@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.connversations.message.model;
 
 import java.util.List;

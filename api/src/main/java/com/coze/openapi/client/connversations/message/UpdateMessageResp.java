@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.connversations.message;
 
 import com.coze.openapi.client.common.BaseResp;

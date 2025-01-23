@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.api;
 
 import com.coze.openapi.client.common.BaseReq;

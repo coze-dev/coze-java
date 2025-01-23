@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.service;
 
 import java.time.Duration;
@@ -18,6 +17,7 @@ import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.service.conversation.ConversationService;
 import com.coze.openapi.service.service.dataset.DatasetService;
 import com.coze.openapi.service.service.file.FileService;
+import com.coze.openapi.service.service.template.TemplateService;
 import com.coze.openapi.service.service.workflow.WorkflowService;
 import com.coze.openapi.service.service.workspace.WorkspaceService;
 import com.coze.openapi.service.utils.UserAgentInterceptor;
@@ -43,6 +43,7 @@ public class CozeAPI {
   private final WorkflowService workflowAPI;
   private final ChatService chatAPI;
   private final AudioService audioAPI;
+  private final TemplateService templateAPI;
 
   private CozeAPI(
       String baseURL,
@@ -55,7 +56,8 @@ public class CozeAPI {
       DatasetService knowledgeAPI,
       WorkflowService workflowAPI,
       ChatService chatAPI,
-      AudioService audioAPI) {
+      AudioService audioAPI,
+      TemplateService templateAPI) {
     this.baseURL = baseURL;
     this.executorService = executorService;
     this.auth = auth;
@@ -67,6 +69,7 @@ public class CozeAPI {
     this.workflowAPI = workflowAPI;
     this.chatAPI = chatAPI;
     this.audioAPI = audioAPI;
+    this.templateAPI = templateAPI;
   }
 
   public WorkspaceService workspaces() {
@@ -99,6 +102,10 @@ public class CozeAPI {
 
   public AudioService audio() {
     return this.audioAPI;
+  }
+
+  public TemplateService templates() {
+    return this.templateAPI;
   }
 
   public void shutdownExecutor() {
@@ -169,10 +176,16 @@ public class CozeAPI {
               retrofit.create(ConversationAPI.class),
               retrofit.create(ConversationMessageAPI.class));
       FileService fileAPI = new FileService(retrofit.create(FileAPI.class));
-      DatasetService knowledgeAPI = new DatasetService(retrofit.create(DocumentAPI.class));
+      DatasetService knowledgeAPI =
+          new DatasetService(
+              retrofit.create(DatasetAPI.class),
+              retrofit.create(DatasetDocumentAPI.class),
+              retrofit.create(DatasetImageAPI.class));
       WorkflowService workflowAPI =
           new WorkflowService(
-              retrofit.create(WorkflowRunAPI.class), retrofit.create(WorkflowRunHistoryAPI.class));
+              retrofit.create(WorkflowRunAPI.class),
+              retrofit.create(WorkflowRunHistoryAPI.class),
+              retrofit.create(WorkflowChatAPI.class));
       ChatService chatAPI =
           new ChatService(retrofit.create(ChatAPI.class), retrofit.create(ChatMessageAPI.class));
       AudioService audioAPI =
@@ -180,7 +193,7 @@ public class CozeAPI {
               retrofit.create(AudioVoiceAPI.class),
               retrofit.create(AudioRoomAPI.class),
               retrofit.create(AudioSpeechAPI.class));
-
+      TemplateService templateAPI = new TemplateService(retrofit.create(TemplateAPI.class));
       return new CozeAPI(
           this.baseURL,
           executorService,
@@ -192,7 +205,8 @@ public class CozeAPI {
           knowledgeAPI,
           workflowAPI,
           chatAPI,
-          audioAPI);
+          audioAPI,
+          templateAPI);
     }
 
     // 确保加上了 Auth 拦截器

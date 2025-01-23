@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.dataset.document.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,6 +43,13 @@ public class DocumentBase {
     return DocumentBase.builder()
         .name(name)
         .sourceInfo(DocumentSourceInfo.buildLocalFile(content, fileType))
+        .build();
+  }
+
+  public static DocumentBase buildImage(String name, Long fileID) {
+    return DocumentBase.builder()
+        .name(name)
+        .sourceInfo(DocumentSourceInfo.buildImage(fileID))
         .build();
   }
 }

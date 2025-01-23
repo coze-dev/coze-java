@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.auth;
 
 import java.util.concurrent.TimeUnit;
@@ -14,6 +13,14 @@ public class DeviceOAuthClient extends OAuthClient {
 
   protected DeviceOAuthClient(DeviceOAuthBuilder builder) {
     super(builder);
+  }
+
+  public static DeviceOAuthClient loadFromConfig(LoadAuthConfig loadConfig) {
+    OAuthConfig config = OAuthConfig.load(loadConfig);
+    return new DeviceOAuthClient.DeviceOAuthBuilder()
+        .clientID(config.getClientId())
+        .baseURL(config.getCozeApiBase())
+        .build();
   }
 
   private static final Logger logger = AuthLogFactory.getLogger();
@@ -40,7 +47,7 @@ public class DeviceOAuthClient extends OAuthClient {
     GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
     builder
         .clientID(this.clientID)
-        .grantType(GrantType.DeviceCode.getValue())
+        .grantType(GrantType.DEVICE_CODE.getValue())
         .deviceCode(deviceCode);
     if (!poll) {
       return super.getAccessToken(null, builder.build()); // secret 放进去

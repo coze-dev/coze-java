@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.auth;
 
 import com.coze.openapi.client.auth.OAuthToken;

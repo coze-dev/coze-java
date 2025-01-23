@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.chat.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -9,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class ChatToolCallType {
   public static final ChatToolCallType FUNCTION = new ChatToolCallType("function");
+  public static final ChatToolCallType REPLY_MESSAGE = new ChatToolCallType("reply_message");
 
   private final String value;
 
@@ -26,6 +26,9 @@ public class ChatToolCallType {
     if (FUNCTION.value.equals(value)) {
       return FUNCTION;
     }
-    throw new IllegalArgumentException("Unknown ChatToolCallType: " + value);
+    if (REPLY_MESSAGE.value.equals(value)) {
+      return REPLY_MESSAGE;
+    }
+    return new ChatToolCallType(value);
   }
 }

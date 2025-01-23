@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.dataset.document.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,7 +43,7 @@ public class Document {
 
   /**
    * The type of file format. Values include: 0: Document type, such as txt, pdf, online web pages,
-   * etc. 1: Spreadsheet type, such as xls spreadsheets, etc. 2: Photo type, such as png images,
+   * etc. 1: Spreadsheet type, such as xls spreadsheets, etc. 2: Image type, such as png images,
    * etc. 文件的格式类型。取值包括： 0：文档类型，例如 txt 、pdf 、在线网页等格式均属于文档类型。 1：表格类型，例如 xls 表格等格式属于表格类型。 2：照片类型，例如 png
    * 图片等格式属于照片类型。
    */

@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.auth;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,7 +95,7 @@ class WebOAuthClientTest {
             anyMap(),
             argThat(
                 req -> {
-                  assertEquals(GrantType.AuthorizationCode.getValue(), req.getGrantType());
+                  assertEquals(GrantType.AUTHORIZATION_CODE.getValue(), req.getGrantType());
                   assertEquals("test_code", req.getCode());
                   assertEquals("https://test.com/callback", req.getRedirectUri());
                   return true;
@@ -147,7 +146,7 @@ class WebOAuthClientTest {
             anyMap(),
             argThat(
                 req -> {
-                  assertEquals(GrantType.RefreshToken.getValue(), req.getGrantType());
+                  assertEquals(GrantType.REFRESH_TOKEN.getValue(), req.getGrantType());
                   assertEquals("refresh_token", req.getRefreshToken());
                   return true;
                 }));

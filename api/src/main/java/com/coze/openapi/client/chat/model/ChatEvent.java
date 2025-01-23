@@ -1,11 +1,10 @@
-/* (C)2024 */
 package com.coze.openapi.client.chat.model;
 
 import java.util.Map;
 
 import com.coze.openapi.client.common.BaseResp;
 import com.coze.openapi.client.connversations.message.model.Message;
-import com.coze.openapi.client.exception.CozeApiExcetion;
+import com.coze.openapi.client.exception.CozeApiException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -36,7 +35,7 @@ public class ChatEvent extends BaseResp {
       return ChatEvent.builder().event(eventType).logID(logID).build();
     }
     if (ChatEventType.ERROR.equals(eventType)) {
-      throw new CozeApiExcetion(0, data, logID);
+      throw new CozeApiException(0, data, logID);
     }
     if (ChatEventType.CONVERSATION_MESSAGE_DELTA.equals(eventType)
         || ChatEventType.CONVERSATION_MESSAGE_COMPLETED.equals(eventType)

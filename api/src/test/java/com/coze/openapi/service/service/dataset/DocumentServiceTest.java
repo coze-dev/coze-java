@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.service.service.dataset;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.coze.openapi.api.DocumentAPI;
+import com.coze.openapi.api.DatasetDocumentAPI;
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.common.pagination.PageResp;
 import com.coze.openapi.client.dataset.document.*;
@@ -28,7 +27,7 @@ import retrofit2.Response;
 
 class DocumentServiceTest {
 
-  @Mock private DocumentAPI documentAPI;
+  @Mock private DatasetDocumentAPI documentAPI;
 
   private DocumentService documentService;
 

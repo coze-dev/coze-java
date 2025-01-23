@@ -1,4 +1,3 @@
-/* (C)2024 */
 package com.coze.openapi.client.auth;
 
 import com.coze.openapi.client.common.BaseResp;
@@ -26,4 +25,7 @@ public class OAuthToken extends BaseResp {
 
   @JsonProperty("refresh_token")
   private String refreshToken;
+
+  @JsonProperty("token_type")
+  private String tokenType;
 }

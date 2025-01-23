@@ -1,32 +1,33 @@
-/* (C)2024 */
 package com.coze.openapi.client.bots.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BotMode {
-  SINGLE_AGENT(0),
-  MULTI_AGENT(1),
-  SINGLE_AGENT_WORKFLOW(2);
+import lombok.Getter;
 
-  private final int value;
+@Getter
+public class BotMode {
+  /** Single agent mode */
+  public static final BotMode SINGLE_AGENT = new BotMode(0);
+  /** Multi agent mode */
+  public static final BotMode MULTI_AGENT = new BotMode(1);
+  /** Single agent workflow mode */
+  public static final BotMode SINGLE_AGENT_WORKFLOW = new BotMode(2);
 
-  BotMode(int value) {
+  @JsonValue private final Integer value;
+
+  private BotMode(Integer value) {
     this.value = value;
   }
 
-  @JsonValue
-  public int getValue() {
-    return value;
-  }
-
   @JsonCreator
-  public static BotMode fromValue(int value) {
-    for (BotMode mode : BotMode.values()) {
-      if (mode.value == value) {
+  public static BotMode fromValue(Integer value) {
+    BotMode[] modes = {SINGLE_AGENT, MULTI_AGENT, SINGLE_AGENT_WORKFLOW};
+    for (BotMode mode : modes) {
+      if (mode.value.equals(value)) {
         return mode;
       }
     }
-    throw new IllegalArgumentException("Unknown BotMode value: " + value);
+    return new BotMode(value);
   }
 }
