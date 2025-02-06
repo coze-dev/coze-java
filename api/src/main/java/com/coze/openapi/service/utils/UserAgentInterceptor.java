@@ -14,17 +14,16 @@ public class UserAgentInterceptor implements Interceptor {
 
   @Override
   public Response intercept(Chain chain) throws IOException {
-    Request request =
-        chain
-            .request()
-            .newBuilder()
-            .addHeader("User-Agent", getUserAgent())
-            .addHeader("X-Coze-Client-User-Agent", getCozeClientUserAgent())
-            .build();
+    Request request = chain
+        .request()
+        .newBuilder()
+        .addHeader("User-Agent", getUserAgent())
+        .addHeader("X-Coze-Client-User-Agent", getCozeClientUserAgent())
+        .build();
     return chain.proceed(request);
   }
 
-  public static final String VERSION = "0.2.2";
+  public static final String VERSION = "0.2.3";
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
   /** 获取操作系统版本 */

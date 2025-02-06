@@ -43,7 +43,7 @@
     </parent>
 
     <artifactId>coze-api</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
 
     <scm>
         <connection>scm:git:git://github.com/coze-dev/coze-java.git</connection>
@@ -296,6 +296,6 @@
                 </plugins>
             </build>
         </profile>
-    </profiles> 
+    </profiles>
 
-</project> 
+</project>
