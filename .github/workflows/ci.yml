@@ -56,7 +56,7 @@ jobs:
       - name: Debug Test Results (Windows)
         if: always() && runner.os == 'Windows'
         run: |
-          echo "=== Test Results ==="
+          echo "=== Test Results === "
           $testReports = Get-ChildItem -Path "api\target\surefire-reports" -Filter "TEST-*.xml" -ErrorAction SilentlyContinue
           if ($testReports) {
               $testReports | Get-Content
