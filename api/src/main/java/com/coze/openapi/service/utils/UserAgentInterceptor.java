@@ -14,12 +14,13 @@ public class UserAgentInterceptor implements Interceptor {
 
   @Override
   public Response intercept(Chain chain) throws IOException {
-    Request request = chain
-        .request()
-        .newBuilder()
-        .addHeader("User-Agent", getUserAgent())
-        .addHeader("X-Coze-Client-User-Agent", getCozeClientUserAgent())
-        .build();
+    Request request =
+        chain
+            .request()
+            .newBuilder()
+            .addHeader("User-Agent", getUserAgent())
+            .addHeader("X-Coze-Client-User-Agent", getCozeClientUserAgent())
+            .build();
     return chain.proceed(request);
   }
 
