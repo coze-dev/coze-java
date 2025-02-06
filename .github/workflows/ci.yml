@@ -37,7 +37,7 @@ jobs:
           mvn -pl api clean test-compile
           mvn -pl api test jacoco:report
       - name: Debug Test Results (Unix)
-        if: always() && runner.os != 'Windows'
+        if: runner.os != 'Windows'
         run: |
           echo "=== Test Results ==="
           if [ -d "api/target/surefire-reports" ]; then
@@ -54,7 +54,7 @@ jobs:
           fi
 
       - name: Debug Test Results (Windows)
-        if: always() && runner.os == 'Windows'
+        if: runner.os == 'Windows'
         run: |
           echo "=== Test Results === "
           $testReports = Get-ChildItem -Path "api\target\surefire-reports" -Filter "TEST-*.xml" -ErrorAction SilentlyContinue
