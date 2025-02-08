@@ -27,6 +27,9 @@ public class CreateRoomReq extends BaseReq {
   @JsonProperty("voice_id")
   private String voiceID;
 
+  @JsonProperty("uid")
+  private String uid;
+
   @JsonProperty("config")
   private RoomConfig config;
 }
