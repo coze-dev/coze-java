@@ -45,6 +45,7 @@ public abstract class OAuthClient {
   protected final String clientSecret;
   protected final String clientID;
   protected final String baseURL;
+  protected final String wwwURL;
   protected final CozeAuthAPI api;
   protected final ExecutorService executorService;
   protected final String hostName;
@@ -54,6 +55,11 @@ public abstract class OAuthClient {
     this.clientSecret = builder.clientSecret;
     this.clientID = builder.clientID;
     this.baseURL = builder.baseURL;
+    if (builder.wwwURL != null) {
+      this.wwwURL = builder.wwwURL;
+    } else {
+      this.wwwURL = builder.baseURL.replace("api.", "www.");
+    }
     if (this.baseURL != null && !this.baseURL.isEmpty()) {
       try {
         java.net.URL url = new java.net.URL(this.baseURL);
@@ -121,10 +127,9 @@ public abstract class OAuthClient {
       params.put("code_challenge_method", codeChallengeMethod);
     }
 
-    String uri = baseURL + "/api/permission/oauth2/authorize";
+    String uri = wwwURL + "/api/permission/oauth2/authorize";
     if (workspaceID != null) {
-      uri =
-          baseURL + String.format("/api/permission/oauth2/workspace_id/%s/authorize", workspaceID);
+      uri = wwwURL + String.format("/api/permission/oauth2/workspace_id/%s/authorize", workspaceID);
     }
 
     String queryString =
@@ -251,6 +256,7 @@ public abstract class OAuthClient {
     protected String clientID;
     protected String clientSecret;
     protected String baseURL;
+    protected String wwwURL;
     protected int readTimeout;
     protected int connectTimeout;
     protected OkHttpClient client;
@@ -273,6 +279,11 @@ public abstract class OAuthClient {
 
     public T baseURL(String baseURL) {
       this.baseURL = baseURL;
+      return self();
+    }
+
+    public T wwwURL(String wwwURL) {
+      this.wwwURL = wwwURL;
       return self();
     }
 

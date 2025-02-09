@@ -27,7 +27,7 @@ jobs:
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'adopt'
           java-version: ${{ matrix.java-version }}
           cache: 'maven'
       - name: Code style check
@@ -39,17 +39,38 @@ jobs:
       - name: Debug Test Results (Unix)
         if: runner.os != 'Windows'
         run: |
-          echo "Test Results:"
-          find . -name "TEST-*.xml" -exec cat {} \;
-          echo "JaCoCo Report Location:"
-          ls -la api/target/site/jacoco/
+          echo "=== Test Results ==="
+          if [ -d "api/target/surefire-reports" ]; then
+            find api/target/surefire-reports -name "TEST-*.xml" -type f -exec cat {} \;
+          else
+            echo "No test reports found"
+          fi
+          
+          echo "=== JaCoCo Report ==="
+          if [ -d "api/target/site/jacoco" ]; then
+            ls -la api/target/site/jacoco/
+          else
+            echo "No JaCoCo report found"
+          fi
+
       - name: Debug Test Results (Windows)
         if: runner.os == 'Windows'
         run: |
-          echo "Test Results:"
-          Get-ChildItem -Recurse -Filter "TEST-*.xml" | Get-Content
-          echo "JaCoCo Report Location:"
-          Get-ChildItem -Path "api\target\site\jacoco" -Force
+          echo "=== Test Results === "
+          $testReports = Get-ChildItem -Path "api\target\surefire-reports" -Filter "TEST-*.xml" -ErrorAction SilentlyContinue
+          if ($testReports) {
+              $testReports | Get-Content
+          } else {
+              echo "No test reports found"
+          }
+          
+          echo "=== JaCoCo Report ==="
+          if (Test-Path "api\target\site\jacoco") {
+              Get-ChildItem -Path "api\target\site\jacoco" -Force
+          } else {
+              echo "No JaCoCo report found"
+          }
+
       - name: Generate JaCoCo Report
         run: mvn -pl api jacoco:report
       - name: Upload coverage to Codecov

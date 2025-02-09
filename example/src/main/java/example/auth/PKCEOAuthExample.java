@@ -45,7 +45,7 @@ public class PKCEOAuthExample {
     to select the code_challenge_method.
     * */
     GetPKCEAuthURLResp oauthURL =
-        oauth.genOAuthURL(redirectURI, "state", PKCEOAuthClient.CodeChallengeMethod.S256);
+        oauth.genOAuthURL(redirectURI, "states", PKCEOAuthClient.CodeChallengeMethod.S256);
     System.out.println(oauthURL);
 
     /*
