@@ -26,7 +26,7 @@ public class JWTOAuthClient extends OAuthClient {
     if (builder.jwtBuilder != null) {
       this.jwtBuilder = builder.jwtBuilder;
     } else {
-      this.jwtBuilder = new DefaultJWTBuilder(this.clientID, this.hostName);
+      this.jwtBuilder = new DefaultJWTBuilder();
     }
     this.ttl = builder.ttl;
   }
@@ -85,8 +85,15 @@ public class JWTOAuthClient extends OAuthClient {
     header.put("alg", "RS256");
     header.put("typ", "JWT");
     header.put("kid", this.publicKey);
+    JWTPayload payload =
+        JWTPayload.builder()
+            .clientID(this.clientID)
+            .hostName(this.hostName)
+            .ttl(this.ttl)
+            .sessionName(sessionName)
+            .build();
     return getAccessToken(
-        this.jwtBuilder.generateJWT(header, privateKey, ttl, sessionName), builder.build());
+        this.jwtBuilder.generateJWT(header, privateKey, payload), builder.build());
   }
 
   private PrivateKey parsePrivateKey(String privateKeyPEM) throws Exception {
