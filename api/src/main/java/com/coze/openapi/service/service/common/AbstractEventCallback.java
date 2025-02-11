@@ -1,18 +1,18 @@
 package com.coze.openapi.service.service.common;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-
-import org.slf4j.Logger;
-
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.exception.CozeApiException;
 import com.coze.openapi.client.exception.CozeError;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.slf4j.Logger;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import io.reactivex.FlowableEmitter;
 import okhttp3.ResponseBody;
@@ -32,56 +32,58 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
 
   @Override
   public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-    BufferedReader reader = null;
+    new Thread(() -> {
+      BufferedReader reader = null;
 
-    try {
-      String logID = Utils.getLogID(response);
-      if (!response.isSuccessful()) {
-        logger.warn("HTTP error: " + response.code() + " " + response.message());
-        String errStr = response.errorBody().string();
-        CozeError error = mapper.readValue(errStr, CozeError.class);
-        throw new CozeApiException(
-            Integer.valueOf(response.code()), error.getErrorMessage(), logID);
-      }
-
-      // 检查 response body 是否为 BaseResponse 格式
-      String contentType = response.headers().get("Content-Type");
-      if (contentType != null && contentType.contains("application/json")) {
-        String respStr = response.body().string();
-        BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
-        if (baseResp.getCode() != 0) {
-          logger.warn("API error: {} {}", baseResp.getCode(), baseResp.getMsg());
-          throw new CozeApiException(baseResp.getCode(), baseResp.getMsg(), logID);
+      try {
+        String logID = Utils.getLogID(response);
+        if (!response.isSuccessful()) {
+          logger.warn("HTTP error: " + response.code() + " " + response.message());
+          String errStr = response.errorBody().string();
+          CozeError error = mapper.readValue(errStr, CozeError.class);
+          throw new CozeApiException(
+                  Integer.valueOf(response.code()), error.getErrorMessage(), logID);
         }
-        return;
-      }
 
-      InputStream in = response.body().byteStream();
-      reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-      String line;
+        // 检查 response body 是否为 BaseResponse 格式
+        String contentType = response.headers().get("Content-Type");
+        if (contentType != null && contentType.contains("application/json")) {
+          String respStr = response.body().string();
+          BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
+          if (baseResp.getCode() != 0) {
+            logger.warn("API error: {} {}", baseResp.getCode(), baseResp.getMsg());
+            throw new CozeApiException(baseResp.getCode(), baseResp.getMsg(), logID);
+          }
+          return;
+        }
 
-      while (!emitter.isCancelled() && (line = reader.readLine()) != null) {
-        if (processLine(line, reader, logID)) {
-          break;
+        InputStream in = response.body().byteStream();
+        reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        String line;
+
+        while (!emitter.isCancelled() && (line = reader.readLine()) != null) {
+          if (processLine(line, reader, logID)) {
+            break;
+          }
+        }
+
+        emitter.onComplete();
+
+      } catch (Throwable t) {
+        onFailure(call, t);
+      } finally {
+        if (reader != null) {
+          try {
+            reader.close();
+          } catch (IOException e) {
+            // do nothing
+          }
+          if (response.body() != null) {
+            response.body().close();
+          }
         }
       }
-
-      emitter.onComplete();
-
-    } catch (Throwable t) {
-      onFailure(call, t);
-    } finally {
-      if (reader != null) {
-        try {
-          reader.close();
-        } catch (IOException e) {
-          // do nothing
-        }
-        if (response.body() != null) {
-          response.body().close();
-        }
-      }
-    }
+    }).start();
   }
 
   protected abstract boolean processLine(String line, BufferedReader reader, String logID)
