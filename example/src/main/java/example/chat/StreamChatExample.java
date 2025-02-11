@@ -63,18 +63,17 @@ public class StreamChatExample {
             },
             throwable -> {
               System.err.println("Error occurred: " + throwable.getMessage());
-              coze.shutdownExecutor();
             },
             () -> {
               System.out.println("done");
-              coze.shutdownExecutor();
             });
 
     // 为了防止程序立即退出，添加一个简单的等待
     try {
-      Thread.sleep(100000); // 等待10秒钟
+      Thread.sleep(5000); // 等待5秒钟
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
+    coze.shutdownExecutor();
   }
 }
