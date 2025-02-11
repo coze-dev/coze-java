@@ -4,6 +4,8 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.coze.openapi.client.auth.*;
 import com.coze.openapi.client.auth.scope.Scope;
@@ -24,8 +26,7 @@ public class JWTOAuthClient extends OAuthClient {
     if (builder.jwtBuilder != null) {
       this.jwtBuilder = builder.jwtBuilder;
     } else {
-      this.jwtBuilder =
-          new DefaultJWTBuilder(this.publicKey, this.clientID, this.hostName, this.privateKey);
+      this.jwtBuilder = new DefaultJWTBuilder(this.clientID, this.hostName);
     }
     this.ttl = builder.ttl;
   }
@@ -80,8 +81,12 @@ public class JWTOAuthClient extends OAuthClient {
   private OAuthToken doGetAccessToken(Integer ttl, Scope scope, String sessionName) {
     GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
     builder.grantType(GrantType.JWT_CODE.getValue()).durationSeconds(ttl).scope(scope);
-
-    return getAccessToken(this.jwtBuilder.generateJWT(ttl, sessionName), builder.build());
+    Map<String, Object> header = new HashMap<>();
+    header.put("alg", "RS256");
+    header.put("typ", "JWT");
+    header.put("kid", this.publicKey);
+    return getAccessToken(
+        this.jwtBuilder.generateJWT(header, privateKey, ttl, sessionName), builder.build());
   }
 
   private PrivateKey parsePrivateKey(String privateKeyPEM) throws Exception {
