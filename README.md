@@ -566,6 +566,17 @@ implementation('com.coze:coze-api:0.1.0') {
 ```
 2. Please refer to [ExampleJWTBuilder.java](example/src/main/java/example/auth/ExampleJWTBuilder.java) to implement your own JWT builder.
 
+3. Set your jwt builder to JWTOAuthClient when initialize it
+```java
+JWTOAuthClient oauth = (new JWTOAuthClient.JWTOAuthBuilder())
+              .privateKey(config.getPrivateKey())
+              .publicKey(config.getPublicKeyId())
+              .clientID(config.getClientId())
+              .baseURL(config.getCozeApiBase())
+              .jwtBuilder(new ExampleJWTBuilder()) // set your jwt builder
+              .build();
+```
+
 Firstly, users need to access https://www.coze.com/open/oauth/apps. For the cn environment,
 users need to access https://www.coze.cn/open/oauth/apps to create an OAuth App of the type
 of Service application.
