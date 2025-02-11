@@ -49,8 +49,9 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
               logger.warn("HTTP error: " + response.code() + " " + response.message());
               String errStr = response.errorBody().string();
               CozeError error = mapper.readValue(errStr, CozeError.class);
-              CozeApiException exception = new CozeApiException(
-                  Integer.valueOf(response.code()), error.getErrorMessage(), logID);
+              CozeApiException exception =
+                  new CozeApiException(
+                      Integer.valueOf(response.code()), error.getErrorMessage(), logID);
               emitter.onError(exception);
               return;
             }
@@ -63,7 +64,8 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
                 BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
                 if (baseResp.getCode() != 0) {
                   logger.warn("API error: {} {}", baseResp.getCode(), baseResp.getMsg());
-                  CozeApiException exception = new CozeApiException(baseResp.getCode(), baseResp.getMsg(), logID);
+                  CozeApiException exception =
+                      new CozeApiException(baseResp.getCode(), baseResp.getMsg(), logID);
                   emitter.onError(exception);
                   return;
                 }
@@ -71,7 +73,9 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
                 return;
               } catch (Exception e) {
                 logger.error("Failed to parse JSON response: {}", respStr, e);
-                CozeApiException exception = new CozeApiException(-1, "Failed to parse JSON response: " + e.getMessage(), logID);
+                CozeApiException exception =
+                    new CozeApiException(
+                        -1, "Failed to parse JSON response: " + e.getMessage(), logID);
                 emitter.onError(exception);
                 return;
               }
