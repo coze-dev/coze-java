@@ -4,5 +4,5 @@ import java.security.PrivateKey;
 import java.util.Map;
 
 public interface JWTBuilder {
-  String generateJWT(Map<String, Object> header, PrivateKey privateKey, JWTPayload payload);
+  String generateJWT(PrivateKey privateKey, Map<String, Object> header, JWTPayload payload);
 }

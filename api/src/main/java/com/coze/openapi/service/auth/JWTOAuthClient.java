@@ -4,12 +4,14 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.coze.openapi.client.auth.*;
 import com.coze.openapi.client.auth.scope.Scope;
 
+import com.coze.openapi.service.utils.Utils;
 import lombok.Getter;
 
 public class JWTOAuthClient extends OAuthClient {
@@ -85,15 +87,19 @@ public class JWTOAuthClient extends OAuthClient {
     header.put("alg", "RS256");
     header.put("typ", "JWT");
     header.put("kid", this.publicKey);
+    long now = System.currentTimeMillis() / 1000;
+
     JWTPayload payload =
         JWTPayload.builder()
-            .clientID(this.clientID)
-            .hostName(this.hostName)
-            .ttl(this.ttl)
+            .iss(this.clientID)
+            .aud(this.hostName)
+            .exp(new Date((now + this.ttl) * 1000))
+                .iat(new Date(now * 1000))
             .sessionName(sessionName)
+                .jti(Utils.genRandomSign(16))
             .build();
     return getAccessToken(
-        this.jwtBuilder.generateJWT(header, privateKey, payload), builder.build());
+        this.jwtBuilder.generateJWT(privateKey, header, payload), builder.build());
   }
 
   private PrivateKey parsePrivateKey(String privateKeyPEM) throws Exception {

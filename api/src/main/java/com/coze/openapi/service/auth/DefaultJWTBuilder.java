@@ -15,17 +15,16 @@ import lombok.NoArgsConstructor;
 public class DefaultJWTBuilder implements JWTBuilder {
 
   @Override
-  public String generateJWT(Map<String, Object> header, PrivateKey privateKey, JWTPayload payload) {
+  public String generateJWT(PrivateKey privateKey, Map<String, Object> header, JWTPayload payload) {
     try {
-      long now = System.currentTimeMillis() / 1000;
       JwtBuilder jwtBuilder =
           Jwts.builder()
               .setHeader(header)
-              .setIssuer(payload.getClientID())
-              .setAudience(payload.getHostName())
-              .setIssuedAt(new Date(now * 1000))
-              .setExpiration(new Date((now + payload.getTtl()) * 1000))
-              .setId(Utils.genRandomSign(16))
+              .setIssuer(payload.getIss())
+              .setAudience(payload.getAud())
+              .setIssuedAt(payload.getIat())
+              .setExpiration(payload.getExp())
+              .setId(payload.getJti())
               .signWith(privateKey, SignatureAlgorithm.RS256);
       if (payload.getSessionName() != null) {
         jwtBuilder.claim("session_name", payload.getSessionName());

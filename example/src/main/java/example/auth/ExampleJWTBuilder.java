@@ -6,6 +6,8 @@ import java.util.Map;
 import com.coze.openapi.service.auth.JWTBuilder;
 import com.coze.openapi.service.auth.JWTPayload;
 
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
 import lombok.NoArgsConstructor;
 
 // import com.coze.openapi.service.utils.Utils;
@@ -21,27 +23,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExampleJWTBuilder implements JWTBuilder {
   @Override
-  public String generateJWT(Map<String, Object> header, PrivateKey privateKey, JWTPayload payload) {
+  public String generateJWT(PrivateKey privateKey, Map<String, Object> header, JWTPayload payload) {
     try {
-      long now = System.currentTimeMillis() / 1000;
-
-      //            JwtBuilder jwtBuilder =
-      //                Jwts.builder()
-      //                    .header()
-      //                    .add(header)
-      //                    .and()
-      //                    .issuer(payload.getClientID())
-      //                    .audience()
-      //                    .add(payload.getHostName())
-      //                    .and()
-      //                    .issuedAt(new Date(now * 1000))
-      //                    .expiration(new Date((now + payload.getTtl()) * 1000))
-      //                    .id(Utils.genRandomSign(16))
-      //                    .signWith(privateKey, Jwts.SIG.RS256);
-      //            if (payload.getSessionName() != null) {
-      //              jwtBuilder.claim("session_name", payload.getSessionName());
-      //            }
-      //            return jwtBuilder.compact();
+//                  JwtBuilder jwtBuilder =
+//                      Jwts.builder()
+//                          .header()
+//                          .add(header)
+//                          .and()
+//                          .issuer(payload.getIss())
+//                          .audience()
+//                          .add(payload.getAud())
+//                          .and()
+//                          .issuedAt(payload.getIat())
+//                          .expiration(payload.getExp())
+//                          .id(payload.getJti())
+//                          .signWith(privateKey, Jwts.SIG.RS256);
+//                  if (payload.getSessionName() != null) {
+//                    jwtBuilder.claim("session_name", payload.getSessionName());
+//                  }
+//                  return jwtBuilder.compact();
 
     } catch (Exception e) {
       throw new RuntimeException("Failed to generate JWT", e);
