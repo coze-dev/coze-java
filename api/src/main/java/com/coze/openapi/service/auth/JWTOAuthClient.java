@@ -10,8 +10,8 @@ import java.util.Map;
 
 import com.coze.openapi.client.auth.*;
 import com.coze.openapi.client.auth.scope.Scope;
-
 import com.coze.openapi.service.utils.Utils;
+
 import lombok.Getter;
 
 public class JWTOAuthClient extends OAuthClient {
@@ -94,9 +94,9 @@ public class JWTOAuthClient extends OAuthClient {
             .iss(this.clientID)
             .aud(this.hostName)
             .exp(new Date((now + this.ttl) * 1000))
-                .iat(new Date(now * 1000))
+            .iat(new Date(now * 1000))
             .sessionName(sessionName)
-                .jti(Utils.genRandomSign(16))
+            .jti(Utils.genRandomSign(16))
             .build();
     return getAccessToken(
         this.jwtBuilder.generateJWT(privateKey, header, payload), builder.build());

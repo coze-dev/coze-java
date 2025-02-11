@@ -1,10 +1,7 @@
 package com.coze.openapi.service.auth;
 
 import java.security.PrivateKey;
-import java.util.Date;
 import java.util.Map;
-
-import com.coze.openapi.service.utils.Utils;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;

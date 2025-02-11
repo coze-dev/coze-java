@@ -1,8 +1,8 @@
 package com.coze.openapi.service.auth;
 
-import lombok.*;
-
 import java.util.Date;
+
+import lombok.*;
 
 @Data
 @Builder
