@@ -49,20 +49,32 @@ public abstract class AbstractEventCallback<T> implements Callback<ResponseBody>
               logger.warn("HTTP error: " + response.code() + " " + response.message());
               String errStr = response.errorBody().string();
               CozeError error = mapper.readValue(errStr, CozeError.class);
-              throw new CozeApiException(
+              CozeApiException exception = new CozeApiException(
                   Integer.valueOf(response.code()), error.getErrorMessage(), logID);
+              emitter.onError(exception);
+              return;
             }
 
             // 检查 response body 是否为 BaseResponse 格式
             String contentType = response.headers().get("Content-Type");
             if (contentType != null && contentType.contains("application/json")) {
               String respStr = response.body().string();
-              BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
-              if (baseResp.getCode() != 0) {
-                logger.warn("API error: {} {}", baseResp.getCode(), baseResp.getMsg());
-                throw new CozeApiException(baseResp.getCode(), baseResp.getMsg(), logID);
+              try {
+                BaseResponse<?> baseResp = mapper.readValue(respStr, BaseResponse.class);
+                if (baseResp.getCode() != 0) {
+                  logger.warn("API error: {} {}", baseResp.getCode(), baseResp.getMsg());
+                  CozeApiException exception = new CozeApiException(baseResp.getCode(), baseResp.getMsg(), logID);
+                  emitter.onError(exception);
+                  return;
+                }
+                emitter.onComplete();
+                return;
+              } catch (Exception e) {
+                logger.error("Failed to parse JSON response: {}", respStr, e);
+                CozeApiException exception = new CozeApiException(-1, "Failed to parse JSON response: " + e.getMessage(), logID);
+                emitter.onError(exception);
+                return;
               }
-              return;
             }
 
             InputStream in = response.body().byteStream();
