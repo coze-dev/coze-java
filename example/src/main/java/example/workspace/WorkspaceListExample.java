@@ -35,5 +35,6 @@ public class WorkspaceListExample {
     for (Workspace item : workspaces.getItems()) {
       System.out.println(item);
     }
+    coze.shutdownExecutor();
   }
 }

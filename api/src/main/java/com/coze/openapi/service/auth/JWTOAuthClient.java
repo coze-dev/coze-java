@@ -12,20 +12,24 @@ import com.coze.openapi.client.auth.*;
 import com.coze.openapi.client.auth.scope.Scope;
 import com.coze.openapi.service.utils.Utils;
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 
 public class JWTOAuthClient extends OAuthClient {
   @Getter private final Integer ttl;
   private final PrivateKey privateKey;
   private final String publicKey;
+  private final JWTBuilder jwtBuilder;
 
   protected JWTOAuthClient(JWTOAuthBuilder builder) throws Exception {
     super(builder);
+
     this.privateKey = parsePrivateKey(builder.privateKey);
     this.publicKey = builder.publicKey;
+    if (builder.jwtBuilder != null) {
+      this.jwtBuilder = builder.jwtBuilder;
+    } else {
+      this.jwtBuilder = new DefaultJWTBuilder();
+    }
     this.ttl = builder.ttl;
   }
 
@@ -79,37 +83,23 @@ public class JWTOAuthClient extends OAuthClient {
   private OAuthToken doGetAccessToken(Integer ttl, Scope scope, String sessionName) {
     GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
     builder.grantType(GrantType.JWT_CODE.getValue()).durationSeconds(ttl).scope(scope);
+    Map<String, Object> header = new HashMap<>();
+    header.put("alg", "RS256");
+    header.put("typ", "JWT");
+    header.put("kid", this.publicKey);
+    long now = System.currentTimeMillis() / 1000;
 
-    return getAccessToken(this.generateJWT(ttl, sessionName), builder.build());
-  }
-
-  private String generateJWT(int ttl, String sessionName) {
-    try {
-      long now = System.currentTimeMillis() / 1000;
-
-      // 构建 JWT header
-      Map<String, Object> header = new HashMap<>();
-      header.put("alg", "RS256");
-      header.put("typ", "JWT");
-      header.put("kid", this.publicKey);
-
-      JwtBuilder jwtBuilder =
-          Jwts.builder()
-              .setHeader(header)
-              .setIssuer(this.clientID)
-              .setAudience(this.hostName)
-              .setIssuedAt(new Date(now * 1000))
-              .setExpiration(new Date((now + ttl) * 1000))
-              .setId(Utils.genRandomSign(16))
-              .signWith(privateKey, SignatureAlgorithm.RS256);
-      if (sessionName != null) {
-        jwtBuilder.claim("session_name", sessionName);
-      }
-      return jwtBuilder.compact();
-
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to generate JWT", e);
-    }
+    JWTPayload payload =
+        JWTPayload.builder()
+            .iss(this.clientID)
+            .aud(this.hostName)
+            .exp(new Date((now + this.ttl) * 1000))
+            .iat(new Date(now * 1000))
+            .sessionName(sessionName)
+            .jti(Utils.genRandomSign(16))
+            .build();
+    return getAccessToken(
+        this.jwtBuilder.generateJWT(privateKey, header, payload), builder.build());
   }
 
   private PrivateKey parsePrivateKey(String privateKeyPEM) throws Exception {
@@ -129,6 +119,7 @@ public class JWTOAuthClient extends OAuthClient {
     private Integer ttl;
     private String publicKey;
     private String privateKey;
+    private JWTBuilder jwtBuilder;
 
     public JWTOAuthBuilder publicKey(String publicKey) {
       this.publicKey = publicKey;
@@ -142,6 +133,12 @@ public class JWTOAuthClient extends OAuthClient {
 
     public JWTOAuthBuilder privateKey(String privateKey) {
       this.privateKey = privateKey;
+      return this;
+    }
+
+    // If you are using jjwt version 0.12.x or above, you need to handle JWT parsing by yourself
+    public JWTOAuthBuilder jwtBuilder(JWTBuilder jwtBuilder) {
+      this.jwtBuilder = jwtBuilder;
       return this;
     }
 

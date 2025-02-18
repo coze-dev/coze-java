@@ -10,6 +10,7 @@ import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
 import io.reactivex.Flowable;
+import io.reactivex.schedulers.Schedulers;
 
 /*
  * This example is about how to use the streaming interface to start a chat request
@@ -21,7 +22,7 @@ public class StreamChatExample {
 
     // Get an access_token through personal access token or oauth.
     String token = System.getenv("COZE_API_TOKEN");
-    String botID = System.getenv("PUBLISHED_BOT_ID");
+    String botID = System.getenv("COZE_BOT_ID");
     String userID = System.getenv("USER_ID");
 
     TokenAuth authCli = new TokenAuth(token);
@@ -49,16 +50,30 @@ public class StreamChatExample {
             .build();
 
     Flowable<ChatEvent> resp = coze.chat().stream(req);
-    resp.blockingForEach(
-        event -> {
-          if (ChatEventType.CONVERSATION_MESSAGE_DELTA.equals(event.getEvent())) {
-            System.out.print(event.getMessage().getContent());
-          }
-          if (ChatEventType.CONVERSATION_CHAT_COMPLETED.equals(event.getEvent())) {
-            System.out.println("Token usage:" + event.getChat().getUsage().getTokenCount());
-          }
-        });
-    System.out.println("done");
+    resp.subscribeOn(Schedulers.io())
+        .subscribe(
+            event -> {
+              if (ChatEventType.CONVERSATION_MESSAGE_DELTA.equals(event.getEvent())) {
+                System.out.print(event.getMessage().getContent());
+              }
+              if (ChatEventType.CONVERSATION_CHAT_COMPLETED.equals(event.getEvent())) {
+                System.out.println("Token usage:" + event.getChat().getUsage().getTokenCount());
+                coze.shutdownExecutor();
+              }
+            },
+            throwable -> {
+              System.err.println("Error occurred: " + throwable.getMessage());
+            },
+            () -> {
+              System.out.println("done");
+            });
+
+    // 为了防止程序立即退出，添加一个简单的等待
+    try {
+      Thread.sleep(5000); // 等待5秒钟
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
     coze.shutdownExecutor();
   }
 }

@@ -64,6 +64,7 @@ class JWTOAuthClientTest {
             .publicKey("test_public_key")
             .privateKey(TEST_PRIVATE_KEY)
             .ttl(900)
+            .jwtBuilder(new DefaultJWTBuilder())
             .build();
     TestUtils.setField(client, "api", mockApi);
   }
