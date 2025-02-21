@@ -22,6 +22,8 @@ import com.coze.openapi.client.connversations.message.UpdateMessageResp;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.service.utils.Utils;
 
+import java.util.Objects;
+
 public class MessageService {
   private final ConversationMessageAPI api;
 
@@ -74,14 +76,16 @@ public class MessageService {
     // 创建分页获取器
     PageFetcher<Message> pageFetcher =
         request -> {
-          req.setAfterID(request.getPageToken()); // 设置 lastID
+          if (Objects.nonNull(request.getPageToken())) {
+              req.setAfterID(request.getPageToken()); // 设置 lastID
+          }
           ListMessageResp resp = Utils.execute(api.list(conversationID, req, req));
 
           return PageResponse.<Message>builder()
               .hasMore(resp.getData().size() >= pageSize)
               .data(resp.getData())
-              .lastID(resp.getLastID()) // 使用 firstID 作为上一页的 token
-              .nextID(resp.getFirstID()) // 使用 lastID 作为下一页的 token
+              .lastID(resp.getLastID()) // 使用 lastID 作为下一页的 token
+              .nextID(resp.getFirstID()) // 使用 firstID 作为上一页的 token
               .build();
         };
 
@@ -97,7 +101,8 @@ public class MessageService {
     return PageResp.<Message>builder()
         .items(currentPage.getData())
         .iterator(paginator)
-        .lastID(currentPage.getNextID())
+        .lastID(currentPage.getLastID())
+        .hasMore(currentPage.isHasMore())
         .build();
   }
 
