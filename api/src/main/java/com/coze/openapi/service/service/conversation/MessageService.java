@@ -1,5 +1,7 @@
 package com.coze.openapi.service.service.conversation;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.coze.openapi.api.ConversationMessageAPI;
@@ -21,8 +23,6 @@ import com.coze.openapi.client.connversations.message.UpdateMessageReq;
 import com.coze.openapi.client.connversations.message.UpdateMessageResp;
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.service.utils.Utils;
-
-import java.util.Objects;
 
 public class MessageService {
   private final ConversationMessageAPI api;
@@ -77,7 +77,7 @@ public class MessageService {
     PageFetcher<Message> pageFetcher =
         request -> {
           if (Objects.nonNull(request.getPageToken())) {
-              req.setAfterID(request.getPageToken()); // 设置 lastID
+            req.setAfterID(request.getPageToken()); // 设置 lastID
           }
           ListMessageResp resp = Utils.execute(api.list(conversationID, req, req));
 
