@@ -30,6 +30,9 @@ public class CreateRoomReq extends BaseReq {
   @JsonProperty("uid")
   private String uid;
 
+  @JsonProperty("workflow_id")
+  private String workflowID;
+
   @JsonProperty("config")
   private RoomConfig config;
 }
