@@ -34,6 +34,9 @@ public class WorkflowEvent extends BaseResp {
   @JsonProperty("error")
   private WorkflowEventError error;
 
+  @JsonProperty("debug_url")
+  private WorkflowEventDebugURL debugUrl;
+
   private static WorkflowEvent parseWorkflowEventMessage(Integer id, String data, String logID) {
     WorkflowEventMessage message = WorkflowEventMessage.fromJson(data);
     return WorkflowEvent.builder()
@@ -64,8 +67,9 @@ public class WorkflowEvent extends BaseResp {
         .build();
   }
 
-  private static WorkflowEvent parseWorkflowEventDone(Integer id, String logID) {
-    return WorkflowEvent.builder().id(id).event(WorkflowEventType.DONE).logID(logID).build();
+  private static WorkflowEvent parseWorkflowEventDone(Integer id, String data, String logID) {
+    WorkflowEventDebugURL url = WorkflowEventDebugURL.fromJson(data);
+    return WorkflowEvent.builder().id(id).event(WorkflowEventType.DONE).debugUrl(url).logID(logID).build();
   }
 
   public static WorkflowEvent parseEvent(Map<String, String> eventLine, String logID) {
@@ -80,7 +84,7 @@ public class WorkflowEvent extends BaseResp {
     } else if (WorkflowEventType.ERROR.equals(event)) {
       return parseWorkflowEventError(id, data, logID);
     } else if (WorkflowEventType.DONE.equals(event)) {
-      return parseWorkflowEventDone(id, logID);
+      return parseWorkflowEventDone(id, data, logID);
     }
     return parseWorkflowEventMessage(id, data, logID);
   }
