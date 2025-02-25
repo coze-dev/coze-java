@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.concurrent.TimeUnit;
 
-import com.coze.openapi.client.workflows.run.model.WorkflowEventType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -19,6 +18,7 @@ import com.coze.openapi.api.WorkflowRunHistoryAPI;
 import com.coze.openapi.client.workflows.run.RunWorkflowReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowResp;
 import com.coze.openapi.client.workflows.run.model.WorkflowEvent;
+import com.coze.openapi.client.workflows.run.model.WorkflowEventType;
 import com.coze.openapi.utils.Utils;
 
 import io.reactivex.subscribers.TestSubscriber;
@@ -100,17 +100,19 @@ public class WorkFlowRunServiceTest {
     testSubscriber.assertNoErrors();
     testSubscriber.assertValueCount(10);
     testSubscriber
-            .assertValueAt(5,
+        .assertValueAt(
+            5,
             event ->
-                    event.getEvent().equals(WorkflowEventType.MESSAGE)
-                    && event.getMessage().getToken().equals(1230)
-            )
-            .assertValueAt(
+                event.getEvent().equals(WorkflowEventType.MESSAGE)
+                    && event.getMessage().getToken().equals(1230))
+        .assertValueAt(
             9,
             event ->
                 event.getEvent().equals(WorkflowEventType.DONE)
-                    && event.getDebugUrl().getDebugURL().equals("https://www.coze.cn/work_flow?***")
-    );
+                    && event
+                        .getDebugUrl()
+                        .getDebugURL()
+                        .equals("https://www.coze.cn/work_flow?***"));
   }
 
   @Test

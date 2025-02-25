@@ -70,35 +70,46 @@ public class MessageService {
 
     String conversationID = req.getConversationID();
     Integer pageSize = req.getLimit();
-
-    // 创建分页获取器
-    PageFetcher<Message> pageFetcher =
-        request -> {
-          req.setAfterID(request.getPageToken()); // 设置 lastID
-          ListMessageResp resp = Utils.execute(api.list(conversationID, req, req));
-
-          return PageResponse.<Message>builder()
-              .hasMore(resp.getData().size() >= pageSize)
-              .data(resp.getData())
-              .lastID(resp.getLastID()) // 使用 firstID 作为上一页的 token
-              .nextID(resp.getFirstID()) // 使用 lastID 作为下一页的 token
-              .build();
-        };
+    PageFetcher<Message> pageFetcher = getMessagePageFetcher(req, conversationID);
 
     // 创建基于 token 的分页器
     TokenBasedPaginator<Message> paginator = new TokenBasedPaginator<>(pageFetcher, req.getLimit());
 
     // 获取当前页数据
     PageRequest initialRequest =
-        PageRequest.builder().pageSize(pageSize).pageToken(req.getBeforeID()).build();
+        PageRequest.builder().pageSize(pageSize).pageToken(req.getAfterID()).build();
 
     PageResponse<Message> currentPage = pageFetcher.fetch(initialRequest);
+    paginator.setCurrentPage(currentPage);
 
     return PageResp.<Message>builder()
         .items(currentPage.getData())
         .iterator(paginator)
-        .lastID(currentPage.getNextID())
+        .lastID(currentPage.getLastID())
+        .firstID(currentPage.getFirstID())
+        .hasMore(currentPage.isHasMore())
         .build();
+  }
+
+  @NotNull
+  private PageFetcher<Message> getMessagePageFetcher(
+      @NotNull ListMessageReq req, String conversationID) {
+
+    // 创建分页获取器
+    PageFetcher<Message> pageFetcher =
+        request -> {
+          // 当前迭代器仅支持向后翻页，若有向前翻页需求，请自行处理
+          req.setAfterID(request.getPageToken());
+          ListMessageResp resp = Utils.execute(api.list(conversationID, req, req));
+          return PageResponse.<Message>builder()
+              .hasMore(resp.isHasMore())
+              .pageToken(resp.getLastID())
+              .firstID(resp.getFirstID())
+              .lastID(resp.getLastID())
+              .data(resp.getData())
+              .build();
+        };
+    return pageFetcher;
   }
 
   /*

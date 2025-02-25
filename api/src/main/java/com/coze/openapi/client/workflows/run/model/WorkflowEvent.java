@@ -69,7 +69,12 @@ public class WorkflowEvent extends BaseResp {
 
   private static WorkflowEvent parseWorkflowEventDone(Integer id, String data, String logID) {
     WorkflowEventDebugURL url = WorkflowEventDebugURL.fromJson(data);
-    return WorkflowEvent.builder().id(id).event(WorkflowEventType.DONE).debugUrl(url).logID(logID).build();
+    return WorkflowEvent.builder()
+        .id(id)
+        .event(WorkflowEventType.DONE)
+        .debugUrl(url)
+        .logID(logID)
+        .build();
   }
 
   public static WorkflowEvent parseEvent(Map<String, String> eventLine, String logID) {
