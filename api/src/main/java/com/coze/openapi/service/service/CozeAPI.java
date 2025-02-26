@@ -192,7 +192,8 @@ public class CozeAPI {
           new AudioService(
               retrofit.create(AudioVoiceAPI.class),
               retrofit.create(AudioRoomAPI.class),
-              retrofit.create(AudioSpeechAPI.class));
+              retrofit.create(AudioSpeechAPI.class),
+              retrofit.create(AudioTranscriptionAPI.class));
       TemplateService templateAPI = new TemplateService(retrofit.create(TemplateAPI.class));
       return new CozeAPI(
           this.baseURL,
