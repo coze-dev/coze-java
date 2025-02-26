@@ -72,6 +72,9 @@ public class Message {
   @JsonProperty("updated_at")
   private Long updatedAt;
 
+  @JsonProperty("reasoning_content")
+  private String reasoningContent;
+
   public static Message buildUserQuestionText(String content) {
     return buildUserQuestionText(content, null);
   }
