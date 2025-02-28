@@ -1,5 +1,6 @@
 package com.coze.openapi.client.connversations.message.model;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,13 @@ public class Message {
 
   @JsonProperty("reasoning_content")
   private String reasoningContent;
+
+  public byte[] getAudio() {
+    if (this.contentType == MessageContentType.AUDIO) {
+      return Base64.getDecoder().decode(this.content);
+    }
+    return new byte[0];
+  }
 
   public static Message buildUserQuestionText(String content) {
     return buildUserQuestionText(content, null);

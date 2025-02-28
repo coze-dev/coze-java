@@ -40,7 +40,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public abstract class OAuthClient {
   private static final String AuthorizeHeader = "Authorization";
-  private static final ObjectMapper mapper = Utils.defaultObjectMapper();
+  private static final ObjectMapper mapper = Utils.getMapper();
 
   protected final String clientSecret;
   protected final String clientID;

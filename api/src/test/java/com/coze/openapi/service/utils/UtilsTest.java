@@ -25,7 +25,7 @@ public class UtilsTest {
 
   @BeforeEach
   public void setUp() {
-    objectMapper = Utils.defaultObjectMapper();
+    objectMapper = Utils.getMapper();
   }
 
   public static class TestResponse extends BaseResp {}
