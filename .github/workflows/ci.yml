@@ -20,7 +20,6 @@ jobs:
         os: [ "ubuntu-latest", "windows-latest", "macos-latest" ]
         os-label: [ "Ubuntu", "Windows", "macOS" ]
         include:
-          - { java-version: "8", os: "windows-latest", os-label: "Windows", distribution: "temurin" }
           - { java-version: "8", os: "macos-latest", os-label: "macOS", distribution: "zulu" }
         exclude:
           - os: "windows-latest"
