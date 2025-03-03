@@ -54,6 +54,23 @@ jobs:
 
           # 5. 更新库缓存
           sudo ldconfig
+
+           # 6. 验证设置
+          echo "=== Verifying library setup ==="
+          echo "Checking all libsunec.so locations:"
+          find / -name libsunec.so 2>/dev/null
+          
+          echo "=== Checking library dependencies ==="
+          for lib in /usr/lib/libsunec.so /usr/java/packages/lib/amd64/libsunec.so /usr/lib/jni/libsunec.so; do
+            echo "Checking $lib:"
+            ldd $lib || echo "Failed to check dependencies for $lib"
+          done
+          
+          echo "=== Library permissions ==="
+          ls -l /usr/lib/libsunec.so
+          ls -l /usr/java/packages/lib/amd64/libsunec.so
+          ls -l /usr/lib/jni/libsunec.so
+
       - name: Code style check
         run: mvn spotless:check
       - name: Build and Test with Coverage
