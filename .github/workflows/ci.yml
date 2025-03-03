@@ -33,7 +33,7 @@ jobs:
       - name: Setup Java 8 environment
         if: matrix.java-version == '8'
         run: |
-                    # 1. 安装基础依赖
+          # 1. 安装基础依赖
           sudo apt-get update
           sudo apt-get install -y libnss3-dev
 
