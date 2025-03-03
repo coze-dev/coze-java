@@ -41,7 +41,12 @@ jobs:
         run: mvn spotless:check
       - name: Build and Test with Coverage
         env:
-          MAVEN_OPTS: ${{ matrix.java-version == '8' && '-Dos.name=Linux' || '' }}
+          MAVEN_OPTS: >-
+            ${{ matrix.java-version == '8' && '
+            -Djava.nio.fs.spi.DefaultFileSystemProvider=sun.nio.fs.LinuxFileSystemProvider
+            -Dos.name=Linux
+            -Dos.arch=amd64
+            ' || '' }}
         run: |
           mvn -pl api clean test-compile
           mvn -pl api test jacoco:report
