@@ -15,7 +15,21 @@ import retrofit2.Response;
 
 public class Utils {
   public static final String LOG_HEADER = "x-tt-logid";
-  private static final ObjectMapper mapper = defaultObjectMapper();
+
+  private static ObjectMapper defaultObjectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    return mapper;
+  }
+
+  private static final class MapperHolder {
+    static final ObjectMapper mapper = defaultObjectMapper();
+  }
+
+  public static ObjectMapper getMapper() {
+    return MapperHolder.mapper;
+  }
 
   public static <T> T execute(Call<T> call) {
     try {
@@ -45,20 +59,13 @@ public class Utils {
     }
   }
 
-  public static ObjectMapper defaultObjectMapper() {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    return mapper;
-  }
-
   public static String getLogID(Response<?> response) {
     return response.raw().headers().get(LOG_HEADER);
   }
 
   public static String toJson(Object obj) {
     try {
-      return mapper.writeValueAsString(obj);
+      return getMapper().writeValueAsString(obj);
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Failed to convert object to JSON string", e);
     }
@@ -66,7 +73,7 @@ public class Utils {
 
   public static <T> T fromJson(String json, Class<T> clazz) {
     try {
-      return mapper.readValue(json, clazz);
+      return getMapper().readValue(json, clazz);
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Failed to parse object from JSON string", e);
     }

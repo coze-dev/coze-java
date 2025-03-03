@@ -1,7 +1,5 @@
 package com.coze.openapi.client.bots;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.client.bots.model.BotOnboardingInfo;
 import com.coze.openapi.client.bots.model.BotPromptInfo;
 import com.coze.openapi.client.common.BaseReq;
@@ -11,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -19,11 +18,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CreateBotReq extends BaseReq {
-  @NotNull
+  @NonNull
   @JsonProperty("space_id")
   String spaceID;
 
-  @NotNull
+  @NonNull
   @JsonProperty("name")
   String name;
 

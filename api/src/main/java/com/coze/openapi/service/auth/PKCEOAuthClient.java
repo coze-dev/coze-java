@@ -5,9 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.coze.openapi.client.auth.*;
 import com.coze.openapi.service.utils.Utils;
 
@@ -41,17 +38,16 @@ public class PKCEOAuthClient extends OAuthClient {
         .build();
   }
 
-  public GetPKCEAuthURLResp genOAuthURL(@NotNull String redirectURI, String state) {
+  public GetPKCEAuthURLResp genOAuthURL(String redirectURI, String state) {
     return genOAuthURL(redirectURI, state, CodeChallengeMethod.Plain);
   }
 
-  public GetPKCEAuthURLResp genOAuthURL(
-      @NotNull String redirectURI, String state, @NotNull String workspaceID) {
+  public GetPKCEAuthURLResp genOAuthURL(String redirectURI, String state, String workspaceID) {
     return genOAuthURL(redirectURI, state, CodeChallengeMethod.Plain, workspaceID);
   }
 
   public GetPKCEAuthURLResp genOAuthURL(
-      @NotNull String redirectURI, String state, @NotNull CodeChallengeMethod codeChallengeMethod) {
+      String redirectURI, String state, CodeChallengeMethod codeChallengeMethod) {
     String codeVerifier = Utils.genRandomSign(codeVerifierLen);
     String url =
         super.getOAuthURL(
@@ -63,10 +59,10 @@ public class PKCEOAuthClient extends OAuthClient {
   }
 
   public GetPKCEAuthURLResp genOAuthURL(
-      @NotNull String redirectURI,
+      String redirectURI,
       String state,
-      @NotNull CodeChallengeMethod codeChallengeMethod,
-      @NotNull String workspaceID) {
+      CodeChallengeMethod codeChallengeMethod,
+      String workspaceID) {
     String codeVerifier = Utils.genRandomSign(codeVerifierLen);
     String url =
         super.getOAuthURL(
@@ -78,8 +74,7 @@ public class PKCEOAuthClient extends OAuthClient {
     return new GetPKCEAuthURLResp(codeVerifier, url);
   }
 
-  private String getCode(
-      @NotNull String codeVerifier, @NotNull CodeChallengeMethod codeChallengeMethod) {
+  private String getCode(String codeVerifier, CodeChallengeMethod codeChallengeMethod) {
     String code = "";
     try {
       code =
@@ -92,8 +87,7 @@ public class PKCEOAuthClient extends OAuthClient {
     return code;
   }
 
-  public OAuthToken getAccessToken(
-      @NotNull String code, @NotNull String redirectURI, @Nullable String codeVerifier) {
+  public OAuthToken getAccessToken(String code, String redirectURI, String codeVerifier) {
     GetAccessTokenReq req =
         GetAccessTokenReq.builder()
             .clientID(this.clientID)

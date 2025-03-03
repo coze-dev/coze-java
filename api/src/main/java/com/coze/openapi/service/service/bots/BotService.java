@@ -1,7 +1,5 @@
 package com.coze.openapi.service.service.bots;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.api.BotAPI;
 import com.coze.openapi.client.bots.*;
 import com.coze.openapi.client.bots.model.Bot;
@@ -22,7 +20,7 @@ public class BotService {
     this.api = api;
   }
 
-  public PageResp<SimpleBot> list(@NotNull ListBotReq req) {
+  public PageResp<SimpleBot> list(ListBotReq req) {
     if (req == null) {
       throw new IllegalArgumentException("req is required");
     }
@@ -48,8 +46,7 @@ public class BotService {
         .build();
   }
 
-  @NotNull
-  private PageFetcher<SimpleBot> getSimpleBotPageFetcher(@NotNull ListBotReq req) {
+  private PageFetcher<SimpleBot> getSimpleBotPageFetcher(ListBotReq req) {
     String spaceID = req.getSpaceID();
 
     // 创建分页获取器
@@ -69,21 +66,21 @@ public class BotService {
     return pageFetcher;
   }
 
-  public RetrieveBotResp retrieve(@NotNull RetrieveBotReq req) {
+  public RetrieveBotResp retrieve(RetrieveBotReq req) {
     BaseResponse<Bot> resp = Utils.execute(api.retrieve(req.getBotID(), req));
     return RetrieveBotResp.builder().bot(resp.getData()).logID(resp.getLogID()).build();
   }
 
-  public CreateBotResp create(@NotNull CreateBotReq req) {
+  public CreateBotResp create(CreateBotReq req) {
     return Utils.execute(api.create(req, req)).getData();
   }
 
-  public UpdateBotResp update(@NotNull UpdateBotReq req) {
+  public UpdateBotResp update(UpdateBotReq req) {
     String logID = Utils.execute(api.update(req, req)).getLogID();
     return UpdateBotResp.builder().logID(logID).build();
   }
 
-  public PublishBotResp publish(@NotNull PublishBotReq req) {
+  public PublishBotResp publish(PublishBotReq req) {
     return Utils.execute(api.publish(req, req)).getData();
   }
 }

@@ -1,7 +1,5 @@
 package com.coze.openapi.service.service.conversation;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.api.ConversationAPI;
 import com.coze.openapi.api.ConversationMessageAPI;
 import com.coze.openapi.client.common.BaseResponse;
@@ -63,7 +61,7 @@ public class ConversationService {
     return Utils.execute(api.clear(req.getConversationID(), req)).getData();
   }
 
-  public PageResp<Conversation> list(@NotNull ListConversationReq req) {
+  public PageResp<Conversation> list(ListConversationReq req) {
     if (req == null || req.getBotID() == null) {
       throw new IllegalArgumentException("botID is required");
     }

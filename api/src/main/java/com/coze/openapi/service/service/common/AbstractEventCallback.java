@@ -23,7 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public abstract class AbstractEventCallback<T> implements Callback<ResponseBody> {
-  private static final ObjectMapper mapper = Utils.defaultObjectMapper();
+  private static final ObjectMapper mapper = Utils.getMapper();
   private static final Logger logger = CozeLoggerFactory.getLogger();
 
   private final ExecutorService backgroundExecutor;

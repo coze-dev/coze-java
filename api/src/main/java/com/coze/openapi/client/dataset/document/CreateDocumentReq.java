@@ -2,8 +2,6 @@ package com.coze.openapi.client.dataset.document;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.dataset.document.model.DocumentBase;
 import com.coze.openapi.client.dataset.document.model.DocumentChunkStrategy;
@@ -15,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -25,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class CreateDocumentReq extends BaseReq {
   /** The ID of the knowledge base. */
-  @NotNull
+  @NonNull
   @JsonProperty("dataset_id")
   private Long datasetID;
 
@@ -34,7 +33,7 @@ public class CreateDocumentReq extends BaseReq {
    * meaning up to 10 files can be uploaded at a time. For detailed instructions, refer to the
    * DocumentBase object.
    */
-  @NotNull
+  @NonNull
   @JsonProperty("document_bases")
   private List<DocumentBase> documentBases;
 

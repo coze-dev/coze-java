@@ -1,7 +1,5 @@
 package com.coze.openapi.service.service.conversation;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.api.ConversationMessageAPI;
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.common.pagination.PageFetcher;
@@ -63,7 +61,7 @@ public class MessageService {
       docs en: https://www.coze.com/docs/developer_guides/list_message
       docs zh: https://www.coze.cn/docs/developer_guides/list_message
   * */
-  public PageResp<Message> list(@NotNull ListMessageReq req) {
+  public PageResp<Message> list(ListMessageReq req) {
     if (req == null || req.getConversationID() == null) {
       throw new IllegalArgumentException("conversationID is required");
     }
@@ -91,9 +89,7 @@ public class MessageService {
         .build();
   }
 
-  @NotNull
-  private PageFetcher<Message> getMessagePageFetcher(
-      @NotNull ListMessageReq req, String conversationID) {
+  private PageFetcher<Message> getMessagePageFetcher(ListMessageReq req, String conversationID) {
 
     // 创建分页获取器
     PageFetcher<Message> pageFetcher =

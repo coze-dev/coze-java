@@ -28,4 +28,7 @@ public class CreateSpeechReq extends BaseReq {
   @JsonProperty("speed")
   @Builder.Default
   private float speed = 1.0f;
+
+  @JsonProperty("sample_rate")
+  private int sampleRate;
 }

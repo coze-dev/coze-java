@@ -39,7 +39,7 @@ class SpeechServiceTest {
         CreateSpeechReq.builder().input("Test speech").voiceID("mock voice id").build();
 
     ResponseBody responseBody =
-        ResponseBody.create(new byte[] {1, 2, 3, 4}, MediaType.parse("audio/mpeg"));
+        ResponseBody.create(MediaType.parse("audio/mpeg"), new byte[] {1, 2, 3, 4});
 
     // 设置 mock 行为
     when(audioSpeechAPI.create(any(CreateSpeechReq.class), any(CreateSpeechReq.class)))
