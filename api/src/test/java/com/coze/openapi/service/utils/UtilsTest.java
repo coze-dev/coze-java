@@ -133,11 +133,7 @@ public class UtilsTest {
 
   @Test
   public void testGenRandomSign() {
-    // 添加调试信息
-    System.out.println("OS Name: " + System.getProperty("os.name"));
-    System.out.println("OS Version: " + System.getProperty("os.version"));
-    System.out.println("OS Arch: " + System.getProperty("os.arch"));
-    
+
     // 测试生成16位随机字符串
     String sign = Utils.genRandomSign(16);
     assertNotNull(sign);
