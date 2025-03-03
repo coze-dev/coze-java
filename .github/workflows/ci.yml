@@ -17,11 +17,16 @@ jobs:
       fail-fast: false
       matrix:
         java-version: [ "8", "11", "17" ]
-        os: [ "ubuntu-latest" ]
-        os-label: [ "Ubuntu" ]
+        os: [ "windows-latest", "macos-latest" ]
+        os-label: [ "Windows", "macOS" ]
         include:
-          - { java-version: "11", os: "windows-latest", os-label: "Windows" }
-          - { java-version: "11", os: "macos-latest", os-label: "macOS" }
+          - { java-version: "11", os: "ubuntu-latest", os-label: "Ubuntu" }
+          - { java-version: "17", os: "ubuntu-latest", os-label: "Ubuntu" }
+        exclude:
+          - os: "windows-latest"
+            os-label: "macOS"
+          - os: "macos-latest"
+            os-label: "Windows"
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK ${{ matrix.java-version }}
@@ -30,47 +35,6 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
           cache: 'maven'
-      - name: Setup Java 8 environment
-        if: matrix.java-version == '8'
-        run: |
-          # 1. 安装基础依赖
-          sudo apt-get update
-          sudo apt-get install -y libnss3-dev
-
-          # 2. 确保所有可能的库路径都存在
-          sudo mkdir -p /usr/java/packages/lib/amd64
-          sudo mkdir -p /usr/lib/jni
-          sudo mkdir -p /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server
-
-          # 3. 复制而不是链接 native 库
-          sudo cp /usr/lib/jvm/temurin-8-jdk-amd64/jre/lib/amd64/libsunec.so /usr/lib/
-          sudo cp /usr/lib/jvm/temurin-8-jdk-amd64/jre/lib/amd64/libsunec.so /usr/java/packages/lib/amd64/
-          sudo cp /usr/lib/jvm/temurin-8-jdk-amd64/jre/lib/amd64/libsunec.so /usr/lib/jni/
-
-          # 4. 设置正确的权限
-          sudo chmod 755 /usr/lib/libsunec.so
-          sudo chmod 755 /usr/java/packages/lib/amd64/libsunec.so
-          sudo chmod 755 /usr/lib/jni/libsunec.so
-
-          # 5. 更新库缓存
-          sudo ldconfig
-
-           # 6. 验证设置
-          echo "=== Verifying library setup ==="
-          echo "Checking all libsunec.so locations:"
-          find / -name libsunec.so 2>/dev/null
-          
-          echo "=== Checking library dependencies ==="
-          for lib in /usr/lib/libsunec.so /usr/java/packages/lib/amd64/libsunec.so /usr/lib/jni/libsunec.so; do
-            echo "Checking $lib:"
-            ldd $lib || echo "Failed to check dependencies for $lib"
-          done
-          
-          echo "=== Library permissions ==="
-          ls -l /usr/lib/libsunec.so
-          ls -l /usr/java/packages/lib/amd64/libsunec.so
-          ls -l /usr/lib/jni/libsunec.so
-
       - name: Code style check
         run: mvn spotless:check
       - name: Build and Test with Coverage
