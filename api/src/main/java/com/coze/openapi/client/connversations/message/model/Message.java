@@ -78,6 +78,9 @@ public class Message {
 
   public byte[] getAudio() {
     if (this.contentType == MessageContentType.AUDIO) {
+      if (this.content == null) {
+        return new byte[0];
+      }
       return Base64.getDecoder().decode(this.content);
     }
     return new byte[0];

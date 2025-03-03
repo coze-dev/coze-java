@@ -14,10 +14,10 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class TranscriptionService {
-  private final AudioTranscriptionAPI roomApi;
+  private final AudioTranscriptionAPI transcriptionAPI;
 
-  public TranscriptionService(AudioTranscriptionAPI roomApi) {
-    this.roomApi = roomApi;
+  public TranscriptionService(AudioTranscriptionAPI transcriptionAPI) {
+    this.transcriptionAPI = transcriptionAPI;
   }
 
   public CreateTranscriptionsResp create(CreateTranscriptionsReq req) {
@@ -47,7 +47,7 @@ public class TranscriptionService {
 
     MultipartBody.Part body = MultipartBody.Part.createFormData("file", filename, requestFile);
 
-    BaseResponse<CreateTranscriptionsResp> resp = Utils.execute(roomApi.create(body, req));
+    BaseResponse<CreateTranscriptionsResp> resp = Utils.execute(transcriptionAPI.create(body, req));
     CreateTranscriptionsResp data = resp.getData();
     data.setLogID(resp.getLogID());
     return data;

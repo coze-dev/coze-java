@@ -53,4 +53,10 @@ public class BaseWebSocketListener extends WebSocketListener {
   public void onClosed(WebSocket webSocket, int code, String reason) {
     this.callbackHandler.onClosed(this.client, code, reason);
   }
+
+  public void shutdown() {
+        if (!executorService.isShutdown()) {
+            executorService.shutdown();
+          }
+      }
 }

@@ -288,10 +288,14 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <forkCount>1</forkCount>
                     <reuseForks>true</reuseForks>
-                    <argLine>@{argLine} -Djava.security.manager=allow -Djava.security.egd=file:/dev/urandom -Djava.security.properties=${project.basedir}/src/test/resources/java.security</argLine>
+                    <argLine>@{argLine}</argLine>
                     <systemPropertyVariables>
                         <okhttp.platform>jdk-8</okhttp.platform>
+                        <java.security.egd>file:/dev/urandom</java.security.egd>
                     </systemPropertyVariables>
+                    <environmentVariables>
+                        <JAVA_TOOL_OPTIONS>-Djava.security.manager=allow</JAVA_TOOL_OPTIONS>
+                    </environmentVariables>
                 </configuration>
             </plugin>
 

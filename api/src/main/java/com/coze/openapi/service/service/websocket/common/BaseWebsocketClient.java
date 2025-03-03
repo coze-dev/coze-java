@@ -17,12 +17,14 @@ public abstract class BaseWebsocketClient {
   protected final WebSocket ws;
   protected final ExecutorService executorService;
   protected static final int CLOSE_TIMEOUT_SECONDS = 10;
+  protected final BaseWebSocketListener listener;
 
   protected BaseWebsocketClient(OkHttpClient client, String url, BaseCallbackHandler handler) {
     Request request = new Request.Builder().url(url).build();
     this.executorService = Executors.newSingleThreadExecutor();
+    this.listener = new BaseWebSocketListener(this::handleEvent, handler, this);
     this.ws =
-        client.newWebSocket(request, new BaseWebSocketListener(this::handleEvent, handler, this));
+        client.newWebSocket(request, this.listener);
   }
 
   protected void sendEvent(BaseEvent event) {
@@ -53,6 +55,8 @@ public abstract class BaseWebsocketClient {
       Thread.currentThread().interrupt();
       // 强制关闭
       executorService.shutdownNow();
+    }finally {
+      this.listener.shutdown();
     }
   }
 }

@@ -89,9 +89,4 @@ public class WebsocketAudioSpeechClient extends BaseWebsocketClient {
       handler.onClientException(this, new RuntimeException(e));
     }
   }
-
-  public void close() {
-    this.close();
-    executorService.shutdown();
-  }
 }
