@@ -32,6 +32,11 @@ jobs:
           cache: 'maven'
       - name: Code style check
         run: mvn spotless:check
+      - name: Setup Java 8 environment
+        if: matrix.java-version == '8'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3-dev
       - name: Build and Test with Coverage
         env:
           MAVEN_OPTS: ${{ matrix.java-version == '8' && '-Dos.name=Linux' || '' }}
