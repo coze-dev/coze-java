@@ -34,6 +34,9 @@ jobs:
         run: mvn spotless:check
       - name: Build and Test with Coverage
         run: |
+          if [ "${{ matrix.java-version }}" = "8" ]; then
+            export MAVEN_OPTS="-Djava.security.manager=allow -Djava.security.egd=file:/dev/urandom -Djava.security.properties=${JAVA_HOME}/lib/security/java.security"
+          fi
           mvn -pl api clean test-compile
           mvn -pl api test jacoco:report
       - name: Debug Test Results (Unix)
