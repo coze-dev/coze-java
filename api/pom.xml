@@ -292,6 +292,8 @@
                     <systemPropertyVariables>
                         <okhttp.platform>jdk-8</okhttp.platform>
                         <java.security.egd>file:/dev/urandom</java.security.egd>
+                        <javax.net.ssl.trustStore>NONE</javax.net.ssl.trustStore>
+                        <javax.net.ssl.trustStoreType>NONE</javax.net.ssl.trustStoreType>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
