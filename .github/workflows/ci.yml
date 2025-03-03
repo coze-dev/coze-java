@@ -36,9 +36,12 @@ jobs:
         if: matrix.java-version == '8'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libnss3-dev libsunec
+          sudo apt-get install -y libnss3-dev
+          # 创建目录并链接 Java 8 自带的 libsunec.so
           sudo mkdir -p /usr/java/packages/lib/amd64
-          sudo ln -s /usr/lib/jvm/temurin-8-jdk-amd64/jre/lib/amd64/libsunec.so /usr/java/packages/lib/amd64/
+          sudo ln -sf $(readlink -f /usr/lib/jvm/temurin-8-jdk-amd64/jre/lib/amd64/libsunec.so) /usr/java/packages/lib/amd64/
+          # 确保文件存在
+          ls -l /usr/java/packages/lib/amd64/libsunec.so
       - name: Build and Test with Coverage
         env:
           MAVEN_OPTS: ${{ matrix.java-version == '8' && '-Dos.name=Linux' || '' }}
