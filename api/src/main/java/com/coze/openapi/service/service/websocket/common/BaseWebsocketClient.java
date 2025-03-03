@@ -23,8 +23,7 @@ public abstract class BaseWebsocketClient {
     Request request = new Request.Builder().url(url).build();
     this.executorService = Executors.newSingleThreadExecutor();
     this.listener = new BaseWebSocketListener(this::handleEvent, handler, this);
-    this.ws =
-        client.newWebSocket(request, this.listener);
+    this.ws = client.newWebSocket(request, this.listener);
   }
 
   protected void sendEvent(BaseEvent event) {
@@ -55,7 +54,7 @@ public abstract class BaseWebsocketClient {
       Thread.currentThread().interrupt();
       // 强制关闭
       executorService.shutdownNow();
-    }finally {
+    } finally {
       this.listener.shutdown();
     }
   }

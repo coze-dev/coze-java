@@ -55,8 +55,8 @@ public class BaseWebSocketListener extends WebSocketListener {
   }
 
   public void shutdown() {
-        if (!executorService.isShutdown()) {
-            executorService.shutdown();
-          }
-      }
+    if (!executorService.isShutdown()) {
+      executorService.shutdown();
+    }
+  }
 }
