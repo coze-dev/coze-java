@@ -293,9 +293,6 @@
                         <okhttp.platform>jdk-8</okhttp.platform>
                         <java.security.egd>file:/dev/urandom</java.security.egd>
                     </systemPropertyVariables>
-                    <environmentVariables>
-                        <JAVA_TOOL_OPTIONS>-Djava.security.manager=allow</JAVA_TOOL_OPTIONS>
-                    </environmentVariables>
                 </configuration>
             </plugin>
 
