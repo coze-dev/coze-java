@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import com.coze.openapi.api.CozeAuthAPI;
@@ -77,28 +76,25 @@ public abstract class OAuthClient {
     this.executorService = builder.client.dispatcher().executorService();
   }
 
-  protected String getOAuthURL(@NotNull String redirectURI, String state) {
+  protected String getOAuthURL(String redirectURI, String state) {
     return this._getOAuthURL(redirectURI, state, null, null, null);
   }
 
-  protected String getOAuthURL(@NotNull String redirectURI, String state, String workspace) {
+  protected String getOAuthURL(String redirectURI, String state, String workspace) {
     return this._getOAuthURL(redirectURI, state, null, null, workspace);
   }
 
   protected String getOAuthURL(
-      @NotNull String redirectURI,
-      String state,
-      @NotNull String codeChallenge,
-      @NotNull String codeChallengeMethod) {
+      String redirectURI, String state, String codeChallenge, String codeChallengeMethod) {
     return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, null);
   }
 
   protected String getOAuthURL(
-      @NotNull String redirectURI,
+      String redirectURI,
       String state,
-      @NotNull String codeChallenge,
-      @NotNull String codeChallengeMethod,
-      @NotNull String workspaceID) {
+      String codeChallenge,
+      String codeChallengeMethod,
+      String workspaceID) {
     return this._getOAuthURL(redirectURI, state, codeChallenge, codeChallengeMethod, workspaceID);
   }
 
@@ -195,7 +191,7 @@ public abstract class OAuthClient {
 
   private OAuthToken request(
       String code, String secret, GrantType grantType, String refreshToken, String redirectURI) {
-    GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
+    GetAccessTokenReq.GetAccessTokenReqBuilder<?, ?> builder = GetAccessTokenReq.builder();
     builder
         .clientID(this.clientID)
         .grantType(grantType.getValue())
@@ -330,7 +326,7 @@ public abstract class OAuthClient {
             defaultClient(
                 Duration.ofMillis(this.readTimeout), Duration.ofMillis(this.connectTimeout));
       } else {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
+        OkHttpClient.Builder builder = client.newBuilder();
         builder.addInterceptor(new UserAgentInterceptor());
 
         this.client = builder.build();

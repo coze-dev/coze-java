@@ -1,17 +1,12 @@
 package com.coze.openapi.client.bots;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.client.bots.model.BotKnowledge;
 import com.coze.openapi.client.bots.model.BotOnboardingInfo;
 import com.coze.openapi.client.bots.model.BotPromptInfo;
 import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -21,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class UpdateBotReq extends BaseReq {
 
-  @NotNull
+  @NonNull
   @JsonProperty("bot_id")
   private String botID;
 

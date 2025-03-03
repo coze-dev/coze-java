@@ -242,7 +242,7 @@ public class CozeAPI {
       if (hasAuthInterceptor && hasTimeoutInterceptor && hasUserAgentInterceptor) {
         return client;
       }
-      OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
+      OkHttpClient.Builder builder = client.newBuilder();
       if (!hasAuthInterceptor) {
         builder.addInterceptor(new AuthenticationInterceptor(this.auth));
       }

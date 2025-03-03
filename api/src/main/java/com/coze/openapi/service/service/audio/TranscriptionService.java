@@ -38,9 +38,11 @@ public class TranscriptionService {
   private CreateTranscriptionsResp uploadFile(Object fileSource, String filename, BaseReq req) {
     RequestBody requestFile;
     if (fileSource instanceof File) {
-      requestFile = RequestBody.create((File) fileSource, MediaType.parse("multipart/form-data"));
+      MediaType mediaType = MediaType.parse("multipart/form-data");
+      requestFile = RequestBody.create(mediaType, (File) fileSource);
     } else {
-      requestFile = RequestBody.create((byte[]) fileSource, MediaType.parse("multipart/form-data"));
+      MediaType mediaType = MediaType.parse("multipart/form-data");
+      requestFile = RequestBody.create(mediaType, (byte[]) fileSource);
     }
 
     MultipartBody.Part body = MultipartBody.Part.createFormData("file", filename, requestFile);

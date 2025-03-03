@@ -1,7 +1,5 @@
 package com.coze.openapi.client.dataset.document;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -21,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class ListDocumentReq extends BaseReq {
   /** The ID of the knowledge base. */
-  @NotNull
+  @NonNull
   @JsonProperty("dataset_id")
   private Long datasetID;
 
