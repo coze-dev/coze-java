@@ -68,26 +68,22 @@ public class WebsocketAudioTranscriptionsClient extends BaseWebsocketClient {
         case EventType.TRANSCRIPTIONS_MESSAGE_UPDATE:
           TranscriptionsMessageUpdateEvent messageUpdateEvent =
               objectMapper.treeToValue(jsonNode, TranscriptionsMessageUpdateEvent.class);
-          handler.onTranscriptionsMessageUpdate(
-              this, messageUpdateEvent);
+          handler.onTranscriptionsMessageUpdate(this, messageUpdateEvent);
           break;
         case EventType.TRANSCRIPTIONS_MESSAGE_COMPLETED:
           TranscriptionsMessageCompletedEvent messageCompletedEvent =
               objectMapper.treeToValue(jsonNode, TranscriptionsMessageCompletedEvent.class);
-          handler.onTranscriptionsMessageCompleted(
-              this, messageCompletedEvent);
+          handler.onTranscriptionsMessageCompleted(this, messageCompletedEvent);
           break;
         case EventType.INPUT_AUDIO_BUFFER_CLEARED:
           InputAudioBufferClearedEvent bufferClearedEvent =
               objectMapper.treeToValue(jsonNode, InputAudioBufferClearedEvent.class);
-          handler.onInputAudioBufferCleared(
-              this, bufferClearedEvent);
+          handler.onInputAudioBufferCleared(this, bufferClearedEvent);
           break;
         case EventType.INPUT_AUDIO_BUFFER_COMPLETED:
           InputAudioBufferCompletedEvent bufferCompletedEvent =
               objectMapper.treeToValue(jsonNode, InputAudioBufferCompletedEvent.class);
-          handler.onInputAudioBufferCompleted(
-              this, bufferCompletedEvent);
+          handler.onInputAudioBufferCompleted(this, bufferCompletedEvent);
           break;
         case EventType.ERROR:
           ErrorEvent errorEvent = objectMapper.treeToValue(jsonNode, ErrorEvent.class);

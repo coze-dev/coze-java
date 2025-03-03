@@ -108,14 +108,12 @@ public class WebsocketChatClient extends BaseWebsocketClient {
         case EventType.CONVERSATION_AUDIO_TRANSCRIPT_COMPLETED:
           ConversationAudioTranscriptCompletedEvent transcriptCompletedEvent =
               objectMapper.treeToValue(jsonNode, ConversationAudioTranscriptCompletedEvent.class);
-          handler.onConversationAudioTranscriptCompleted(
-              this, transcriptCompletedEvent);
+          handler.onConversationAudioTranscriptCompleted(this, transcriptCompletedEvent);
           break;
         case EventType.CONVERSATION_AUDIO_TRANSCRIPT_UPDATE:
           ConversationAudioTranscriptUpdateEvent transcriptUpdateEvent =
               objectMapper.treeToValue(jsonNode, ConversationAudioTranscriptUpdateEvent.class);
-          handler.onConversationAudioTranscriptUpdate(
-              this, transcriptUpdateEvent);
+          handler.onConversationAudioTranscriptUpdate(this, transcriptUpdateEvent);
           break;
         case EventType.CONVERSATION_CHAT_CANCELED:
           ConversationChatCanceledEvent chatCanceledEvent =
@@ -145,8 +143,7 @@ public class WebsocketChatClient extends BaseWebsocketClient {
         case EventType.CONVERSATION_CHAT_REQUIRES_ACTION:
           ConversationChatRequiresActionEvent chatRequiresActionEvent =
               objectMapper.treeToValue(jsonNode, ConversationChatRequiresActionEvent.class);
-          handler.onConversationChatRequiresAction(
-              this, chatRequiresActionEvent);
+          handler.onConversationChatRequiresAction(this, chatRequiresActionEvent);
           break;
         case EventType.CONVERSATION_CLEARED:
           ConversationClearedEvent clearedEvent =
