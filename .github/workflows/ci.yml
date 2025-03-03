@@ -43,16 +43,22 @@ jobs:
           distribution: ${{ matrix.java-version == '8' && matrix.os == 'macos-latest' && 'zulu' || 'temurin' }}
           java-version: ${{ matrix.java-version }}
           cache: 'maven'
+          java-package: 'jdk'
+      - name: Set JAVA_HOME (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "JAVA_HOME=${{ env.JAVA_HOME }}" >> $GITHUB_ENV
+          echo "${{ env.JAVA_HOME }}/bin" >> $GITHUB_PATH
+        shell: bash
       - name: Code style check
-        run: mvn spotless:check
+        run: |
+          echo "Java version:"
+          java -version
+          echo "Javac version:"
+          javac -version
+          mvn -v
+          mvn spotless:check
       - name: Build and Test with Coverage
-        env:
-          MAVEN_OPTS: >-
-            ${{ matrix.java-version == '8' && '
-            -Djava.nio.fs.spi.DefaultFileSystemProvider=sun.nio.fs.LinuxFileSystemProvider
-            -Dos.name=Linux
-            -Dos.arch=amd64
-            ' || '' }}
         run: |
           mvn -pl api clean test-compile
           mvn -pl api test jacoco:report
