@@ -19,7 +19,8 @@ import com.coze.openapi.client.websocket.event.downstream.InputAudioBufferCleare
 import com.coze.openapi.client.websocket.event.downstream.InputAudioBufferCompletedEvent;
 import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
 
-public abstract class WebsocketChatCallbackHandler extends BaseCallbackHandler<WebsocketChatClient> {
+public abstract class WebsocketChatCallbackHandler
+    extends BaseCallbackHandler<WebsocketChatClient> {
   public WebsocketChatCallbackHandler() {}
 
   // 对话连接成功事件 (chat.created)
@@ -86,5 +87,4 @@ public abstract class WebsocketChatCallbackHandler extends BaseCallbackHandler<W
   // 语音提交成功事件 (input_audio_buffer.completed)
   public void onInputAudioBufferCompleted(
       WebsocketChatClient client, InputAudioBufferCompletedEvent event) {}
-
 }

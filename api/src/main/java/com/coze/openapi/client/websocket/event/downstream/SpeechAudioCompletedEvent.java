@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 // event_type: speech.audio.completed
 public class SpeechAudioCompletedEvent extends BaseEvent {
-    @JsonProperty("event_type")
-    @Builder.Default
-    private final String eventType = EventType.SPEECH_AUDIO_COMPLETED;
-} 
+  @JsonProperty("event_type")
+  @Builder.Default
+  private final String eventType = EventType.SPEECH_AUDIO_COMPLETED;
+}

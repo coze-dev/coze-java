@@ -14,9 +14,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 // event_type: input_text_buffer.completed
 public class InputTextBufferCompletedEvent extends BaseEvent {
-    @JsonProperty("event_type")
-    @Builder.Default
-    private final String eventType = EventType.INPUT_TEXT_BUFFER_COMPLETED;
-
-
-} 
+  @JsonProperty("event_type")
+  @Builder.Default
+  private final String eventType = EventType.INPUT_TEXT_BUFFER_COMPLETED;
+}

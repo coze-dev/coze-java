@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class WsChatReq extends BaseReq {
+public class WebsocketChatCreateReq extends BaseReq {
   @NonNull private String botID;
   @NonNull private WebsocketChatCallbackHandler callbackHandler;
 }

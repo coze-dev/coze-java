@@ -41,6 +41,8 @@ public class EventType {
   // resp
   public static final String TRANSCRIPTIONS_CREATED =
       "transcriptions.created"; // after transcriptions created
+  public static final String TRANSCRIPTIONS_UPDATED =
+      "transcriptions.updated"; // after transcriptions config updated
   public static final String INPUT_AUDIO_BUFFER_COMPLETED =
       "input_audio_buffer.completed"; // received `input_audio_buffer.complete` event
   public static final String TRANSCRIPTIONS_MESSAGE_UPDATE =

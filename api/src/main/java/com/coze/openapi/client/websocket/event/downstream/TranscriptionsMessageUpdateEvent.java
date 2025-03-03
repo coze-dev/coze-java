@@ -2,29 +2,33 @@ package com.coze.openapi.client.websocket.event.downstream;
 
 import com.coze.openapi.client.websocket.common.BaseEvent;
 import com.coze.openapi.client.websocket.event.EventType;
-import com.coze.openapi.client.websocket.event.model.SpeechUpdateEventData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Data
+@lombok.Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-// event_type: speech.update
-public class SpeechUpdatedEvent extends BaseEvent {
+// 转录消息更新事件
+// event_type: transcriptions.message.update
+public class TranscriptionsMessageUpdateEvent extends BaseEvent {
   @JsonProperty("event_type")
   @Builder.Default
-  private final String eventType = EventType.SPEECH_UPDATED;
+  private final String eventType = EventType.TRANSCRIPTIONS_MESSAGE_UPDATE;
 
   @JsonProperty("data")
-  private SpeechUpdateEventData data;
+  private Data data;
+
+  @lombok.Data
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Data {
+    @JsonProperty("content")
+    private String content;
+  }
 }

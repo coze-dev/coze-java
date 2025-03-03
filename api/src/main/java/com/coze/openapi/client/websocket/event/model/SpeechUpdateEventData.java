@@ -1,6 +1,7 @@
 package com.coze.openapi.client.websocket.event.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 
 @Data
@@ -8,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class SpeechEventUpdateEventData {
-    @JsonProperty("output_audio")
-    private OutputAudio outputAudio;
+public class SpeechUpdateEventData {
+  @JsonProperty("output_audio")
+  private OutputAudio outputAudio;
 }

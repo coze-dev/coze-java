@@ -2,7 +2,6 @@ package com.coze.openapi.client.websocket.event.upstream;
 
 import com.coze.openapi.client.websocket.common.BaseEvent;
 import com.coze.openapi.client.websocket.event.EventType;
-import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;

@@ -8,13 +8,16 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class BaseWebSocketListener<T> extends WebSocketListener {
+public class BaseWebSocketListener extends WebSocketListener {
   private final ExecutorService executorService = Executors.newSingleThreadExecutor();
   private final BiConsumer<WebSocket, String> handleEvent;
-  private final BaseCallbackHandler<T> callbackHandler;
-  private final T client;
+  private final BaseCallbackHandler callbackHandler;
+  private final BaseWebsocketClient client;
 
-  public BaseWebSocketListener(BiConsumer<WebSocket, String> handleEvent, BaseCallbackHandler<T> handler, T client) {
+  public BaseWebSocketListener(
+      BiConsumer<WebSocket, String> handleEvent,
+      BaseCallbackHandler handler,
+      BaseWebsocketClient client) {
     this.handleEvent = handleEvent;
     this.callbackHandler = handler;
     this.client = client;
@@ -22,6 +25,7 @@ public class BaseWebSocketListener<T> extends WebSocketListener {
 
   @Override
   public void onOpen(WebSocket webSocket, okhttp3.Response response) {
+    System.out.println("onOpen");
   }
 
   @Override
@@ -41,7 +45,8 @@ public class BaseWebSocketListener<T> extends WebSocketListener {
 
   @Override
   public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
-    this.callbackHandler.onFailure(this.client, new RuntimeException("websocket connection error: " + t.getMessage(), t));
+    this.callbackHandler.onFailure(
+        this.client, new RuntimeException("websocket connection error: " + t.getMessage(), t));
   }
 
   @Override

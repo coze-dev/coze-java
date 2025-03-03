@@ -20,7 +20,7 @@ import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.service.websocket.chat.WebsocketChatCallbackHandler;
 import com.coze.openapi.service.service.websocket.chat.WebsocketChatClient;
-import com.coze.openapi.service.service.websocket.chat.WsChatReq;
+import com.coze.openapi.service.service.websocket.chat.WebsocketChatCreateReq;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -140,7 +140,8 @@ public class ChatExample {
 
     WebsocketChatClient client = null;
     try {
-      client = coze.websocket().chat().create(new WsChatReq(botID, new CallbackHandler()));
+      client =
+          coze.websocket().chat().create(new WebsocketChatCreateReq(botID, new CallbackHandler()));
       CreateSpeechResp speechResp =
           coze.audio()
               .speech()

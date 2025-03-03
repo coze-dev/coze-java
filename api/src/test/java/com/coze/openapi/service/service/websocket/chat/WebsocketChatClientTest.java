@@ -30,7 +30,7 @@ class WebsocketChatClientTest {
     MockitoAnnotations.openMocks(this);
     when(mockOkHttpClient.newWebSocket(any(), any())).thenReturn(mockWebSocket);
 
-    WsChatReq req = new WsChatReq("test-bot-id", mockCallbackHandler);
+    WebsocketChatCreateReq req = new WebsocketChatCreateReq("test-bot-id", mockCallbackHandler);
     client = new WebsocketChatClient(mockOkHttpClient, "ws://test.com", req);
   }
 

@@ -8,7 +8,7 @@ public class WebsocketChatClientBuilder {
   private final String baseUrl;
   private final OkHttpClient httpClient;
 
-  public WebsocketChatClient create(WsChatReq req) {
+  public WebsocketChatClient create(WebsocketChatCreateReq req) {
     return new WebsocketChatClient(httpClient, baseUrl, req);
   }
 }
