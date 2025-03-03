@@ -23,6 +23,12 @@ public class ChatUsage {
   @JsonProperty("output_count")
   private int outputCount;
 
+  @JsonProperty("output_tokens")
+  private int outputTokens;
+
+  @JsonProperty("input_tokens")
+  private int inputTokens;
+
   /** The total number of Tokens consumed for the input part. */
   @JsonProperty("input_count")
   private int inputCount;

@@ -18,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 // 对话创建事件
 // event_type: chat.created
-@Builder
 public class ChatCreatedEvent extends BaseEvent {
   @JsonProperty("event_type")
   @Builder.Default

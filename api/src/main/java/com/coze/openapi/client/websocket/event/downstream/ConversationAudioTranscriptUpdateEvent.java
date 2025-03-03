@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Data
+@lombok.Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

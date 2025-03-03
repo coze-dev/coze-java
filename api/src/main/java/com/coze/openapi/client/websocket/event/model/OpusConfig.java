@@ -18,4 +18,7 @@ public class OpusConfig {
 
   @JsonProperty("frame_size_ms")
   private Double frameSizeMs;
+
+  @JsonProperty("limit_config")
+  private LimitConfig limitConfig;
 }

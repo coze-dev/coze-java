@@ -29,62 +29,64 @@ public abstract class WebsocketChatCallbackHandler
   // 对话配置成功事件 (chat.updated)
   public void onChatUpdated(WebsocketChatClient client, ChatUpdatedEvent event) {}
 
-  // 语音回复完成事件 (conversation.audio.completed)
-  public void onConversationAudioCompleted(
-      WebsocketChatClient client, ConversationAudioCompletedEvent event) {}
+    // 对话创建事件 (conversation.chat.created)
+    public void onConversationChatCreated(
+        WebsocketChatClient client, ConversationChatCreatedEvent event) {}
+
+          // 对话正在处理事件 (conversation.chat.in_progress)
+  public void onConversationChatInProgress(
+    WebsocketChatClient client, ConversationChatInProgressEvent event) {}
+
+      // 增量消息事件 (conversation.message.delta)
+  public void onConversationMessageDelta(
+    WebsocketChatClient client, ConversationMessageDeltaEvent event) {}
 
   // 增量语音事件 (conversation.audio.delta)
   public void onConversationAudioDelta(
       WebsocketChatClient client, ConversationAudioDeltaEvent event) {}
 
-  // 语音转录完成事件 (conversation.audio_transcript.completed)
-  public void onConversationAudioTranscriptCompleted(
-      WebsocketChatClient client, ConversationAudioTranscriptCompletedEvent event) {}
+        // 消息完成事件 (conversation.message.completed)
+  public void onConversationMessageCompleted(
+    WebsocketChatClient client, ConversationMessageCompletedEvent event) {}
 
-  // 语音转录更新事件 (conversation.audio_transcript.update)
-  public void onConversationAudioTranscriptUpdate(
-      WebsocketChatClient client, ConversationAudioTranscriptUpdateEvent event) {}
-
-  // 对话取消事件 (conversation.chat.canceled)
-  public void onConversationChatCanceled(
-      WebsocketChatClient client, ConversationChatCanceledEvent event) {}
+  // 语音回复完成事件 (conversation.audio.completed)
+  public void onConversationAudioCompleted(
+      WebsocketChatClient client, ConversationAudioCompletedEvent event) {}
 
   // 对话完成事件 (conversation.chat.completed)
   public void onConversationChatCompleted(
       WebsocketChatClient client, ConversationChatCompletedEvent event) {}
 
-  // 对话创建事件 (conversation.chat.created)
-  public void onConversationChatCreated(
-      WebsocketChatClient client, ConversationChatCreatedEvent event) {}
-
   // 对话失败事件 (conversation.chat.failed)
   public void onConversationChatFailed(
       WebsocketChatClient client, ConversationChatFailedEvent event) {}
 
-  // 对话正在处理事件 (conversation.chat.in_progress)
-  public void onConversationChatInProgress(
-      WebsocketChatClient client, ConversationChatInProgressEvent event) {}
+ // 语音提交成功事件 (input_audio_buffer.completed)
+ public void onInputAudioBufferCompleted(
+    WebsocketChatClient client, InputAudioBufferCompletedEvent event) {}
 
-  // 端插件事件 (conversation.chat.requires_action)
-  public void onConversationChatRequiresAction(
-      WebsocketChatClient client, ConversationChatRequiresActionEvent event) {}
-
-  // 对话清除事件 (conversation.cleared)
-  public void onConversationCleared(WebsocketChatClient client, ConversationClearedEvent event) {}
-
-  // 消息完成事件 (conversation.message.completed)
-  public void onConversationMessageCompleted(
-      WebsocketChatClient client, ConversationMessageCompletedEvent event) {}
-
-  // 增量消息事件 (conversation.message.delta)
-  public void onConversationMessageDelta(
-      WebsocketChatClient client, ConversationMessageDeltaEvent event) {}
 
   // 语音清除成功事件 (input_audio_buffer.cleared)
   public void onInputAudioBufferCleared(
       WebsocketChatClient client, InputAudioBufferClearedEvent event) {}
 
-  // 语音提交成功事件 (input_audio_buffer.completed)
-  public void onInputAudioBufferCompleted(
-      WebsocketChatClient client, InputAudioBufferCompletedEvent event) {}
+  // 对话清除事件 (conversation.cleared)
+  public void onConversationCleared(WebsocketChatClient client, ConversationClearedEvent event) {}
+
+  // 对话取消事件 (conversation.chat.canceled)
+  public void onConversationChatCanceled(
+      WebsocketChatClient client, ConversationChatCanceledEvent event) {}
+
+  // 语音转录更新事件 (conversation.audio_transcript.update)
+  public void onConversationAudioTranscriptUpdate(
+      WebsocketChatClient client, ConversationAudioTranscriptUpdateEvent event) {}
+
+  // 语音转录完成事件 (conversation.audio_transcript.completed)
+  public void onConversationAudioTranscriptCompleted(
+      WebsocketChatClient client, ConversationAudioTranscriptCompletedEvent event) {}
+      
+  // 端插件事件 (conversation.chat.requires_action)
+  public void onConversationChatRequiresAction(
+      WebsocketChatClient client, ConversationChatRequiresActionEvent event) {}
+
 }

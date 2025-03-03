@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Data
+@lombok.Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +24,7 @@ public class SpeechAudioUpdateEvent extends BaseEvent {
   @JsonProperty("data")
   private Data data;
 
+  @lombok.Data
   @NoArgsConstructor
   @AllArgsConstructor
   public static class Data {
