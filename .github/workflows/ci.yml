@@ -34,7 +34,7 @@ jobs:
         run: mvn spotless:check
       - name: Build and Test with Coverage
         env:
-          MAVEN_OPTS: ${{ matrix.java-version == '8' && '-Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.PollSelectorProvider -Djava.security.egd=file:/dev/urandom' || '' }}
+          MAVEN_OPTS: ${{ matrix.java-version == '8' && '-Dos.name=Linux' || '' }}
         run: |
           mvn -pl api clean test-compile
           mvn -pl api test jacoco:report
