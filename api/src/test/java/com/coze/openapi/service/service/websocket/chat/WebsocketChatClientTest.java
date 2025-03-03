@@ -32,11 +32,21 @@ public class WebsocketChatClientTest {
   @Captor private ArgumentCaptor<ChatUpdatedEvent> chatUpdatedEventCaptor;
   @Captor private ArgumentCaptor<ConversationAudioCompletedEvent> audioCompletedEventCaptor;
   @Captor private ArgumentCaptor<ConversationAudioDeltaEvent> audioDeltaEventCaptor;
-  @Captor private ArgumentCaptor<ConversationAudioTranscriptUpdateEvent> audioTranscriptUpdateEventCaptor;
+
+  @Captor
+  private ArgumentCaptor<ConversationAudioTranscriptUpdateEvent> audioTranscriptUpdateEventCaptor;
+
   @Captor private ArgumentCaptor<InputAudioBufferClearedEvent> inputAudioBufferClearedEventCaptor;
-  @Captor private ArgumentCaptor<InputAudioBufferCompletedEvent> inputAudioBufferCompletedEventCaptor;
+
+  @Captor
+  private ArgumentCaptor<InputAudioBufferCompletedEvent> inputAudioBufferCompletedEventCaptor;
+
   @Captor private ArgumentCaptor<ErrorEvent> errorEventCaptor;
-  @Captor private ArgumentCaptor<ConversationAudioTranscriptCompletedEvent> audioTranscriptCompletedEventCaptor;
+
+  @Captor
+  private ArgumentCaptor<ConversationAudioTranscriptCompletedEvent>
+      audioTranscriptCompletedEventCaptor;
+
   @Captor private ArgumentCaptor<ConversationChatCompletedEvent> chatCompletedEventCaptor;
   @Captor private ArgumentCaptor<ConversationChatCreatedEvent> conversationChatCreatedEventCaptor;
   @Captor private ArgumentCaptor<ConversationChatFailedEvent> chatFailedEventCaptor;
@@ -131,7 +141,7 @@ public class WebsocketChatClientTest {
     ChatUpdatedEvent event = chatUpdatedEventCaptor.getValue();
     assertEquals(EventType.CHAT_UPDATED, event.getEventType());
     assertEquals("event_id", event.getId());
-    
+
     // 验证 chat_config
     assertEquals(true, event.getData().getChatConfig().getAutoSaveHistory());
     assertEquals("xxxx", event.getData().getChatConfig().getConversationId());
@@ -143,17 +153,18 @@ public class WebsocketChatClientTest {
     assertEquals(24000, event.getData().getInputAudio().getSampleRate());
     assertEquals(1, event.getData().getInputAudio().getChannel());
     assertEquals(16, event.getData().getInputAudio().getBitDepth());
-    
+
     // 验证 output_audio
     assertEquals("opus", event.getData().getOutputAudio().getCodec());
     assertEquals(48000, event.getData().getOutputAudio().getOpusConfig().getBitrate());
     assertEquals(false, event.getData().getOutputAudio().getOpusConfig().getUseCbr());
     assertEquals(10, event.getData().getOutputAudio().getOpusConfig().getFrameSizeMs());
     assertEquals(2, event.getData().getOutputAudio().getOpusConfig().getLimitConfig().getPeriod());
-    assertEquals(300, event.getData().getOutputAudio().getOpusConfig().getLimitConfig().getMaxFrameNum());
+    assertEquals(
+        300, event.getData().getOutputAudio().getOpusConfig().getLimitConfig().getMaxFrameNum());
     assertEquals(50, event.getData().getOutputAudio().getSpeechRate());
     assertEquals("74466752759302*****", event.getData().getOutputAudio().getVoiceId());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -161,33 +172,34 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleConversationAudioCompletedEvent() {
     // event_type: conversation.audio.completed
-    String json = "{\n" +
-            "  \"id\": \"event_1\",\n" +
-            "  \"event_type\": \"conversation.audio.completed\",\n" +
-            "  \"data\": {\n" +
-            "    \"id\": \"msg_002\",\n" +
-            "    \"role\": \"assistant\",\n" +
-            "    \"type\": \"function_call\",\n" +
-            "    \"content\": \"{\\\"name\\\":\\\"toutiaosousuo-search\\\",\\\"arguments\\\":{\\\"cursor\\\":0,\\\"input_query\\\":\\\"今天的体育新闻\\\",\\\"plugin_id\\\":7281192623887548473,\\\"api_id\\\":7288907006982012986,\\\"plugin_type\\\":1}}\",\n" +
-            "    \"content_type\": \"audio\",\n" +
-            "    \"chat_id\": \"123\",\n" +
-            "    \"conversation_id\": \"123\",\n" +
-            "    \"bot_id\": \"222\"\n" +
-            "  },\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"conversation.audio.completed\",\n"
+            + "  \"data\": {\n"
+            + "    \"id\": \"msg_002\",\n"
+            + "    \"role\": \"assistant\",\n"
+            + "    \"type\": \"function_call\",\n"
+            + "    \"content\": \"{\\\"name\\\":\\\"toutiaosousuo-search\\\",\\\"arguments\\\":{\\\"cursor\\\":0,\\\"input_query\\\":\\\"今天的体育新闻\\\",\\\"plugin_id\\\":7281192623887548473,\\\"api_id\\\":7288907006982012986,\\\"plugin_type\\\":1}}\",\n"
+            + "    \"content_type\": \"audio\",\n"
+            + "    \"chat_id\": \"123\",\n"
+            + "    \"conversation_id\": \"123\",\n"
+            + "    \"bot_id\": \"222\"\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationAudioCompleted(
-        eq(client), audioCompletedEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationAudioCompleted(eq(client), audioCompletedEventCaptor.capture());
+
     ConversationAudioCompletedEvent event = audioCompletedEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_AUDIO_COMPLETED, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals("msg_002", event.getData().getId());
     assertEquals("assistant", event.getData().getRole().getValue());
@@ -196,14 +208,14 @@ public class WebsocketChatClientTest {
     assertEquals("123", event.getData().getChatId());
     assertEquals("123", event.getData().getConversationId());
     assertEquals("222", event.getData().getBotId());
-    
+
     // 验证 content 中的 function_call 数据
     String content = event.getData().getContent();
     assertTrue(content.contains("toutiaosousuo-search"));
     assertTrue(content.contains("今天的体育新闻"));
     assertTrue(content.contains("7281192623887548473"));
     assertTrue(content.contains("7288907006982012986"));
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -212,33 +224,33 @@ public class WebsocketChatClientTest {
   public void testHandleConversationAudioDeltaEvent() {
     // event_type: conversation.audio.delta
     String json =
-        "{\n" +
-                "  \"id\": \"event_1\",\n" +
-                "  \"event_type\": \"conversation.audio.delta\",\n" +
-                "  \"data\": {\n" +
-                "      \"id\": \"msg_006\",\n" +
-                "      \"role\": \"assistant\",\n" +
-                "      \"type\": \"answer\",\n" +
-                "      \"content\": \"你好你好\",\n" +
-                "      \"content_type\": \"text\",\n" +
-                "      \"chat_id\": \"123\",\n" +
-                "      \"conversation_id\": \"123\",\n" +
-                "      \"bot_id\": \"222\"\n" +
-                "  },\n" +
-                "  \"detail\": {\n" +
-                "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-                "  }\n" +
-                "}\n";
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"conversation.audio.delta\",\n"
+            + "  \"data\": {\n"
+            + "      \"id\": \"msg_006\",\n"
+            + "      \"role\": \"assistant\",\n"
+            + "      \"type\": \"answer\",\n"
+            + "      \"content\": \"你好你好\",\n"
+            + "      \"content_type\": \"text\",\n"
+            + "      \"chat_id\": \"123\",\n"
+            + "      \"conversation_id\": \"123\",\n"
+            + "      \"bot_id\": \"222\"\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationAudioDelta(
-        eq(client), audioDeltaEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationAudioDelta(eq(client), audioDeltaEventCaptor.capture());
+
     ConversationAudioDeltaEvent event = audioDeltaEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_AUDIO_DELTA, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals("msg_006", event.getData().getId());
     assertEquals("assistant", event.getData().getRole().getValue());
@@ -248,7 +260,7 @@ public class WebsocketChatClientTest {
     assertEquals("123", event.getData().getChatId());
     assertEquals("123", event.getData().getConversationId());
     assertEquals("222", event.getData().getBotId());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -256,29 +268,32 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleConversationAudioTranscriptCompletedEvent() {
     // event_type: conversation.audio_transcript.completed
-    String json = "{\n" +
-            "  \"id\": \"event_1\",\n" +
-            "  \"event_type\": \"conversation.audio_transcript.completed\",\n" +
-            "  \"data\": {\n" +
-            "      \"content\": \"今天的天气怎么样？\"\n" +
-            "  },\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"conversation.audio_transcript.completed\",\n"
+            + "  \"data\": {\n"
+            + "      \"content\": \"今天的天气怎么样？\"\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationAudioTranscriptCompleted(
-        eq(client), audioTranscriptCompletedEventCaptor.capture());
-    
-    ConversationAudioTranscriptCompletedEvent event = audioTranscriptCompletedEventCaptor.getValue();
+    verify(mockCallbackHandler)
+        .onConversationAudioTranscriptCompleted(
+            eq(client), audioTranscriptCompletedEventCaptor.capture());
+
+    ConversationAudioTranscriptCompletedEvent event =
+        audioTranscriptCompletedEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_AUDIO_TRANSCRIPT_COMPLETED, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals("今天的天气怎么样？", event.getData().getContent());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -287,29 +302,30 @@ public class WebsocketChatClientTest {
   public void testHandleConversationAudioTranscriptUpdateEvent() {
     // event_type: conversation.audio_transcript.update
     String json =
-        "{\n" +
-                "  \"id\": \"event_1\",\n" +
-                "  \"event_type\": \"conversation.audio_transcript.update\",\n" +
-                "  \"data\": {\n" +
-                "      \"content\": \"今天的\"\n" +
-                "  },\n" +
-                "  \"detail\": {\n" +
-                "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-                "  }\n" +
-                "}\n";
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"conversation.audio_transcript.update\",\n"
+            + "  \"data\": {\n"
+            + "      \"content\": \"今天的\"\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationAudioTranscriptUpdate(
-        eq(client), audioTranscriptUpdateEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationAudioTranscriptUpdate(
+            eq(client), audioTranscriptUpdateEventCaptor.capture());
+
     ConversationAudioTranscriptUpdateEvent event = audioTranscriptUpdateEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_AUDIO_TRANSCRIPT_UPDATE, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals("今天的", event.getData().getContent());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -328,39 +344,40 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleConversationChatCompletedEvent() {
     // event_type: conversation.chat.completed
-    String json = "{\n" +
-            "  \"id\": \"event_1\",\n" +
-            "  \"event_type\": \"conversation.chat.completed\",\n" +
-            "  \"data\": {\n" +
-            "    \"id\": \"123\",\n" +
-            "    \"chat_id\": \"123\",\n" +
-            "    \"conversation_id\": \"123\",\n" +
-            "    \"bot_id\": \"222\",\n" +
-            "    \"created_at\": 1710348675,\n" +
-            "    \"completed_at\": 1710348675,\n" +
-            "    \"last_error\": null,\n" +
-            "    \"meta_data\": {},\n" +
-            "    \"status\": \"completed\",\n" +
-            "    \"usage\": {\n" +
-            "        \"token_count\": 3397,\n" +
-            "        \"output_tokens\": 1173,\n" +
-            "        \"input_tokens\": 2224\n" +
-            "    }\n" +
-            "  },\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"conversation.chat.completed\",\n"
+            + "  \"data\": {\n"
+            + "    \"id\": \"123\",\n"
+            + "    \"chat_id\": \"123\",\n"
+            + "    \"conversation_id\": \"123\",\n"
+            + "    \"bot_id\": \"222\",\n"
+            + "    \"created_at\": 1710348675,\n"
+            + "    \"completed_at\": 1710348675,\n"
+            + "    \"last_error\": null,\n"
+            + "    \"meta_data\": {},\n"
+            + "    \"status\": \"completed\",\n"
+            + "    \"usage\": {\n"
+            + "        \"token_count\": 3397,\n"
+            + "        \"output_tokens\": 1173,\n"
+            + "        \"input_tokens\": 2224\n"
+            + "    }\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationChatCompleted(
-        eq(client), chatCompletedEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationChatCompleted(eq(client), chatCompletedEventCaptor.capture());
+
     ConversationChatCompletedEvent event = chatCompletedEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_CHAT_COMPLETED, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals("123", event.getData().getID());
     assertEquals("123", event.getData().getConversationID());
@@ -369,12 +386,12 @@ public class WebsocketChatClientTest {
     assertEquals(1710348675, event.getData().getCompletedAt());
     assertNull(event.getData().getLastError());
     assertEquals("completed", event.getData().getStatus().getValue());
-    
+
     // 验证 usage
     assertEquals(3397, event.getData().getUsage().getTokenCount());
     assertEquals(1173, event.getData().getUsage().getOutputTokens());
     assertEquals(2224, event.getData().getUsage().getInputTokens());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -382,34 +399,35 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleConversationChatCreatedEvent() {
     // event_type: conversation.chat.created
-    String json = "{\n" +
-            "  \"id\": \"744666853824656xxx\",\n" +
-            "  \"event_type\": \"conversation.chat.created\",\n" +
-            "  \"data\": {\n" +
-            "      \"id\": \"123\",\n" +
-            "      \"conversation_id\": \"123\",\n" +
-            "      \"bot_id\": \"222\",\n" +
-            "      \"created_at\": 1710348675,\n" +
-            "      \"completed_at\": null,\n" +
-            "      \"last_error\": null,\n" +
-            "      \"meta_data\": {},\n" +
-            "      \"status\": \"created\",\n" +
-            "      \"usage\": null\n" +
-            "  },\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"744666853824656xxx\",\n"
+            + "  \"event_type\": \"conversation.chat.created\",\n"
+            + "  \"data\": {\n"
+            + "      \"id\": \"123\",\n"
+            + "      \"conversation_id\": \"123\",\n"
+            + "      \"bot_id\": \"222\",\n"
+            + "      \"created_at\": 1710348675,\n"
+            + "      \"completed_at\": null,\n"
+            + "      \"last_error\": null,\n"
+            + "      \"meta_data\": {},\n"
+            + "      \"status\": \"created\",\n"
+            + "      \"usage\": null\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationChatCreated(
-        eq(client), conversationChatCreatedEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationChatCreated(eq(client), conversationChatCreatedEventCaptor.capture());
+
     ConversationChatCreatedEvent event = conversationChatCreatedEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_CHAT_CREATED, event.getEventType());
     assertEquals("744666853824656xxx", event.getId());
-    
+
     // 验证 data
     assertEquals("123", event.getData().getID());
     assertEquals("123", event.getData().getConversationID());
@@ -419,7 +437,7 @@ public class WebsocketChatClientTest {
     assertNull(event.getData().getLastError());
     assertEquals("created", event.getData().getStatus().getValue());
     assertNull(event.getData().getUsage());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -427,42 +445,43 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleConversationChatFailedEvent() {
     // event_type: conversation.chat.failed
-    String json = "{\n" +
-            "    \"id\": \"event_1\",\n" +
-            "    \"event_type\": \"conversation.chat.failed\",\n" +
-            "    \"data\": {\n" +
-            "        \"id\": \"123\",\n" +
-            "        \"chat_id\": \"123\",\n" +
-            "        \"conversation_id\": \"123\",\n" +
-            "        \"bot_id\": \"222\",\n" +
-            "        \"created_at\": 1710348675,\n" +
-            "        \"failed_at\": 1710348675,\n" +
-            "        \"last_error\": {\n" +
-            "            \"code\": 1,\n" +
-            "            \"msg\": \"发生异常\"\n" +
-            "        },\n" +
-            "        \"meta_data\": { },\n" +
-            "        \"status\": \"failed\",\n" +
-            "        \"usage\": {\n" +
-            "            \"token_count\": 3397,\n" +
-            "            \"output_tokens\": 1173,\n" +
-            "            \"input_tokens\": 2224\n" +
-            "        }\n" +
-            "    },\n" +
-            "    \"detail\": {\n" +
-            "        \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "    }\n" +
-            "}";
+    String json =
+        "{\n"
+            + "    \"id\": \"event_1\",\n"
+            + "    \"event_type\": \"conversation.chat.failed\",\n"
+            + "    \"data\": {\n"
+            + "        \"id\": \"123\",\n"
+            + "        \"chat_id\": \"123\",\n"
+            + "        \"conversation_id\": \"123\",\n"
+            + "        \"bot_id\": \"222\",\n"
+            + "        \"created_at\": 1710348675,\n"
+            + "        \"failed_at\": 1710348675,\n"
+            + "        \"last_error\": {\n"
+            + "            \"code\": 1,\n"
+            + "            \"msg\": \"发生异常\"\n"
+            + "        },\n"
+            + "        \"meta_data\": { },\n"
+            + "        \"status\": \"failed\",\n"
+            + "        \"usage\": {\n"
+            + "            \"token_count\": 3397,\n"
+            + "            \"output_tokens\": 1173,\n"
+            + "            \"input_tokens\": 2224\n"
+            + "        }\n"
+            + "    },\n"
+            + "    \"detail\": {\n"
+            + "        \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "    }\n"
+            + "}";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationChatFailed(
-        eq(client), chatFailedEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationChatFailed(eq(client), chatFailedEventCaptor.capture());
+
     ConversationChatFailedEvent event = chatFailedEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_CHAT_FAILED, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals("123", event.getData().getID());
     assertEquals("123", event.getData().getConversationID());
@@ -472,12 +491,12 @@ public class WebsocketChatClientTest {
     assertEquals(1, event.getData().getLastError().getCode());
     assertEquals("发生异常", event.getData().getLastError().getMsg());
     assertEquals("failed", event.getData().getStatus().getValue());
-    
+
     // 验证 usage
     assertEquals(3397, event.getData().getUsage().getTokenCount());
     assertEquals(1173, event.getData().getUsage().getOutputTokens());
     assertEquals(2224, event.getData().getUsage().getInputTokens());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -485,34 +504,35 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleConversationChatInProgressEvent() {
     // event_type: conversation.chat.in_progress
-    String json = "{\n" +
-            "  \"id\": \"744666853824656xxxx\",\n" +
-            "  \"event_type\": \"conversation.chat.in_progress\",\n" +
-            "  \"data\": {\n" +
-            "      \"id\": \"123\",\n" +
-            "      \"conversation_id\": \"123\",\n" +
-            "      \"bot_id\": \"222\",\n" +
-            "      \"created_at\": 1710348675,\n" +
-            "      \"completed_at\": null,\n" +
-            "      \"last_error\": null,\n" +
-            "      \"meta_data\": {},\n" +
-            "      \"status\": \"in_progress\",\n" +
-            "      \"usage\": null\n" +
-            "  },\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"744666853824656xxxx\",\n"
+            + "  \"event_type\": \"conversation.chat.in_progress\",\n"
+            + "  \"data\": {\n"
+            + "      \"id\": \"123\",\n"
+            + "      \"conversation_id\": \"123\",\n"
+            + "      \"bot_id\": \"222\",\n"
+            + "      \"created_at\": 1710348675,\n"
+            + "      \"completed_at\": null,\n"
+            + "      \"last_error\": null,\n"
+            + "      \"meta_data\": {},\n"
+            + "      \"status\": \"in_progress\",\n"
+            + "      \"usage\": null\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationChatInProgress(
-        eq(client), chatInProgressEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationChatInProgress(eq(client), chatInProgressEventCaptor.capture());
+
     ConversationChatInProgressEvent event = chatInProgressEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_CHAT_IN_PROGRESS, event.getEventType());
     assertEquals("744666853824656xxxx", event.getId());
-    
+
     // 验证 data
     assertEquals("123", event.getData().getID());
     assertEquals("123", event.getData().getConversationID());
@@ -522,7 +542,7 @@ public class WebsocketChatClientTest {
     assertNull(event.getData().getLastError());
     assertEquals("in_progress", event.getData().getStatus().getValue());
     assertNull(event.getData().getUsage());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -582,33 +602,34 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleConversationMessageCompletedEvent() {
     // event_type: conversation.message.completed
-    String json = "{\n" +
-            "  \"id\": \"event_1\",\n" +
-            "  \"event_type\": \"conversation.message.completed\",\n" +
-            "  \"data\": {\n" +
-            "    \"id\": \"msg_002\",\n" +
-            "    \"role\": \"assistant\",\n" +
-            "    \"type\": \"function_call\",\n" +
-            "    \"content\": \"{\\\"name\\\":\\\"toutiaosousuo-search\\\",\\\"arguments\\\":{\\\"cursor\\\":0,\\\"input_query\\\":\\\"今天的体育新闻\\\",\\\"plugin_id\\\":7281192623887548473,\\\"api_id\\\":7288907006982012986,\\\"plugin_type\\\":1}}\",\n" +
-            "    \"content_type\": \"text\",\n" +
-            "    \"chat_id\": \"123\",\n" +
-            "    \"conversation_id\": \"123\",\n" +
-            "    \"bot_id\": \"222\"\n" +
-            "  },\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"conversation.message.completed\",\n"
+            + "  \"data\": {\n"
+            + "    \"id\": \"msg_002\",\n"
+            + "    \"role\": \"assistant\",\n"
+            + "    \"type\": \"function_call\",\n"
+            + "    \"content\": \"{\\\"name\\\":\\\"toutiaosousuo-search\\\",\\\"arguments\\\":{\\\"cursor\\\":0,\\\"input_query\\\":\\\"今天的体育新闻\\\",\\\"plugin_id\\\":7281192623887548473,\\\"api_id\\\":7288907006982012986,\\\"plugin_type\\\":1}}\",\n"
+            + "    \"content_type\": \"text\",\n"
+            + "    \"chat_id\": \"123\",\n"
+            + "    \"conversation_id\": \"123\",\n"
+            + "    \"bot_id\": \"222\"\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onConversationMessageCompleted(
-        eq(client), messageCompletedEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onConversationMessageCompleted(eq(client), messageCompletedEventCaptor.capture());
+
     ConversationMessageCompletedEvent event = messageCompletedEventCaptor.getValue();
     assertEquals(EventType.CONVERSATION_MESSAGE_COMPLETED, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals("msg_002", event.getData().getId());
     assertEquals("assistant", event.getData().getRole().getValue());
@@ -617,14 +638,14 @@ public class WebsocketChatClientTest {
     assertEquals("123", event.getData().getChatId());
     assertEquals("123", event.getData().getConversationId());
     assertEquals("222", event.getData().getBotId());
-    
+
     // 验证 content 中的 function_call 数据
     String content = event.getData().getContent();
     assertTrue(content.contains("toutiaosousuo-search"));
     assertTrue(content.contains("今天的体育新闻"));
     assertTrue(content.contains("7281192623887548473"));
     assertTrue(content.contains("7288907006982012986"));
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -632,23 +653,24 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleInputAudioBufferClearedEvent() {
     // event_type: input_audio_buffer.cleared
-    String json = "{\n" +
-            "  \"id\": \"event_1\",\n" +
-            "  \"event_type\": \"input_audio_buffer.cleared\",\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"input_audio_buffer.cleared\",\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onInputAudioBufferCleared(
-        eq(client), inputAudioBufferClearedEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onInputAudioBufferCleared(eq(client), inputAudioBufferClearedEventCaptor.capture());
+
     InputAudioBufferClearedEvent event = inputAudioBufferClearedEventCaptor.getValue();
     assertEquals(EventType.INPUT_AUDIO_BUFFER_CLEARED, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -656,23 +678,24 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleInputAudioBufferCompletedEvent() {
     // event_type: input_audio_buffer.completed
-    String json = "{\n" +
-            "  \"id\": \"event_1\",\n" +
-            "  \"event_type\": \"input_audio_buffer.completed\",\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"input_audio_buffer.completed\",\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
-    verify(mockCallbackHandler).onInputAudioBufferCompleted(
-        eq(client), inputAudioBufferCompletedEventCaptor.capture());
-    
+    verify(mockCallbackHandler)
+        .onInputAudioBufferCompleted(eq(client), inputAudioBufferCompletedEventCaptor.capture());
+
     InputAudioBufferCompletedEvent event = inputAudioBufferCompletedEventCaptor.getValue();
     assertEquals(EventType.INPUT_AUDIO_BUFFER_COMPLETED, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
@@ -680,30 +703,31 @@ public class WebsocketChatClientTest {
   @Test
   public void testHandleErrorEvent() {
     // event_type: error
-    String json = "{\n" +
-            "  \"id\": \"event_1\",\n" +
-            "  \"event_type\": \"error\",\n" +
-            "  \"data\": {\n" +
-            "      \"code\": 123,\n" +
-            "      \"msg\": \"error message\"\n" +
-            "  },\n" +
-            "  \"detail\": {\n" +
-            "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n" +
-            "  }\n" +
-            "}\n";
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"error\",\n"
+            + "  \"data\": {\n"
+            + "      \"code\": 123,\n"
+            + "      \"msg\": \"error message\"\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
 
     client.handleEvent(mockWebSocket, json);
 
     verify(mockCallbackHandler).onError(eq(client), errorEventCaptor.capture());
-    
+
     ErrorEvent event = errorEventCaptor.getValue();
     assertEquals(EventType.ERROR, event.getEventType());
     assertEquals("event_1", event.getId());
-    
+
     // 验证 data
     assertEquals(123, event.getData().getCode());
     assertEquals("error message", event.getData().getMsg());
-    
+
     // 验证 detail
     assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
   }
