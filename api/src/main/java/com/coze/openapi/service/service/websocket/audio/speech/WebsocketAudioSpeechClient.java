@@ -1,8 +1,5 @@
 package com.coze.openapi.service.service.websocket.audio.speech;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.client.websocket.event.model.SpeechUpdateEventData;
@@ -19,15 +16,14 @@ public class WebsocketAudioSpeechClient extends BaseWebsocketClient {
   private final ObjectMapper objectMapper = Utils.getMapper();
   private final WebsocketAudioSpeechCallbackHandler handler;
   private static final String uri = "/v1/audio/speech";
-  private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
   protected WebsocketAudioSpeechClient(
       OkHttpClient client, String wsHost, WebsocketAudioSpeechCreateReq req) {
-    super(client, buildUrl(wsHost, uri), req.getCallbackHandler());
+    super(client, buildUrl(wsHost), req.getCallbackHandler(), req);
     this.handler = req.getCallbackHandler();
   }
 
-  protected static String buildUrl(String wsHost, String uri) {
+  protected static String buildUrl(String wsHost) {
     return String.format("%s%s", wsHost, uri);
   }
 
@@ -83,7 +79,7 @@ public class WebsocketAudioSpeechClient extends BaseWebsocketClient {
           handler.onError(this, errorEvent);
           break;
         default:
-          System.out.println("未知事件类型: " + eventType);
+          logger.error("unknown event type: {}, event string: {}", eventType, text);
       }
     } catch (Exception e) {
       handler.onClientException(this, new RuntimeException(e));

@@ -15,8 +15,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.client.chat.model.ChatToolCall;
+import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
+import com.coze.openapi.client.websocket.event.model.ChatUpdateEventData;
+import com.coze.openapi.client.websocket.event.upstream.ConversationChatSubmitToolOutputsEvent;
+import com.coze.openapi.client.websocket.event.upstream.InputAudioBufferAppendEvent;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
@@ -32,6 +36,7 @@ public class WebsocketChatClientTest {
   @Captor private ArgumentCaptor<ChatUpdatedEvent> chatUpdatedEventCaptor;
   @Captor private ArgumentCaptor<ConversationAudioCompletedEvent> audioCompletedEventCaptor;
   @Captor private ArgumentCaptor<ConversationAudioDeltaEvent> audioDeltaEventCaptor;
+  @Captor private ArgumentCaptor<ConversationMessageDeltaEvent> conversationMessageDeltaEventCaptor;
 
   @Captor
   private ArgumentCaptor<ConversationAudioTranscriptUpdateEvent> audioTranscriptUpdateEventCaptor;
@@ -66,6 +71,7 @@ public class WebsocketChatClientTest {
             .botID("test-bot-id")
             .callbackHandler(mockCallbackHandler)
             .build();
+
     client = new WebsocketChatClient(mockOkHttpClient, "ws://test.com", req);
   }
 
@@ -743,11 +749,126 @@ public class WebsocketChatClientTest {
   }
 
   @Test
+  public void testHandleConversationMessageDeltaEvent() {
+    String json =
+        "{\n"
+            + "  \"id\": \"event_1\",\n"
+            + "  \"event_type\": \"conversation.message.delta\",\n"
+            + "  \"data\": {\n"
+            + "      \"id\": \"msg_006\",\n"
+            + "      \"role\": \"assistant\",\n"
+            + "      \"type\": \"answer\",\n"
+            + "      \"content\": \"你好你好\",\n"
+            + "      \"content_type\": \"text\",\n"
+            + "      \"chat_id\": \"123\",\n"
+            + "      \"conversation_id\": \"123\",\n"
+            + "      \"bot_id\": \"222\"\n"
+            + "  },\n"
+            + "  \"detail\": {\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "  }\n"
+            + "}\n";
+
+    client.handleEvent(mockWebSocket, json);
+
+    verify(mockCallbackHandler)
+        .onConversationMessageDelta(eq(client), conversationMessageDeltaEventCaptor.capture());
+
+    ConversationMessageDeltaEvent event = conversationMessageDeltaEventCaptor.getValue();
+    assertEquals(EventType.CONVERSATION_MESSAGE_DELTA, event.getEventType());
+    assertEquals("event_1", event.getId());
+
+    // 验证 data
+    assertEquals("msg_006", event.getData().getId());
+    assertEquals("assistant", event.getData().getRole().getValue());
+    assertEquals("answer", event.getData().getType().getValue());
+    assertEquals("你好你好", event.getData().getContent());
+    assertEquals("text", event.getData().getContentType().getValue());
+    assertEquals("123", event.getData().getChatId());
+    assertEquals("123", event.getData().getConversationId());
+    assertEquals("222", event.getData().getBotId());
+
+    // 验证 detail
+    assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
+  }
+
+  @Test
   public void testHandleInvalidJson() {
     String invalidJson = "invalid json";
 
     client.handleEvent(mockWebSocket, invalidJson);
 
     verify(mockCallbackHandler).onClientException(eq(client), any(RuntimeException.class));
+  }
+
+  @Test
+  void testChatUpdate() {
+    ChatUpdateEventData data = ChatUpdateEventData.builder().build();
+
+    client.chatUpdate(data);
+
+    verify(mockWebSocket).send(anyString()); // 验证发送了消息
+  }
+
+  @Test
+  void testConversationChatCancel() {
+    client.conversationChatCancel();
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testConversationChatSubmitToolOutputs() {
+    ConversationChatSubmitToolOutputsEvent.Data data =
+        ConversationChatSubmitToolOutputsEvent.Data.builder().chatID("test-tool-call-id").build();
+
+    client.conversationChatSubmitToolOutputs(data);
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testConversationClear() {
+    client.conversationClear();
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testConversationMessageCreate() {
+    client.conversationMessageCreate(Message.buildUserQuestionText("hello"));
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputAudioBufferAppendWithData() {
+
+    client.inputAudioBufferAppend(new InputAudioBufferAppendEvent.Data("hello"));
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputAudioBufferAppendWithString() {
+    String audioData = "base64EncodedAudioData";
+
+    client.inputAudioBufferAppend(audioData);
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputAudioBufferClear() {
+    client.inputAudioBufferClear();
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputAudioBufferComplete() {
+    client.inputAudioBufferComplete();
+
+    verify(mockWebSocket).send(anyString());
   }
 }

@@ -2,6 +2,7 @@ package com.coze.openapi.service.service.websocket.audio.transcriptions;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -14,6 +15,9 @@ import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
+import com.coze.openapi.client.websocket.event.model.InputAudio;
+import com.coze.openapi.client.websocket.event.model.TranscriptionsUpdateEventData;
+import com.coze.openapi.client.websocket.event.upstream.InputAudioBufferAppendEvent;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
@@ -270,5 +274,57 @@ public class WebsocketAudioTranscriptionsClientTest {
     client.handleEvent(mockWebSocket, invalidJson);
 
     verify(mockCallbackHandler).onClientException(eq(client), any(RuntimeException.class));
+  }
+
+  @Test
+  void testTranscriptionsUpdate() {
+    TranscriptionsUpdateEventData data =
+        TranscriptionsUpdateEventData.builder()
+            .inputAudio(
+                InputAudio.builder()
+                    .format("pcm")
+                    .codec("pcm")
+                    .sampleRate(24000)
+                    .channel(1)
+                    .bitDepth(16)
+                    .build())
+            .build();
+
+    client.transcriptionsUpdate(data);
+
+    verify(mockWebSocket).send(anyString()); // 验证发送了消息
+  }
+
+  @Test
+  void testInputAudioBufferAppendWithString() {
+    String audioData = "base64EncodedAudioData";
+
+    client.inputAudioBufferAppend(audioData);
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputAudioBufferAppendWithData() {
+    InputAudioBufferAppendEvent.Data data =
+        new InputAudioBufferAppendEvent.Data("base64EncodedAudioData");
+
+    client.inputAudioBufferAppend(data);
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputAudioBufferClear() {
+    client.inputAudioBufferClear();
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputAudioBufferComplete() {
+    client.inputAudioBufferComplete();
+
+    verify(mockWebSocket).send(anyString());
   }
 }

@@ -1,8 +1,5 @@
 package com.coze.openapi.service.service.websocket.chat;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
@@ -27,21 +24,16 @@ public class WebsocketChatClient extends BaseWebsocketClient {
 
   private static final String uri = "/v1/chat";
 
-  private final WebsocketChatCreateReq req;
-
-  private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-
   protected WebsocketChatClient(OkHttpClient client, String wsHost, WebsocketChatCreateReq req) {
-    super(client, buildUrl(wsHost, uri, req), req.getCallbackHandler());
+    super(client, buildUrl(wsHost, req), req.getCallbackHandler(), req);
     this.handler = req.getCallbackHandler();
-    this.req = req;
   }
 
-  protected static String buildUrl(String wsHost, String uri, WebsocketChatCreateReq req) {
+  protected static String buildUrl(String wsHost, WebsocketChatCreateReq req) {
     return String.format("%s%s?bot_id=%s", wsHost, uri, req.getBotID());
   }
 
-  private void chatUpdate(ChatUpdateEventData data) {
+  public void chatUpdate(ChatUpdateEventData data) {
     this.sendEvent(ChatUpdateEvent.builder().data(data).build());
   }
 
@@ -175,16 +167,10 @@ public class WebsocketChatClient extends BaseWebsocketClient {
           handler.onError(this, errorEvent);
           break;
         default:
-          // todo 用 log
-          System.out.println("未知事件类型: " + eventType);
+          logger.error("unknown event type: {}, event string: {}", eventType, text);
       }
     } catch (Exception e) {
       handler.onClientException(this, new RuntimeException(e));
     }
-  }
-
-  public void close() {
-    this.ws.close(1000, null);
-    executorService.shutdown();
   }
 }

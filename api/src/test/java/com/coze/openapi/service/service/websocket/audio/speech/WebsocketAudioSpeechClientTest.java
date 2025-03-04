@@ -14,6 +14,9 @@ import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
+import com.coze.openapi.client.websocket.event.model.OutputAudio;
+import com.coze.openapi.client.websocket.event.model.PCMConfig;
+import com.coze.openapi.client.websocket.event.model.SpeechUpdateEventData;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
@@ -227,5 +230,39 @@ public class WebsocketAudioSpeechClientTest {
     client.handleEvent(mockWebSocket, invalidJson);
 
     verify(mockCallbackHandler).onClientException(eq(client), any(RuntimeException.class));
+  }
+
+  @Test
+  void testSpeechUpdate() {
+    SpeechUpdateEventData data =
+        SpeechUpdateEventData.builder()
+            .outputAudio(
+                OutputAudio.builder()
+                    .codec("pcm")
+                    .pcmConfig(PCMConfig.builder().sampleRate(24000).build())
+                    .speechRate(50)
+                    .voiceId("test-voice-id")
+                    .build())
+            .build();
+
+    client.speechUpdate(data);
+
+    verify(mockWebSocket).send(anyString()); // 验证发送了消息
+  }
+
+  @Test
+  void testInputTextBufferAppend() {
+    String textData = "测试文本内容";
+
+    client.inputTextBufferAppend(textData);
+
+    verify(mockWebSocket).send(anyString());
+  }
+
+  @Test
+  void testInputTextBufferComplete() {
+    client.inputTextBufferComplete();
+
+    verify(mockWebSocket).send(anyString());
   }
 }

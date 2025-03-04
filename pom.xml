@@ -58,6 +58,10 @@
                     </formats>
                     <excludes>
                         <exclude>**/client/**/*</exclude>
+                        <exclude>**/BaseCallbackHandler.java</exclude>
+                        <exclude>**/WebsocketChatCallbackHandler.java</exclude>
+                        <exclude>**/WebsocketAudioTranscriptionsCallbackHandler.java</exclude>
+                        <exclude>**/WebsocketAudioSpeechCallbackHandler.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>

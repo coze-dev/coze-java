@@ -4,7 +4,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+
+import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.websocket.common.BaseEvent;
+import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,16 +18,38 @@ import okhttp3.WebSocket;
 
 public abstract class BaseWebsocketClient {
   protected final ObjectMapper objectMapper = Utils.getMapper();
+  protected static final Logger logger = CozeLoggerFactory.getLogger();
   protected final WebSocket ws;
   protected final ExecutorService executorService;
   protected static final int CLOSE_TIMEOUT_SECONDS = 10;
   protected final BaseWebSocketListener listener;
 
-  protected BaseWebsocketClient(OkHttpClient client, String url, BaseCallbackHandler handler) {
+  protected BaseWebsocketClient(
+      OkHttpClient client, String url, BaseCallbackHandler handler, BaseReq req) {
     Request request = new Request.Builder().url(url).build();
     this.executorService = Executors.newSingleThreadExecutor();
     this.listener = new BaseWebSocketListener(this::handleEvent, handler, this);
-    this.ws = client.newWebSocket(request, this.listener);
+    OkHttpClient.Builder builder = client.newBuilder();
+    boolean hasSetTimeout = false;
+    if (req != null) {
+      if (req.getConnectTimeout() != null) {
+        hasSetTimeout = true;
+        builder.connectTimeout(req.getConnectTimeout(), TimeUnit.SECONDS);
+      }
+      if (req.getReadTimeout() != null) {
+        hasSetTimeout = true;
+        builder.readTimeout(req.getReadTimeout(), TimeUnit.SECONDS);
+      }
+      if (req.getWriteTimeout() != null) {
+        hasSetTimeout = true;
+        builder.writeTimeout(req.getWriteTimeout(), TimeUnit.SECONDS);
+      }
+    }
+    if (hasSetTimeout) {
+      this.ws = builder.build().newWebSocket(request, this.listener);
+    } else {
+      this.ws = client.newWebSocket(request, this.listener);
+    }
   }
 
   protected void sendEvent(BaseEvent event) {

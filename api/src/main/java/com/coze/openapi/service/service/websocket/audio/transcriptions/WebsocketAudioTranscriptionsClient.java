@@ -16,11 +16,11 @@ public class WebsocketAudioTranscriptionsClient extends BaseWebsocketClient {
 
   protected WebsocketAudioTranscriptionsClient(
       OkHttpClient client, String wsHost, WebsocketAudioTranscriptionsCreateReq req) {
-    super(client, buildUrl(wsHost, uri), req.getCallbackHandler());
+    super(client, buildUrl(wsHost), req.getCallbackHandler(), req);
     this.handler = req.getCallbackHandler();
   }
 
-  protected static String buildUrl(String wsHost, String uri) {
+  protected static String buildUrl(String wsHost) {
     return String.format("%s%s", wsHost, uri);
   }
 
@@ -90,7 +90,7 @@ public class WebsocketAudioTranscriptionsClient extends BaseWebsocketClient {
           handler.onError(this, errorEvent);
           break;
         default:
-          System.out.println("未知事件类型: " + eventType);
+          logger.error("unknown event type: {}, event string: {}", eventType, text);
       }
     } catch (Exception e) {
       handler.onClientException(this, new RuntimeException(e));
