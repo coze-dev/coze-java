@@ -78,7 +78,17 @@ public class JWTOAuthExample {
     The jwt oauth process does not support refreshing tokens. When the token expires,
     just directly call get_access_token to generate a new token.
     * */
-    CozeAPI coze = new CozeAPI.Builder().auth(new JWTOAuth(oauth)).baseURL(cozeAPIBase).build();
+    CozeAPI coze =
+        new CozeAPI.Builder()
+            .auth(
+                JWTOAuth.builder()
+                    .jwtClient(oauth)
+                    // the sdk will automatically refresh the token before it expires,
+                    // the default is 30s, you can also customize the refresh time
+                    .refreshBefore(30)
+                    .build())
+            .baseURL(cozeAPIBase)
+            .build();
     // you can also specify the scope and session for it
   }
 }
