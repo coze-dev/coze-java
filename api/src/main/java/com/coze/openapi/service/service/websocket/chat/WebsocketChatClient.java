@@ -8,6 +8,7 @@ import com.coze.openapi.client.websocket.event.upstream.*;
 import com.coze.openapi.client.websocket.event.upstream.ChatUpdateEvent;
 import com.coze.openapi.client.websocket.event.upstream.ConversationChatCancelEvent;
 import com.coze.openapi.client.websocket.event.upstream.ConversationChatSubmitToolOutputsEvent;
+import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
 import com.coze.openapi.service.service.websocket.common.BaseWebsocketClient;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -70,18 +71,16 @@ public class WebsocketChatClient extends BaseWebsocketClient {
   }
 
   @Override
+  protected BaseCallbackHandler getCallbackHandler() {
+    return handler;
+  }
+
+  @Override
   protected void handleEvent(WebSocket ws, String text) {
     try {
       // 解析 JSON
       JsonNode jsonNode = objectMapper.readTree(text);
-      JsonNode eventTypeNode = jsonNode.get("event_type");
-      if (eventTypeNode == null) {
-        logger.error("Missing event_type field in event: {}", text);
-        handler.onClientException(this, new RuntimeException("Missing event_type field in event"));
-        return;
-      }
-      String eventType = eventTypeNode.asText();
-
+      String eventType = parseEventType(jsonNode, text);
       switch (eventType) {
         case EventType.CHAT_CREATED:
           ChatCreatedEvent chatCreatedEvent =

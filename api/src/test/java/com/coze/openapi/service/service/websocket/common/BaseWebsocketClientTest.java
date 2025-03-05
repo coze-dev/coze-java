@@ -27,8 +27,16 @@ class BaseWebsocketClientTest {
 
   // 创建一个测试用的具体实现类
   private static class TestBaseWebsocketClient extends BaseWebsocketClient {
+    BaseCallbackHandler handler;
+
     public TestBaseWebsocketClient(OkHttpClient client, String url, BaseCallbackHandler handler) {
       super(client, url, handler, null);
+      this.handler = handler;
+    }
+
+    @Override
+    protected BaseCallbackHandler getCallbackHandler() {
+      return handler;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.websocket.common.BaseEvent;
 import com.coze.openapi.service.service.common.CozeLoggerFactory;
 import com.coze.openapi.service.utils.Utils;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.OkHttpClient;
@@ -57,6 +58,19 @@ public abstract class BaseWebsocketClient {
   }
 
   protected abstract void handleEvent(WebSocket ws, String text);
+
+  protected abstract BaseCallbackHandler getCallbackHandler();
+
+  protected String parseEventType(JsonNode jsonNode, String text) {
+    JsonNode eventTypeNode = jsonNode.get("event_type");
+    if (eventTypeNode == null) {
+      logger.error("Missing event_type field in event: {}", text);
+      getCallbackHandler()
+          .onClientException(this, new RuntimeException("Missing event_type field in event"));
+      return null;
+    }
+    return eventTypeNode.asText();
+  }
 
   public void close() {
     try {

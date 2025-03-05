@@ -4,6 +4,7 @@ import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.client.websocket.event.model.TranscriptionsUpdateEventData;
 import com.coze.openapi.client.websocket.event.upstream.*;
+import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
 import com.coze.openapi.service.service.websocket.common.BaseWebsocketClient;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -49,16 +50,15 @@ public class WebsocketAudioTranscriptionsClient extends BaseWebsocketClient {
   }
 
   @Override
+  protected BaseCallbackHandler getCallbackHandler() {
+    return handler;
+  }
+
+  @Override
   protected void handleEvent(WebSocket ws, String text) {
     try {
       JsonNode jsonNode = objectMapper.readTree(text);
-      JsonNode eventTypeNode = jsonNode.get("event_type");
-      if (eventTypeNode == null) {
-        logger.error("Missing event_type field in event: {}", text);
-        handler.onClientException(this, new RuntimeException("Missing event_type field in event"));
-        return;
-      }
-      String eventType = eventTypeNode.asText();
+      String eventType = parseEventType(jsonNode, text);
       switch (eventType) {
         case EventType.TRANSCRIPTIONS_CREATED:
           TranscriptionsCreatedEvent createdEvent =
