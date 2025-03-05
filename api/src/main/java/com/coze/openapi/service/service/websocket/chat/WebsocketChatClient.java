@@ -74,7 +74,13 @@ public class WebsocketChatClient extends BaseWebsocketClient {
     try {
       // 解析 JSON
       JsonNode jsonNode = objectMapper.readTree(text);
-      String eventType = jsonNode.get("event_type").asText();
+      JsonNode eventTypeNode = jsonNode.get("event_type");
+      if (eventTypeNode == null) {
+          logger.error("Missing event_type field in event: {}", text);
+          handler.onClientException(this, new RuntimeException("Missing event_type field in event"));
+          return;
+        }
+      String eventType = eventTypeNode.asText();
 
       switch (eventType) {
         case EventType.CHAT_CREATED:
