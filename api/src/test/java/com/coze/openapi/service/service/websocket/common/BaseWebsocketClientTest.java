@@ -1,5 +1,6 @@
 package com.coze.openapi.service.service.websocket.common;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.client.websocket.common.BaseEvent;
 
 import okhttp3.OkHttpClient;
@@ -29,8 +31,9 @@ class BaseWebsocketClientTest {
   private static class TestBaseWebsocketClient extends BaseWebsocketClient {
     BaseCallbackHandler handler;
 
-    public TestBaseWebsocketClient(OkHttpClient client, String url, BaseCallbackHandler handler) {
-      super(client, url, handler, null);
+    public TestBaseWebsocketClient(
+        OkHttpClient client, String url, BaseCallbackHandler handler, BaseReq req) {
+      super(client, url, handler, req);
       this.handler = handler;
     }
 
@@ -56,7 +59,20 @@ class BaseWebsocketClientTest {
     when(mockOkHttpClient.newWebSocket(any(Request.class), any(BaseWebSocketListener.class)))
         .thenReturn(mockWebSocket);
 
-    client = new TestBaseWebsocketClient(mockOkHttpClient, "ws://test.com", mockCallbackHandler);
+    client =
+        new TestBaseWebsocketClient(mockOkHttpClient, "ws://test.com", mockCallbackHandler, null);
+  }
+
+  @Test
+  void testConstructor() {
+    // 验证构造函数是否正确初始化了 WebSocket
+    TestBaseWebsocketClient client =
+        new TestBaseWebsocketClient(
+            new OkHttpClient(),
+            "ws://test.com",
+            mockCallbackHandler,
+            BaseReq.builder().writeTimeout(1).connectTimeout(2).readTimeout(3).build());
+    assertNotNull(client);
   }
 
   @Test
