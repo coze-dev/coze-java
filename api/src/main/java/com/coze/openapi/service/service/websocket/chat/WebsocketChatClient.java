@@ -81,6 +81,10 @@ public class WebsocketChatClient extends BaseWebsocketClient {
       // 解析 JSON
       JsonNode jsonNode = objectMapper.readTree(text);
       String eventType = parseEventType(jsonNode, text);
+      if (eventType == null) {
+        // 这里在上面已经抛出异常了，直接 return 即可
+        return;
+      }
       switch (eventType) {
         case EventType.CHAT_CREATED:
           ChatCreatedEvent chatCreatedEvent =

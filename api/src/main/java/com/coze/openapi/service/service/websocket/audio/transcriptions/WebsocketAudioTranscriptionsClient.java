@@ -59,6 +59,10 @@ public class WebsocketAudioTranscriptionsClient extends BaseWebsocketClient {
     try {
       JsonNode jsonNode = objectMapper.readTree(text);
       String eventType = parseEventType(jsonNode, text);
+      if (eventType == null) {
+        // 这里在上面已经抛出异常了，直接 return 即可
+        return;
+      }
       switch (eventType) {
         case EventType.TRANSCRIPTIONS_CREATED:
           TranscriptionsCreatedEvent createdEvent =

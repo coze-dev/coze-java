@@ -14,7 +14,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 
 public class WebsocketAudioSpeechClient extends BaseWebsocketClient {
-  private final ObjectMapper objectMapper = Utils.getMapper();
   private final WebsocketAudioSpeechCallbackHandler handler;
   private static final String uri = "/v1/audio/speech";
 
@@ -53,7 +52,10 @@ public class WebsocketAudioSpeechClient extends BaseWebsocketClient {
     try {
       JsonNode jsonNode = objectMapper.readTree(text);
       String eventType = parseEventType(jsonNode, text);
-
+      if (eventType == null) {
+        // 这里在上面已经抛出异常了，直接 return 即可
+        return;
+      }
       switch (eventType) {
         case EventType.SPEECH_CREATED:
           SpeechCreatedEvent speechCreatedEvent =
