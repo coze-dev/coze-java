@@ -4,6 +4,7 @@ public abstract class Auth {
 
   protected String accessToken;
   protected String refreshToken;
+  protected long refreshAt;
   protected long expiresIn;
   protected OAuthClient client;
 

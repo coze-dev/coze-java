@@ -16,8 +16,6 @@ public class JWTOAuth extends Auth {
   private Integer ttl;
   private String sessionName;
   private Scope scope;
-  private long refreshAt;
-  @Builder.Default private long refreshBefore = 30;
   @NonNull private JWTOAuthClient jwtClient;
 
   public JWTOAuth(JWTOAuthClient client) {
@@ -37,7 +35,18 @@ public class JWTOAuth extends Auth {
     OAuthToken resp = this.jwtClient.getAccessToken(this.ttl, this.scope, this.sessionName);
     this.accessToken = resp.getAccessToken();
     this.expiresIn = resp.getExpiresIn();
-    this.refreshAt = this.expiresIn - this.refreshBefore;
+    this.refreshAt = this.expiresIn - getRefreshBefore();
     return this.accessToken;
+  }
+
+  private long getRefreshBefore() {
+    if (ttl >= 600) {
+      return 30;
+    } else if (ttl >= 60) {
+      return 10;
+    } else if (ttl >= 30) {
+      return 5;
+    }
+    return 0;
   }
 }

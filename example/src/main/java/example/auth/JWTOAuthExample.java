@@ -80,13 +80,7 @@ public class JWTOAuthExample {
     * */
     CozeAPI coze =
         new CozeAPI.Builder()
-            .auth(
-                JWTOAuth.builder()
-                    .jwtClient(oauth)
-                    // the sdk will automatically refresh the token before it expires,
-                    // the default is 30s, you can also customize the refresh time
-                    .refreshBefore(30)
-                    .build())
+            .auth(JWTOAuth.builder().jwtClient(oauth).build())
             .baseURL(cozeAPIBase)
             .build();
     // you can also specify the scope and session for it
