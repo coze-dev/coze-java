@@ -52,7 +52,7 @@ public class WebsocketAudioSpeechClientTest {
             + "  \"id\": \"7446668538246561xxxx\",\n"
             + "  \"event_type\": \"speech.created\",\n"
             + "  \"detail\": {\n"
-            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F***\"\n"
             + "  }\n"
             + "}\n";
 
@@ -65,7 +65,7 @@ public class WebsocketAudioSpeechClientTest {
     assertEquals("7446668538246561xxxx", event.getId());
 
     // 验证 detail
-    assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
+    assertEquals("20241210152726467C48D89D6DB2F***", event.getDetail().getLogID());
   }
 
   @Test
@@ -85,7 +85,7 @@ public class WebsocketAudioSpeechClientTest {
             + "      }\n"
             + "  },\n"
             + "  \"detail\": {\n"
-            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"  }\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F***\"  }\n"
             + "}\n";
 
     client.handleEvent(mockWebSocket, json);
@@ -103,7 +103,7 @@ public class WebsocketAudioSpeechClientTest {
     assertEquals("音色id", event.getData().getOutputAudio().getVoiceId());
 
     // 验证 detail
-    assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
+    assertEquals("20241210152726467C48D89D6DB2F***", event.getDetail().getLogID());
   }
 
   @Test
@@ -116,7 +116,7 @@ public class WebsocketAudioSpeechClientTest {
             + "      \"delta\": \"base64EncodedAudioDelta\"\n"
             + "  },\n"
             + "  \"detail\": {\n"
-            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"  }\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F***\"  }\n"
             + "}\n";
 
     client.handleEvent(mockWebSocket, json);
@@ -132,7 +132,7 @@ public class WebsocketAudioSpeechClientTest {
     assertEquals("base64EncodedAudioDelta", event.getData().getDelta());
 
     // 验证 detail
-    assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
+    assertEquals("20241210152726467C48D89D6DB2F***", event.getDetail().getLogID());
   }
 
   @Test
@@ -142,7 +142,7 @@ public class WebsocketAudioSpeechClientTest {
             + "  \"id\": \"event_id\",\n"
             + "  \"event_type\": \"speech.audio.completed\",\n"
             + "  \"detail\": {\n"
-            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F***\"\n"
             + "  }\n"
             + "}\n";
 
@@ -156,7 +156,7 @@ public class WebsocketAudioSpeechClientTest {
     assertEquals("event_id", event.getId());
 
     // 验证 detail
-    assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
+    assertEquals("20241210152726467C48D89D6DB2F***", event.getDetail().getLogID());
   }
 
   @Test
@@ -166,7 +166,7 @@ public class WebsocketAudioSpeechClientTest {
             + "  \"id\": \"event_id\",\n"
             + "  \"event_type\": \"input_text_buffer.completed\",\n"
             + "  \"detail\": {\n"
-            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F***\"\n"
             + "  }\n"
             + "}\n";
 
@@ -180,7 +180,7 @@ public class WebsocketAudioSpeechClientTest {
     assertEquals("event_id", event.getId());
 
     // 验证 detail
-    assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
+    assertEquals("20241210152726467C48D89D6DB2F***", event.getDetail().getLogID());
   }
 
   @Test
@@ -194,7 +194,7 @@ public class WebsocketAudioSpeechClientTest {
             + "      \"msg\": \"error message\"\n"
             + "  },\n"
             + "  \"detail\": {\n"
-            + "      \"logid\": \"20241210152726467C48D89D6DB2F3***\"\n"
+            + "      \"logid\": \"20241210152726467C48D89D6DB2F***\"\n"
             + "  }\n"
             + "}\n";
 
@@ -211,7 +211,7 @@ public class WebsocketAudioSpeechClientTest {
     assertEquals("error message", event.getData().getMsg());
 
     // 验证 detail
-    assertEquals("20241210152726467C48D89D6DB2F3***", event.getDetail().getLogID());
+    assertEquals("20241210152726467C48D89D6DB2F***", event.getDetail().getLogID());
   }
 
   @Test
