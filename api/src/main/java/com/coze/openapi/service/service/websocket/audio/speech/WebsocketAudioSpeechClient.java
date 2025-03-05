@@ -6,9 +6,7 @@ import com.coze.openapi.client.websocket.event.model.SpeechUpdateEventData;
 import com.coze.openapi.client.websocket.event.upstream.*;
 import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
 import com.coze.openapi.service.service.websocket.common.BaseWebsocketClient;
-import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
