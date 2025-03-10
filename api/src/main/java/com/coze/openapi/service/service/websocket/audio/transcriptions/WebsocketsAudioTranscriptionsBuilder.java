@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import okhttp3.OkHttpClient;
 
 @AllArgsConstructor
-public class WebsocketAudioTranscriptionsBuilder {
+public class WebsocketsAudioTranscriptionsBuilder {
   private final String baseUrl;
   private final OkHttpClient httpClient;
 
-  public WebsocketAudioTranscriptionsClient create(WebsocketAudioTranscriptionsCreateReq req) {
-    return new WebsocketAudioTranscriptionsClient(httpClient, baseUrl, req);
+  public WebsocketsAudioTranscriptionsClient create(WebsocketsAudioTranscriptionsCreateReq req) {
+    return new WebsocketsAudioTranscriptionsClient(httpClient, baseUrl, req);
   }
 }

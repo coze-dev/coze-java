@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import okhttp3.OkHttpClient;
 
 @AllArgsConstructor
-public class WebsocketChatClientBuilder {
+public class WebsocketsChatClientBuilder {
   private final String baseUrl;
   private final OkHttpClient httpClient;
 
-  public WebsocketChatClient create(WebsocketChatCreateReq req) {
-    return new WebsocketChatClient(httpClient, baseUrl, req);
+  public WebsocketsChatClient create(WebsocketsChatCreateReq req) {
+    return new WebsocketsChatClient(httpClient, baseUrl, req);
   }
 }

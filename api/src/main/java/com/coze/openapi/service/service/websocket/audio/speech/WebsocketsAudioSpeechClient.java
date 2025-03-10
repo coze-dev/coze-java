@@ -5,18 +5,18 @@ import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.client.websocket.event.model.SpeechUpdateEventData;
 import com.coze.openapi.client.websocket.event.upstream.*;
 import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
-import com.coze.openapi.service.service.websocket.common.BaseWebsocketClient;
+import com.coze.openapi.service.service.websocket.common.BaseWebsocketsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 
-public class WebsocketAudioSpeechClient extends BaseWebsocketClient {
-  private final WebsocketAudioSpeechCallbackHandler handler;
+public class WebsocketsAudioSpeechClient extends BaseWebsocketsClient {
+  private final WebsocketsAudioSpeechCallbackHandler handler;
   private static final String uri = "/v1/audio/speech";
 
-  protected WebsocketAudioSpeechClient(
-      OkHttpClient client, String wsHost, WebsocketAudioSpeechCreateReq req) {
+  protected WebsocketsAudioSpeechClient(
+      OkHttpClient client, String wsHost, WebsocketsAudioSpeechCreateReq req) {
     super(client, buildUrl(wsHost), req.getCallbackHandler(), req);
     this.handler = req.getCallbackHandler();
   }

@@ -1,5 +1,8 @@
 package com.coze.openapi.service.service.websocket.chat;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import com.coze.openapi.client.connversations.message.model.Message;
 import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
@@ -9,7 +12,7 @@ import com.coze.openapi.client.websocket.event.upstream.ChatUpdateEvent;
 import com.coze.openapi.client.websocket.event.upstream.ConversationChatCancelEvent;
 import com.coze.openapi.client.websocket.event.upstream.ConversationChatSubmitToolOutputsEvent;
 import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
-import com.coze.openapi.service.service.websocket.common.BaseWebsocketClient;
+import com.coze.openapi.service.service.websocket.common.BaseWebsocketsClient;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,20 +20,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 
-public class WebsocketChatClient extends BaseWebsocketClient {
+public class WebsocketsChatClient extends BaseWebsocketsClient {
 
   private final ObjectMapper objectMapper = Utils.getMapper();
 
-  private final WebsocketChatCallbackHandler handler;
+  private final WebsocketsChatCallbackHandler handler;
 
   private static final String uri = "/v1/chat";
 
-  protected WebsocketChatClient(OkHttpClient client, String wsHost, WebsocketChatCreateReq req) {
+  protected WebsocketsChatClient(OkHttpClient client, String wsHost, WebsocketsChatCreateReq req) {
     super(client, buildUrl(wsHost, req), req.getCallbackHandler(), req);
     this.handler = req.getCallbackHandler();
   }
 
-  protected static String buildUrl(String wsHost, WebsocketChatCreateReq req) {
+  protected static String buildUrl(String wsHost, WebsocketsChatCreateReq req) {
     return String.format("%s%s?bot_id=%s", wsHost, uri, req.getBotID());
   }
 
@@ -54,12 +57,14 @@ public class WebsocketChatClient extends BaseWebsocketClient {
     this.sendEvent(ConversationMessageCreateEvent.builder().data(data).build());
   }
 
-  public void inputAudioBufferAppend(InputAudioBufferAppendEvent.Data data) {
-    this.sendEvent(InputAudioBufferAppendEvent.builder().data(data).build());
+  public void inputAudioBufferAppend(String data) {
+    this.sendEvent(
+        InputAudioBufferAppendEvent.of(
+            Base64.getEncoder().encodeToString(data.getBytes(StandardCharsets.UTF_8))));
   }
 
-  public void inputAudioBufferAppend(String data) {
-    this.sendEvent(InputAudioBufferAppendEvent.of(data));
+  public void inputAudioBufferAppend(byte[] data) {
+    this.sendEvent(InputAudioBufferAppendEvent.of(Base64.getEncoder().encodeToString(data)));
   }
 
   public void inputAudioBufferClear() {

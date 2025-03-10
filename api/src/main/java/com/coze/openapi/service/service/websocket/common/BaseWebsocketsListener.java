@@ -8,16 +8,16 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class BaseWebSocketListener extends WebSocketListener {
+public class BaseWebsocketsListener extends WebSocketListener {
   private final ExecutorService executorService = Executors.newSingleThreadExecutor();
   private final BiConsumer<WebSocket, String> handleEvent;
   private final BaseCallbackHandler callbackHandler;
-  private final BaseWebsocketClient client;
+  private final BaseWebsocketsClient client;
 
-  public BaseWebSocketListener(
+  public BaseWebsocketsListener(
       BiConsumer<WebSocket, String> handleEvent,
       BaseCallbackHandler handler,
-      BaseWebsocketClient client) {
+      BaseWebsocketsClient client) {
     this.handleEvent = handleEvent;
     this.callbackHandler = handler;
     this.client = client;

@@ -2,7 +2,7 @@ package com.coze.openapi.service.service.websocket.common;
 
 import com.coze.openapi.client.websocket.event.downstream.ErrorEvent;
 
-public abstract class BaseCallbackHandler<T extends BaseWebsocketClient> {
+public abstract class BaseCallbackHandler<T extends BaseWebsocketsClient> {
 
   public BaseCallbackHandler() {}
 

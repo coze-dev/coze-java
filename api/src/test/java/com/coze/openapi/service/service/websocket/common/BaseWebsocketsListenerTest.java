@@ -19,15 +19,15 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okio.ByteString;
 
-class BaseWebSocketListenerTest {
+class BaseWebsocketsListenerTest {
 
   @Mock private WebSocket mockWebSocket;
   private Response mockResponse;
   @Mock private BaseCallbackHandler mockCallbackHandler;
-  @Mock private BaseWebsocketClient mockClient;
+  @Mock private BaseWebsocketsClient mockClient;
   @Mock private BiConsumer<WebSocket, String> mockHandleEvent;
 
-  private BaseWebSocketListener listener;
+  private BaseWebsocketsListener listener;
 
   @BeforeEach
   void setUp() {
@@ -42,7 +42,7 @@ class BaseWebSocketListenerTest {
             .request(new Request.Builder().url("ws://test.com").build())
             .build();
 
-    listener = new BaseWebSocketListener(mockHandleEvent, mockCallbackHandler, mockClient);
+    listener = new BaseWebsocketsListener(mockHandleEvent, mockCallbackHandler, mockClient);
   }
 
   @Test

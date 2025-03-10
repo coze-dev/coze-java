@@ -8,31 +8,31 @@ import com.coze.openapi.client.websocket.event.downstream.TranscriptionsMessageU
 import com.coze.openapi.client.websocket.event.downstream.TranscriptionsUpdatedEvent;
 import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
 
-public abstract class WebsocketAudioTranscriptionsCallbackHandler
-    extends BaseCallbackHandler<WebsocketAudioTranscriptionsClient> {
-  public WebsocketAudioTranscriptionsCallbackHandler() {}
+public abstract class WebsocketsAudioTranscriptionsCallbackHandler
+    extends BaseCallbackHandler<WebsocketsAudioTranscriptionsClient> {
+  public WebsocketsAudioTranscriptionsCallbackHandler() {}
 
   // 转录创建事件 (transcriptions.created)
   public void onTranscriptionsCreated(
-      WebsocketAudioTranscriptionsClient client, TranscriptionsCreatedEvent event) {}
+      WebsocketsAudioTranscriptionsClient client, TranscriptionsCreatedEvent event) {}
 
   // 转录配置更新事件 (transcriptions.updated)
   public void onTranscriptionsUpdated(
-      WebsocketAudioTranscriptionsClient client, TranscriptionsUpdatedEvent event) {}
+      WebsocketsAudioTranscriptionsClient client, TranscriptionsUpdatedEvent event) {}
 
   // 转录消息更新事件 (transcriptions.message.update)
   public void onTranscriptionsMessageUpdate(
-      WebsocketAudioTranscriptionsClient client, TranscriptionsMessageUpdateEvent event) {}
+      WebsocketsAudioTranscriptionsClient client, TranscriptionsMessageUpdateEvent event) {}
 
   // 转录消息完成事件 (transcriptions.message.completed)
   public void onTranscriptionsMessageCompleted(
-      WebsocketAudioTranscriptionsClient client, TranscriptionsMessageCompletedEvent event) {}
+      WebsocketsAudioTranscriptionsClient client, TranscriptionsMessageCompletedEvent event) {}
 
   // 语音缓冲区清除事件 (input_audio_buffer.cleared)
   public void onInputAudioBufferCleared(
-      WebsocketAudioTranscriptionsClient client, InputAudioBufferClearedEvent event) {}
+      WebsocketsAudioTranscriptionsClient client, InputAudioBufferClearedEvent event) {}
 
   // 语音缓冲区完成事件 (input_audio_buffer.completed)
   public void onInputAudioBufferCompleted(
-      WebsocketAudioTranscriptionsClient client, InputAudioBufferCompletedEvent event) {}
+      WebsocketsAudioTranscriptionsClient client, InputAudioBufferCompletedEvent event) {}
 }

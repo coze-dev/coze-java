@@ -24,7 +24,7 @@ import okhttp3.WebSocket;
 public class WebsocketAudioSpeechClientTest {
   @Mock private OkHttpClient mockOkHttpClient;
   @Mock private WebSocket mockWebSocket;
-  @Mock private WebsocketAudioSpeechCallbackHandler mockCallbackHandler;
+  @Mock private WebsocketsAudioSpeechCallbackHandler mockCallbackHandler;
 
   @Captor private ArgumentCaptor<SpeechCreatedEvent> speechCreatedEventCaptor;
   @Captor private ArgumentCaptor<SpeechUpdatedEvent> speechUpdatedEventCaptor;
@@ -33,16 +33,16 @@ public class WebsocketAudioSpeechClientTest {
   @Captor private ArgumentCaptor<InputTextBufferCompletedEvent> inputTextBufferCompletedEventCaptor;
   @Captor private ArgumentCaptor<ErrorEvent> errorEventCaptor;
 
-  private WebsocketAudioSpeechClient client;
+  private WebsocketsAudioSpeechClient client;
 
   @BeforeEach
   public void setup() {
     MockitoAnnotations.openMocks(this);
     when(mockOkHttpClient.newWebSocket(any(), any())).thenReturn(mockWebSocket);
 
-    WebsocketAudioSpeechCreateReq req =
-        WebsocketAudioSpeechCreateReq.builder().callbackHandler(mockCallbackHandler).build();
-    client = new WebsocketAudioSpeechClient(mockOkHttpClient, "ws://test.com", req);
+    WebsocketsAudioSpeechCreateReq req =
+        WebsocketsAudioSpeechCreateReq.builder().callbackHandler(mockCallbackHandler).build();
+    client = new WebsocketsAudioSpeechClient(mockOkHttpClient, "ws://test.com", req);
   }
 
   @Test

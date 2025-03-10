@@ -1,22 +1,25 @@
 package com.coze.openapi.service.service.websocket.audio.transcriptions;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.client.websocket.event.model.TranscriptionsUpdateEventData;
 import com.coze.openapi.client.websocket.event.upstream.*;
 import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
-import com.coze.openapi.service.service.websocket.common.BaseWebsocketClient;
+import com.coze.openapi.service.service.websocket.common.BaseWebsocketsClient;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 
-public class WebsocketAudioTranscriptionsClient extends BaseWebsocketClient {
-  private final WebsocketAudioTranscriptionsCallbackHandler handler;
+public class WebsocketsAudioTranscriptionsClient extends BaseWebsocketsClient {
+  private final WebsocketsAudioTranscriptionsCallbackHandler handler;
   private static final String uri = "/v1/audio/transcriptions";
 
-  protected WebsocketAudioTranscriptionsClient(
-      OkHttpClient client, String wsHost, WebsocketAudioTranscriptionsCreateReq req) {
+  protected WebsocketsAudioTranscriptionsClient(
+      OkHttpClient client, String wsHost, WebsocketsAudioTranscriptionsCreateReq req) {
     super(client, buildUrl(wsHost), req.getCallbackHandler(), req);
     this.handler = req.getCallbackHandler();
   }
@@ -32,11 +35,12 @@ public class WebsocketAudioTranscriptionsClient extends BaseWebsocketClient {
 
   // 发送语音缓冲区追加事件
   public void inputAudioBufferAppend(String data) {
-    this.sendEvent(InputAudioBufferAppendEvent.of(data));
+    this.inputAudioBufferAppend(data.getBytes(StandardCharsets.UTF_8));
   }
 
-  public void inputAudioBufferAppend(InputAudioBufferAppendEvent.Data data) {
-    this.sendEvent(InputAudioBufferAppendEvent.builder().data(data).build());
+  public void inputAudioBufferAppend(byte[] data) {
+    String base64Data = Base64.getEncoder().encodeToString(data);
+    this.sendEvent(InputAudioBufferAppendEvent.of(base64Data));
   }
 
   // 发送语音缓冲区清除事件

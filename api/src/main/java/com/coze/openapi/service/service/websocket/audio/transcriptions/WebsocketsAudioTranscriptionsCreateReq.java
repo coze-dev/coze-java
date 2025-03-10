@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class WebsocketAudioTranscriptionsCreateReq extends BaseReq {
-  @NonNull private WebsocketAudioTranscriptionsCallbackHandler callbackHandler;
+public class WebsocketsAudioTranscriptionsCreateReq extends BaseReq {
+  @NonNull private WebsocketsAudioTranscriptionsCallbackHandler callbackHandler;
 }

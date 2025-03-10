@@ -17,19 +17,19 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 
-public abstract class BaseWebsocketClient {
+public abstract class BaseWebsocketsClient {
   protected final ObjectMapper objectMapper = Utils.getMapper();
   protected static final Logger logger = CozeLoggerFactory.getLogger();
   protected final WebSocket ws;
   protected final ExecutorService executorService;
   protected static final int CLOSE_TIMEOUT_SECONDS = 10;
-  protected final BaseWebSocketListener listener;
+  protected final BaseWebsocketsListener listener;
 
-  protected BaseWebsocketClient(
+  protected BaseWebsocketsClient(
       OkHttpClient client, String url, BaseCallbackHandler handler, BaseReq req) {
     Request request = new Request.Builder().url(url).build();
     this.executorService = Executors.newSingleThreadExecutor();
-    this.listener = new BaseWebSocketListener(this::handleEvent, handler, this);
+    this.listener = new BaseWebsocketsListener(this::handleEvent, handler, this);
     OkHttpClient.Builder builder = client.newBuilder();
     boolean hasSetTimeout = false;
     if (req != null) {

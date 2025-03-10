@@ -1004,8 +1004,8 @@ WebsocketChatClient client = coze.websocket()
     .create(new WebsocketChatCreateReq(botID, new CallbackHandler()));
 
 // Send audio data
-String base64AudioData = "..."; // Base64 encoded audio data
-client.inputAudioBufferAppend(base64AudioData);
+String audioData = "..."; // Base64 encoded audio data
+client.inputAudioBufferAppend(audioData);
 client.inputAudioBufferComplete();
 
 // Handle responses in callback
@@ -1078,8 +1078,8 @@ InputAudio inputAudio = InputAudio.builder()
 client.transcriptionsUpdate(new TranscriptionsUpdateEventData(inputAudio));
 
 // Send audio for transcription
-String base64AudioData = "..."; // Base64 encoded audio data
-client.inputAudioBufferAppend(base64AudioData);
+String audioData = "..."; // Base64 encoded audio data
+client.inputAudioBufferAppend(audioData);
 client.inputAudioBufferComplete();
 
 // Handle transcription results in callback

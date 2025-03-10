@@ -20,15 +20,14 @@ import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.client.websocket.event.model.ChatUpdateEventData;
 import com.coze.openapi.client.websocket.event.upstream.ConversationChatSubmitToolOutputsEvent;
-import com.coze.openapi.client.websocket.event.upstream.InputAudioBufferAppendEvent;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 
-public class WebsocketChatClientTest {
+public class WebsocketsChatClientTest {
   @Mock private OkHttpClient mockOkHttpClient;
   @Mock private WebSocket mockWebSocket;
-  @Mock private WebsocketChatCallbackHandler mockCallbackHandler;
+  @Mock private WebsocketsChatCallbackHandler mockCallbackHandler;
 
   @Captor private ArgumentCaptor<ChatCreatedEvent> chatCreatedEventCaptor;
   @Captor private ArgumentCaptor<ConversationMessageDeltaEvent> messageDeltaEventCaptor;
@@ -59,20 +58,20 @@ public class WebsocketChatClientTest {
   @Captor private ArgumentCaptor<ConversationMessageCompletedEvent> messageCompletedEventCaptor;
   // ... 其他事件的 Captor
 
-  private WebsocketChatClient client;
+  private WebsocketsChatClient client;
 
   @BeforeEach
   public void setup() {
     MockitoAnnotations.openMocks(this);
     when(mockOkHttpClient.newWebSocket(any(), any())).thenReturn(mockWebSocket);
 
-    WebsocketChatCreateReq req =
-        WebsocketChatCreateReq.builder()
+    WebsocketsChatCreateReq req =
+        WebsocketsChatCreateReq.builder()
             .botID("test-bot-id")
             .callbackHandler(mockCallbackHandler)
             .build();
 
-    client = new WebsocketChatClient(mockOkHttpClient, "ws://test.com", req);
+    client = new WebsocketsChatClient(mockOkHttpClient, "ws://test.com", req);
   }
 
   @Test
@@ -844,7 +843,7 @@ public class WebsocketChatClientTest {
   @Test
   void testInputAudioBufferAppendWithData() {
 
-    client.inputAudioBufferAppend(new InputAudioBufferAppendEvent.Data("hello"));
+    client.inputAudioBufferAppend("hello");
 
     verify(mockWebSocket).send(anyString());
   }

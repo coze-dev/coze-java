@@ -18,17 +18,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 
-class BaseWebsocketClientTest {
+class BaseWebsocketsClientTest {
 
   @Mock private OkHttpClient mockOkHttpClient;
   @Mock private WebSocket mockWebSocket;
   @Mock private BaseCallbackHandler mockCallbackHandler;
-  @Mock private BaseWebSocketListener mockListener;
+  @Mock private BaseWebsocketsListener mockListener;
 
   private TestBaseWebsocketClient client;
 
   // 创建一个测试用的具体实现类
-  private static class TestBaseWebsocketClient extends BaseWebsocketClient {
+  private static class TestBaseWebsocketClient extends BaseWebsocketsClient {
     BaseCallbackHandler handler;
 
     public TestBaseWebsocketClient(
@@ -56,7 +56,7 @@ class BaseWebsocketClientTest {
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    when(mockOkHttpClient.newWebSocket(any(Request.class), any(BaseWebSocketListener.class)))
+    when(mockOkHttpClient.newWebSocket(any(Request.class), any(BaseWebsocketsListener.class)))
         .thenReturn(mockWebSocket);
 
     client =
@@ -77,7 +77,7 @@ class BaseWebsocketClientTest {
 
   @Test
   void testInitialization() {
-    verify(mockOkHttpClient).newWebSocket(any(Request.class), any(BaseWebSocketListener.class));
+    verify(mockOkHttpClient).newWebSocket(any(Request.class), any(BaseWebsocketsListener.class));
   }
 
   @Test
@@ -148,7 +148,7 @@ class BaseWebsocketClientTest {
     // 使用反射设置模拟的 listener
     try {
       java.lang.reflect.Field listenerField =
-          BaseWebsocketClient.class.getDeclaredField("listener");
+          BaseWebsocketsClient.class.getDeclaredField("listener");
       listenerField.setAccessible(true);
       listenerField.set(client, mockListener);
     } catch (Exception e) {

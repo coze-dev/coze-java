@@ -17,7 +17,6 @@ import com.coze.openapi.client.websocket.event.EventType;
 import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.client.websocket.event.model.InputAudio;
 import com.coze.openapi.client.websocket.event.model.TranscriptionsUpdateEventData;
-import com.coze.openapi.client.websocket.event.upstream.InputAudioBufferAppendEvent;
 
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
@@ -25,7 +24,7 @@ import okhttp3.WebSocket;
 public class WebsocketAudioTranscriptionsClientTest {
   @Mock private OkHttpClient mockOkHttpClient;
   @Mock private WebSocket mockWebSocket;
-  @Mock private WebsocketAudioTranscriptionsCallbackHandler mockCallbackHandler;
+  @Mock private WebsocketsAudioTranscriptionsCallbackHandler mockCallbackHandler;
 
   @Captor private ArgumentCaptor<TranscriptionsCreatedEvent> transcriptionsCreatedEventCaptor;
   @Captor private ArgumentCaptor<TranscriptionsUpdatedEvent> transcriptionsUpdatedEventCaptor;
@@ -44,18 +43,18 @@ public class WebsocketAudioTranscriptionsClientTest {
 
   @Captor private ArgumentCaptor<ErrorEvent> errorEventCaptor;
 
-  private WebsocketAudioTranscriptionsClient client;
+  private WebsocketsAudioTranscriptionsClient client;
 
   @BeforeEach
   public void setup() {
     MockitoAnnotations.openMocks(this);
     when(mockOkHttpClient.newWebSocket(any(), any())).thenReturn(mockWebSocket);
 
-    WebsocketAudioTranscriptionsCreateReq req =
-        WebsocketAudioTranscriptionsCreateReq.builder()
+    WebsocketsAudioTranscriptionsCreateReq req =
+        WebsocketsAudioTranscriptionsCreateReq.builder()
             .callbackHandler(mockCallbackHandler)
             .build();
-    client = new WebsocketAudioTranscriptionsClient(mockOkHttpClient, "ws://test.com", req);
+    client = new WebsocketsAudioTranscriptionsClient(mockOkHttpClient, "ws://test.com", req);
   }
 
   @Test
@@ -306,10 +305,7 @@ public class WebsocketAudioTranscriptionsClientTest {
 
   @Test
   void testInputAudioBufferAppendWithData() {
-    InputAudioBufferAppendEvent.Data data =
-        new InputAudioBufferAppendEvent.Data("base64EncodedAudioData");
-
-    client.inputAudioBufferAppend(data);
+    client.inputAudioBufferAppend("data");
 
     verify(mockWebSocket).send(anyString());
   }

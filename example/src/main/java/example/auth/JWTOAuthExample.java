@@ -36,7 +36,7 @@ public class JWTOAuthExample {
     String jwtOauthPrivateKey = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY");
     String jwtOauthPrivateKeyFilePath = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY_FILE_PATH");
     String jwtOauthPublicKeyID = System.getenv("COZE_JWT_OAUTH_PUBLIC_KEY_ID");
-
+    //    jwtOauthPublicKeyID+="123";
     JWTOAuthClient oauth = null;
     try {
       jwtOauthPrivateKey =

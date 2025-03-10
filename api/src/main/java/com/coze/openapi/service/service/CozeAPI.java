@@ -18,7 +18,7 @@ import com.coze.openapi.service.service.conversation.ConversationService;
 import com.coze.openapi.service.service.dataset.DatasetService;
 import com.coze.openapi.service.service.file.FileService;
 import com.coze.openapi.service.service.template.TemplateService;
-import com.coze.openapi.service.service.websocket.WebsocketClient;
+import com.coze.openapi.service.service.websocket.WebsocketsClient;
 import com.coze.openapi.service.service.workflow.WorkflowService;
 import com.coze.openapi.service.service.workspace.WorkspaceService;
 import com.coze.openapi.service.utils.UserAgentInterceptor;
@@ -46,7 +46,7 @@ public class CozeAPI {
   private final ChatService chatAPI;
   private final AudioService audioAPI;
   private final TemplateService templateAPI;
-  private final WebsocketClient websocket;
+  private final WebsocketsClient websocket;
 
   private CozeAPI(
       String baseURL,
@@ -61,7 +61,7 @@ public class CozeAPI {
       ChatService chatAPI,
       AudioService audioAPI,
       TemplateService templateAPI,
-      WebsocketClient websocket) {
+      WebsocketsClient websocket) {
     this.baseURL = baseURL;
     this.executorService = executorService;
     this.auth = auth;
@@ -113,7 +113,7 @@ public class CozeAPI {
     return this.templateAPI;
   }
 
-  public WebsocketClient websocket() {
+  public WebsocketsClient websockets() {
     return this.websocket;
   }
 
@@ -204,8 +204,8 @@ public class CozeAPI {
               retrofit.create(AudioSpeechAPI.class),
               retrofit.create(AudioTranscriptionAPI.class));
       TemplateService templateAPI = new TemplateService(retrofit.create(TemplateAPI.class));
-      WebsocketClient websocket =
-          new WebsocketClient(
+      WebsocketsClient websocket =
+          new WebsocketsClient(
               this.client, Strings.replace(this.baseURL, "https://api", "wss://ws"));
       return new CozeAPI(
           this.baseURL,

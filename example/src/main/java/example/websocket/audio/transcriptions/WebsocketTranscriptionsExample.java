@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 import com.coze.openapi.client.audio.common.AudioFormat;
@@ -15,9 +14,9 @@ import com.coze.openapi.client.websocket.event.model.InputAudio;
 import com.coze.openapi.client.websocket.event.model.TranscriptionsUpdateEventData;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
-import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketAudioTranscriptionsCallbackHandler;
-import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketAudioTranscriptionsClient;
-import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketAudioTranscriptionsCreateReq;
+import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketsAudioTranscriptionsCallbackHandler;
+import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketsAudioTranscriptionsClient;
+import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketsAudioTranscriptionsCreateReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -39,7 +38,7 @@ public class WebsocketTranscriptionsExample {
     private String weather;
   }
 
-  private static class CallbackHandler extends WebsocketAudioTranscriptionsCallbackHandler {
+  private static class CallbackHandler extends WebsocketsAudioTranscriptionsCallbackHandler {
     private final ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024 * 10); // 分配 10MB 缓冲区
 
     public CallbackHandler() {
@@ -47,19 +46,19 @@ public class WebsocketTranscriptionsExample {
     }
 
     @Override
-    public void onError(WebsocketAudioTranscriptionsClient client, ErrorEvent event) {
+    public void onError(WebsocketsAudioTranscriptionsClient client, ErrorEvent event) {
       System.out.println(event);
     }
 
     @Override
-    public void onClientException(WebsocketAudioTranscriptionsClient client, Throwable e) {
+    public void onClientException(WebsocketsAudioTranscriptionsClient client, Throwable e) {
       e.printStackTrace();
     }
 
     // 转录配置更新事件 (transcriptions.updated)
     @Override
     public void onTranscriptionsUpdated(
-        WebsocketAudioTranscriptionsClient client, TranscriptionsUpdatedEvent event) {
+        WebsocketsAudioTranscriptionsClient client, TranscriptionsUpdatedEvent event) {
       System.out.println("=== Transcriptions Updated ===");
       System.out.println(event);
     }
@@ -67,7 +66,7 @@ public class WebsocketTranscriptionsExample {
     // 转录创建事件 (transcriptions.created)
     @Override
     public void onTranscriptionsCreated(
-        WebsocketAudioTranscriptionsClient client, TranscriptionsCreatedEvent event) {
+        WebsocketsAudioTranscriptionsClient client, TranscriptionsCreatedEvent event) {
       System.out.println("=== Transcriptions Created ===");
       System.out.println(event);
     }
@@ -75,14 +74,14 @@ public class WebsocketTranscriptionsExample {
     // 转录消息更新事件 (transcriptions.message.update)
     @Override
     public void onTranscriptionsMessageUpdate(
-        WebsocketAudioTranscriptionsClient client, TranscriptionsMessageUpdateEvent event) {
+        WebsocketsAudioTranscriptionsClient client, TranscriptionsMessageUpdateEvent event) {
       System.out.println(event.getData().getContent());
     }
 
     // 转录消息完成事件 (transcriptions.message.completed)
     @Override
     public void onTranscriptionsMessageCompleted(
-        WebsocketAudioTranscriptionsClient client, TranscriptionsMessageCompletedEvent event) {
+        WebsocketsAudioTranscriptionsClient client, TranscriptionsMessageCompletedEvent event) {
       System.out.println("=== Transcriptions Message Completed ===");
       System.out.println(event);
     }
@@ -90,7 +89,7 @@ public class WebsocketTranscriptionsExample {
     // 语音缓冲区完成事件 (input_audio_buffer.completed)
     @Override
     public void onInputAudioBufferCompleted(
-        WebsocketAudioTranscriptionsClient client, InputAudioBufferCompletedEvent event) {
+        WebsocketsAudioTranscriptionsClient client, InputAudioBufferCompletedEvent event) {
       System.out.println("=== Input Audio Buffer Completed ===");
       System.out.println(event);
     }
@@ -112,13 +111,13 @@ public class WebsocketTranscriptionsExample {
             .readTimeout(10000)
             .build();
 
-    WebsocketAudioTranscriptionsClient client = null;
+    WebsocketsAudioTranscriptionsClient client = null;
     try {
       client =
-          coze.websocket()
+          coze.websockets()
               .audio()
               .transcriptions()
-              .create(new WebsocketAudioTranscriptionsCreateReq(new CallbackHandler()));
+              .create(new WebsocketsAudioTranscriptionsCreateReq(new CallbackHandler()));
       CreateSpeechResp speechResp =
           coze.audio()
               .speech()
@@ -139,9 +138,7 @@ public class WebsocketTranscriptionsExample {
         int bytesRead;
 
         while ((bytesRead = inputStream.read(buffer)) != -1) {
-          // 将读取到的字节转换为 base64 编码
-          String base64Data = Base64.getEncoder().encodeToString(Arrays.copyOf(buffer, bytesRead));
-          client.inputAudioBufferAppend(base64Data);
+          client.inputAudioBufferAppend(Arrays.copyOf(buffer, bytesRead));
         }
         client.inputAudioBufferComplete();
       } catch (IOException e) {

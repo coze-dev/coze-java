@@ -10,9 +10,9 @@ import com.coze.openapi.client.websocket.event.model.PCMConfig;
 import com.coze.openapi.client.websocket.event.model.SpeechUpdateEventData;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
-import com.coze.openapi.service.service.websocket.audio.speech.WebsocketAudioSpeechCallbackHandler;
-import com.coze.openapi.service.service.websocket.audio.speech.WebsocketAudioSpeechClient;
-import com.coze.openapi.service.service.websocket.audio.speech.WebsocketAudioSpeechCreateReq;
+import com.coze.openapi.service.service.websocket.audio.speech.WebsocketsAudioSpeechCallbackHandler;
+import com.coze.openapi.service.service.websocket.audio.speech.WebsocketsAudioSpeechClient;
+import com.coze.openapi.service.service.websocket.audio.speech.WebsocketsAudioSpeechCreateReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import example.utils.ExampleUtils;
@@ -35,7 +35,7 @@ public class WebsocketAudioSpeechExample {
     private String weather;
   }
 
-  private static class CallbackHandler extends WebsocketAudioSpeechCallbackHandler {
+  private static class CallbackHandler extends WebsocketsAudioSpeechCallbackHandler {
     private final ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024 * 10); // 分配 10MB 缓冲区
 
     public CallbackHandler() {
@@ -44,14 +44,14 @@ public class WebsocketAudioSpeechExample {
 
     // 语音创建成功事件 (speech.created)
     @Override
-    public void onSpeechCreated(WebsocketAudioSpeechClient client, SpeechCreatedEvent event) {
+    public void onSpeechCreated(WebsocketsAudioSpeechClient client, SpeechCreatedEvent event) {
       System.out.println("==== Speech Created ====");
       System.out.println(event);
     }
 
     // 语音配置更新事件 (speech.update)
     @Override
-    public void onSpeechUpdated(WebsocketAudioSpeechClient client, SpeechUpdatedEvent event) {
+    public void onSpeechUpdated(WebsocketsAudioSpeechClient client, SpeechUpdatedEvent event) {
       System.out.println("==== Speech Updated ====");
       System.out.println(event);
     }
@@ -59,14 +59,14 @@ public class WebsocketAudioSpeechExample {
     // 语音数据更新事件 (speech.audio.update)
     @Override
     public void onSpeechAudioUpdate(
-        WebsocketAudioSpeechClient client, SpeechAudioUpdateEvent event) {
+        WebsocketsAudioSpeechClient client, SpeechAudioUpdateEvent event) {
       buffer.put(event.getDelta());
     }
 
     // 语音数据完成事件 (speech.audio.completed)
     @Override
     public void onSpeechAudioCompleted(
-        WebsocketAudioSpeechClient client, SpeechAudioCompletedEvent event) {
+        WebsocketsAudioSpeechClient client, SpeechAudioCompletedEvent event) {
       try {
         ExampleUtils.writePcmToWavFile(buffer.array(), "output_speech.wav");
         System.out.println("========= On Speech Audio Completed =========");
@@ -78,13 +78,13 @@ public class WebsocketAudioSpeechExample {
     // 文本缓冲区完成事件 (input_text_buffer.completed)
     @Override
     public void onInputTextBufferCompleted(
-        WebsocketAudioSpeechClient client, InputTextBufferCompletedEvent event) {
+        WebsocketsAudioSpeechClient client, InputTextBufferCompletedEvent event) {
       System.out.println("==== Input Text Buffer Completed ====");
       System.out.println(event);
     }
 
     @Override
-    public void onError(WebsocketAudioSpeechClient client, ErrorEvent event) {
+    public void onError(WebsocketsAudioSpeechClient client, ErrorEvent event) {
       System.out.println(event);
     }
   }
@@ -105,13 +105,13 @@ public class WebsocketAudioSpeechExample {
             .readTimeout(10000)
             .build();
 
-    WebsocketAudioSpeechClient client = null;
+    WebsocketsAudioSpeechClient client = null;
     try {
       client =
-          coze.websocket()
+          coze.websockets()
               .audio()
               .speech()
-              .create(new WebsocketAudioSpeechCreateReq(new CallbackHandler()));
+              .create(new WebsocketsAudioSpeechCreateReq(new CallbackHandler()));
       OutputAudio outputAudio =
           OutputAudio.builder()
               .voiceId(voiceID)

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,9 +17,9 @@ import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.client.websocket.event.upstream.ConversationChatSubmitToolOutputsEvent;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
-import com.coze.openapi.service.service.websocket.chat.WebsocketChatCallbackHandler;
-import com.coze.openapi.service.service.websocket.chat.WebsocketChatClient;
-import com.coze.openapi.service.service.websocket.chat.WebsocketChatCreateReq;
+import com.coze.openapi.service.service.websocket.chat.WebsocketsChatCallbackHandler;
+import com.coze.openapi.service.service.websocket.chat.WebsocketsChatClient;
+import com.coze.openapi.service.service.websocket.chat.WebsocketsChatCreateReq;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -35,6 +34,9 @@ This example describes how to use the chat interface to initiate conversations,
 poll the status of the conversation, and obtain the messages after the conversation is completed.
 * */
 public class ChatExample {
+
+  private static boolean isDone;
+
   @Data
   @Builder
   @AllArgsConstructor
@@ -44,7 +46,7 @@ public class ChatExample {
     private String weather;
   }
 
-  private static class CallbackHandler extends WebsocketChatCallbackHandler {
+  private static class CallbackHandler extends WebsocketsChatCallbackHandler {
     private final ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024 * 10); // 分配 10MB 缓冲区
 
     public CallbackHandler() {
@@ -52,55 +54,56 @@ public class ChatExample {
     }
 
     @Override
-    public void onChatCreated(WebsocketChatClient client, ChatCreatedEvent event) {
+    public void onChatCreated(WebsocketsChatClient client, ChatCreatedEvent event) {
       System.out.println(event);
       //            client.sendEvent(new BaseEvent());
     }
 
     @Override
     public void onConversationMessageDelta(
-        WebsocketChatClient client, ConversationMessageDeltaEvent event) {
+        WebsocketsChatClient client, ConversationMessageDeltaEvent event) {
       System.out.printf("Revieve: %s\n", event.getData().getContent());
     }
 
     @Override
-    public void onError(WebsocketChatClient client, ErrorEvent event) {
+    public void onError(WebsocketsChatClient client, ErrorEvent event) {
       System.out.println(event);
     }
 
     @Override
     public void onInputAudioBufferCompleted(
-        WebsocketChatClient client, InputAudioBufferCompletedEvent event) {
+        WebsocketsChatClient client, InputAudioBufferCompletedEvent event) {
       System.out.println("========= Input Audio Buffer Completed =========");
       System.out.println(event);
     }
 
     @Override
     public void onConversationAudioCompleted(
-        WebsocketChatClient client, ConversationAudioCompletedEvent event) {
+        WebsocketsChatClient client, ConversationAudioCompletedEvent event) {
       try {
         ExampleUtils.writePcmToWavFile(buffer.array(), "output.wav");
         System.out.println("========= Output Audio Completed =========");
+        isDone = true;
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
 
     @Override
-    public void onClientException(WebsocketChatClient client, Throwable e) {
+    public void onClientException(WebsocketsChatClient client, Throwable e) {
       e.printStackTrace();
     }
 
     @Override
     public void onConversationAudioDelta(
-        WebsocketChatClient client, ConversationAudioDeltaEvent event) {
+        WebsocketsChatClient client, ConversationAudioDeltaEvent event) {
       byte[] audioData = event.getData().getAudio();
       buffer.put(audioData);
     }
 
     @Override
     public void onConversationChatRequiresAction(
-        WebsocketChatClient client, ConversationChatRequiresActionEvent event) {
+        WebsocketsChatClient client, ConversationChatRequiresActionEvent event) {
       List<ToolOutput> toolOutputs = new ArrayList<>();
       for (ChatToolCall call :
           event.getData().getRequiredAction().getSubmitToolOutputs().getToolCalls()) {
@@ -138,10 +141,12 @@ public class ChatExample {
             .readTimeout(10000)
             .build();
 
-    WebsocketChatClient client = null;
+    WebsocketsChatClient client = null;
     try {
       client =
-          coze.websocket().chat().create(new WebsocketChatCreateReq(botID, new CallbackHandler()));
+          coze.websockets()
+              .chat()
+              .create(new WebsocketsChatCreateReq(botID, new CallbackHandler()));
       CreateSpeechResp speechResp =
           coze.audio()
               .speech()
@@ -158,16 +163,17 @@ public class ChatExample {
         int bytesRead;
 
         while ((bytesRead = inputStream.read(buffer)) != -1) {
-          // 将读取到的字节转换为 base64 编码
-          String base64Data = Base64.getEncoder().encodeToString(Arrays.copyOf(buffer, bytesRead));
-          client.inputAudioBufferAppend(base64Data);
+          client.inputAudioBufferAppend(Arrays.copyOf(buffer, bytesRead));
+          TimeUnit.MILLISECONDS.sleep(100);
         }
         client.inputAudioBufferComplete();
       } catch (IOException e) {
         e.printStackTrace();
       }
+      while (!isDone) {
+        TimeUnit.MILLISECONDS.sleep(100);
+      }
 
-      TimeUnit.SECONDS.sleep(100);
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
