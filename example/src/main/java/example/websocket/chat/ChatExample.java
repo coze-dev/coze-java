@@ -164,6 +164,7 @@ public class ChatExample {
 
         while ((bytesRead = inputStream.read(buffer)) != -1) {
           client.inputAudioBufferAppend(Arrays.copyOf(buffer, bytesRead));
+          // 模拟人说话的间隔
           TimeUnit.MILLISECONDS.sleep(100);
         }
         client.inputAudioBufferComplete();

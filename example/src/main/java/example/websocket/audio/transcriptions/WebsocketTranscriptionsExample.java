@@ -17,26 +17,14 @@ import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketsAudioTranscriptionsCallbackHandler;
 import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketsAudioTranscriptionsClient;
 import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketsAudioTranscriptionsCreateReq;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /*
 This example describes how to use the chat interface to initiate conversations,
 poll the status of the conversation, and obtain the messages after the conversation is completed.
 * */
 public class WebsocketTranscriptionsExample {
-  @Data
-  @Builder
-  @AllArgsConstructor
-  @NoArgsConstructor
-  private static class Weather {
-    @JsonProperty("weather")
-    private String weather;
-  }
+
+  public static boolean isDone = false;
 
   private static class CallbackHandler extends WebsocketsAudioTranscriptionsCallbackHandler {
     private final ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024 * 10); // 分配 10MB 缓冲区
@@ -84,6 +72,7 @@ public class WebsocketTranscriptionsExample {
         WebsocketsAudioTranscriptionsClient client, TranscriptionsMessageCompletedEvent event) {
       System.out.println("=== Transcriptions Message Completed ===");
       System.out.println(event);
+      isDone = true;
     }
 
     // 语音缓冲区完成事件 (input_audio_buffer.completed)
@@ -139,13 +128,18 @@ public class WebsocketTranscriptionsExample {
 
         while ((bytesRead = inputStream.read(buffer)) != -1) {
           client.inputAudioBufferAppend(Arrays.copyOf(buffer, bytesRead));
+          // 模拟人说话的间隔
+          TimeUnit.MILLISECONDS.sleep(100);
         }
         client.inputAudioBufferComplete();
       } catch (IOException e) {
         e.printStackTrace();
       }
 
-      TimeUnit.SECONDS.sleep(100);
+      while (!isDone) {
+        TimeUnit.MILLISECONDS.sleep(100);
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
     } finally {

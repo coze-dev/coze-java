@@ -13,27 +13,16 @@ import com.coze.openapi.service.service.CozeAPI;
 import com.coze.openapi.service.service.websocket.audio.speech.WebsocketsAudioSpeechCallbackHandler;
 import com.coze.openapi.service.service.websocket.audio.speech.WebsocketsAudioSpeechClient;
 import com.coze.openapi.service.service.websocket.audio.speech.WebsocketsAudioSpeechCreateReq;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import example.utils.ExampleUtils;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /*
 This example describes how to use the chat interface to initiate conversations,
 poll the status of the conversation, and obtain the messages after the conversation is completed.
 * */
 public class WebsocketAudioSpeechExample {
-  @Data
-  @Builder
-  @AllArgsConstructor
-  @NoArgsConstructor
-  private static class Weather {
-    @JsonProperty("weather")
-    private String weather;
-  }
+
+  private static boolean isDone = false;
 
   private static class CallbackHandler extends WebsocketsAudioSpeechCallbackHandler {
     private final ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024 * 10); // 分配 10MB 缓冲区
@@ -70,6 +59,7 @@ public class WebsocketAudioSpeechExample {
       try {
         ExampleUtils.writePcmToWavFile(buffer.array(), "output_speech.wav");
         System.out.println("========= On Speech Audio Completed =========");
+        isDone = true;
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -122,7 +112,9 @@ public class WebsocketAudioSpeechExample {
       client.speechUpdate(new SpeechUpdateEventData(outputAudio));
       client.inputTextBufferAppend("hello world, nice to meet you!");
       client.inputTextBufferComplete();
-      TimeUnit.SECONDS.sleep(100);
+      while (!isDone) {
+        TimeUnit.MILLISECONDS.sleep(100);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
