@@ -59,9 +59,9 @@
                     <excludes>
                         <exclude>**/client/**/*</exclude>
                         <exclude>**/BaseCallbackHandler.java</exclude>
-                        <exclude>**/WebsocketChatCallbackHandler.java</exclude>
-                        <exclude>**/WebsocketAudioTranscriptionsCallbackHandler.java</exclude>
-                        <exclude>**/WebsocketAudioSpeechCallbackHandler.java</exclude>
+                        <exclude>**/WebsocketsChatCallbackHandler.java</exclude>
+                        <exclude>**/WebsocketsAudioTranscriptionsCallbackHandler.java</exclude>
+                        <exclude>**/WebsocketsAudioSpeechCallbackHandler.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
