@@ -19,9 +19,9 @@ import com.coze.openapi.service.service.websocket.audio.transcriptions.Websocket
 import com.coze.openapi.service.service.websocket.audio.transcriptions.WebsocketsAudioTranscriptionsCreateReq;
 
 /*
-This example describes how to use the chat interface to initiate conversations,
-poll the status of the conversation, and obtain the messages after the conversation is completed.
-* */
+This example demonstrates how to use the WebSocket transcription API to transcribe audio data,
+process transcription events, and handle the results through callback methods.
+ */
 public class WebsocketTranscriptionsExample {
 
   public static boolean isDone = false;

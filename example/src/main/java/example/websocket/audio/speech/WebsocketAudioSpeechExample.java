@@ -17,9 +17,12 @@ import com.coze.openapi.service.service.websocket.audio.speech.WebsocketsAudioSp
 import example.utils.ExampleUtils;
 
 /*
-This example describes how to use the chat interface to initiate conversations,
-poll the status of the conversation, and obtain the messages after the conversation is completed.
-* */
+This example demonstrates how to use the WebSocket audio speech interface to:
+- Create a speech session
+- Configure audio parameters
+- Send text input
+- Process and save the resulting audio output
+*/
 public class WebsocketAudioSpeechExample {
 
   private static boolean isDone = false;
