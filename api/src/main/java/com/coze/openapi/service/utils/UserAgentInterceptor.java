@@ -24,7 +24,7 @@ public class UserAgentInterceptor implements Interceptor {
     return chain.proceed(request);
   }
 
-  public static final String VERSION = "0.2.9";
+  public static final String VERSION = "0.3.0";
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
   /** 获取操作系统版本 */
