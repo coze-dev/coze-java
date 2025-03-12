@@ -1,13 +1,8 @@
 package com.coze.openapi.client.bots.model;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -16,12 +11,12 @@ import lombok.NoArgsConstructor;
 public class BotPluginIdInfo {
 
   /** 智能体绑定的插件工具 ID */
-  @NotNull
+  @NonNull
   @JsonProperty("api_id")
   private String apiId;
 
   /** 智能体绑定的插件 ID */
-  @NotNull
+  @NonNull
   @JsonProperty("plugin_id")
   private String pluginId;
 }

@@ -1,8 +1,7 @@
 package com.coze.openapi.client.bots.model;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.istack.internal.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
