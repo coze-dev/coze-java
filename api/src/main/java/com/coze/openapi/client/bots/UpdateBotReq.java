@@ -1,11 +1,11 @@
 package com.coze.openapi.client.bots;
 
 import com.coze.openapi.client.bots.model.BotKnowledge;
-import com.coze.openapi.client.bots.model.BotOnboardingInfo;
-import com.coze.openapi.client.bots.model.BotPromptInfo;
-import com.coze.openapi.client.bots.model.BotPluginIdList;
-import com.coze.openapi.client.bots.model.BotWorkflowIdList;
 import com.coze.openapi.client.bots.model.BotModelInfoConfig;
+import com.coze.openapi.client.bots.model.BotOnboardingInfo;
+import com.coze.openapi.client.bots.model.BotPluginIdList;
+import com.coze.openapi.client.bots.model.BotPromptInfo;
+import com.coze.openapi.client.bots.model.BotWorkflowIdList;
 import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
