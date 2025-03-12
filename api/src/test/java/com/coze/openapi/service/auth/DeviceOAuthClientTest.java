@@ -17,8 +17,10 @@ import com.coze.openapi.client.exception.CozeAuthException;
 
 import io.reactivex.Single;
 import okhttp3.Headers;
+import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 class DeviceOAuthClientTest {
@@ -129,15 +131,15 @@ class DeviceOAuthClientTest {
     Response<OAuthToken> pendingResponse =
         Response.error(
             400,
-            okhttp3.ResponseBody.create(
-                "{\"error_code\":\"authorization_pending\",\"error_message\":\"Authorization pending\"}",
-                okhttp3.MediaType.get("application/json")));
+            ResponseBody.create(
+                MediaType.parse("application/json"),
+                "{\"error_code\":\"authorization_pending\",\"error_message\":\"Authorization pending\"}"));
     Response<OAuthToken> slowDownResponse =
         Response.error(
             400,
-            okhttp3.ResponseBody.create(
-                "{\"error_code\":\"slow_down\",\"error_message\":\"Slow Down\"}",
-                okhttp3.MediaType.get("application/json")));
+            ResponseBody.create(
+                MediaType.parse("application/json"),
+                "{\"error_code\":\"slow_down\",\"error_message\":\"Slow Down\"}"));
 
     // 设置模拟行为 - 第一次返回 pending，第二次返回 slow down，第三次成功
     when(mockApi.retrieve(any(), any()))
@@ -162,8 +164,8 @@ class DeviceOAuthClientTest {
         Response.error(
             400,
             okhttp3.ResponseBody.create(
-                "{\"error_code\":\"invalid_grant\",\"error_message\":\"Invalid grant\"}",
-                okhttp3.MediaType.get("application/json")));
+                MediaType.parse("application/json"),
+                "{\"error_code\":\"invalid_grant\",\"error_message\":\"Invalid grant\"}"));
 
     // 设置模拟行为
     when(mockApi.retrieve(anyMap(), any(GetAccessTokenReq.class)))

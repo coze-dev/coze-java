@@ -7,7 +7,6 @@ public class TokenAuth extends Auth {
     this.accessToken = accessToken;
   }
 
-  @Override
   public String token() {
     return accessToken;
   }

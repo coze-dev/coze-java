@@ -36,7 +36,7 @@ public class JWTOAuthExample {
     String jwtOauthPrivateKey = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY");
     String jwtOauthPrivateKeyFilePath = System.getenv("COZE_JWT_OAUTH_PRIVATE_KEY_FILE_PATH");
     String jwtOauthPublicKeyID = System.getenv("COZE_JWT_OAUTH_PUBLIC_KEY_ID");
-
+    //    jwtOauthPublicKeyID+="123";
     JWTOAuthClient oauth = null;
     try {
       jwtOauthPrivateKey =
@@ -78,7 +78,11 @@ public class JWTOAuthExample {
     The jwt oauth process does not support refreshing tokens. When the token expires,
     just directly call get_access_token to generate a new token.
     * */
-    CozeAPI coze = new CozeAPI.Builder().auth(new JWTOAuth(oauth)).baseURL(cozeAPIBase).build();
+    CozeAPI coze =
+        new CozeAPI.Builder()
+            .auth(JWTOAuth.builder().jwtClient(oauth).build())
+            .baseURL(cozeAPIBase)
+            .build();
     // you can also specify the scope and session for it
   }
 }

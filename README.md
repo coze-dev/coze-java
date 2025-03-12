@@ -71,6 +71,9 @@ dependencies {
 | how to handle exception       | [HandlerExceptionExample.java](example/src/main/java/example/service/HandlerExceptionExample.java)          |
 | get request log id            | [GetLogExample.java](example/src/main/java/example/service/GetLogExample.java)                              |
 | set timeout                   | [SetRequestTimeoutExample.java](example/src/main/java/example/service/SetRequestTimeoutExample.java)        |
+| websocket chat              | [ChatExample.java](example/src/main/java/example/websocket/chat/ChatExample.java)                           |
+| websocket speech synthesis  | [WebsocketAudioSpeechExample.java](example/src/main/java/example/websocket/audio/speech/WebsocketAudioSpeechExample.java) |
+| websocket transcription     | [WebsocketTranscriptionsExample.java](example/src/main/java/example/websocket/audio/transcriptions/WebsocketTranscriptionsExample.java) |
 
 ### Initialize the Coze Client 
 
@@ -982,6 +985,125 @@ while (iterator.hasNext()) {
     iterator.forEachRemaining(System.out::println);
 }
 
+```
+
+### WebSocket
+
+The SDK provides WebSocket interfaces for real-time chat, speech synthesis and speech transcription.
+
+You can check the official documentation for more information:
+https://www.coze.cn/open/docs/guides/websocket_openapi
+
+#### WebSocket Chat
+
+WebSocket chat allows real-time communication with bots, including text and audio interactions:
+
+```java
+WebsocketChatClient client = coze.websocket()
+    .chat()
+    .create(new WebsocketChatCreateReq(botID, new CallbackHandler()));
+
+// Send audio data
+String audioData = "..."; // Base64 encoded audio data
+client.inputAudioBufferAppend(audioData);
+client.inputAudioBufferComplete();
+
+// Handle responses in callback
+class CallbackHandler extends WebsocketChatCallbackHandler {
+    // Handle text responses
+    @Override
+    public void onConversationMessageDelta(WebsocketChatClient client, ConversationMessageDeltaEvent event) {
+        System.out.printf("Received: %s\n", event.getData().getContent());
+    }
+
+    // Handle audio responses  
+    @Override
+    public void onConversationAudioDelta(WebsocketChatClient client, ConversationAudioDeltaEvent event) {
+        byte[] audioData = event.getData().getAudio();
+        // Process audio data...
+    }
+}
+```
+
+#### Speech Synthesis
+
+WebSocket speech synthesis allows real-time text-to-speech conversion:
+
+```java
+WebsocketAudioSpeechClient client = coze.websocket()
+    .audio()
+    .speech()
+    .create(new WebsocketAudioSpeechCreateReq(new CallbackHandler()));
+
+// Configure audio output
+OutputAudio outputAudio = OutputAudio.builder()
+    .voiceId(voiceID)
+    .codec("pcm")
+    .speechRate(50)
+    .pcmConfig(PCMConfig.builder().sampleRate(24000).build())
+    .build();
+client.speechUpdate(new SpeechUpdateEventData(outputAudio));
+
+// Send text for synthesis
+client.inputTextBufferAppend("Hello world!");
+client.inputTextBufferComplete();
+
+// Handle synthesized audio in callback
+class CallbackHandler extends WebsocketAudioSpeechCallbackHandler {
+    @Override
+    public void onSpeechAudioUpdate(WebsocketAudioSpeechClient client, SpeechAudioUpdateEvent event) {
+        byte[] audioData = event.getDelta();
+        // Process audio data...
+    }
+}
+```
+
+#### Speech Transcription 
+
+WebSocket speech transcription provides real-time speech-to-text conversion:
+
+```java
+WebsocketAudioTranscriptionsClient client = coze.websocket()
+    .audio()
+    .transcriptions()
+    .create(new WebsocketAudioTranscriptionsCreateReq(new CallbackHandler()));
+
+// Configure audio input
+InputAudio inputAudio = InputAudio.builder()
+    .sampleRate(24000)
+    .codec("pcm")
+    .format("wav")
+    .channel(2)
+    .build();
+client.transcriptionsUpdate(new TranscriptionsUpdateEventData(inputAudio));
+
+// Send audio for transcription
+String audioData = "..."; // Base64 encoded audio data
+client.inputAudioBufferAppend(audioData);
+client.inputAudioBufferComplete();
+
+// Handle transcription results in callback
+class CallbackHandler extends WebsocketAudioTranscriptionsCallbackHandler {
+    @Override
+    public void onTranscriptionsMessageUpdate(
+        WebsocketAudioTranscriptionsClient client, 
+        TranscriptionsMessageUpdateEvent event) {
+        System.out.println(event.getData().getContent());
+    }
+}
+```
+
+All WebSocket clients support proper resource cleanup:
+
+```java
+try {
+    // Use the client...
+} finally {
+    if (client != null) {
+        client.close();
+    }
+    coze.shutdownExecutor();
+}
 ```
 
 

@@ -88,7 +88,7 @@ public class WorkFlowRunServiceTest {
     // 准备 SSE 格式的响应数据
     // 使用 okio 的 Buffer 创建模拟的响应流
     ResponseBody responseBody =
-        ResponseBody.create(eventData, MediaType.parse("text/event-stream; charset=utf-8"));
+        ResponseBody.create(MediaType.parse("text/event-stream; charset=utf-8"), eventData);
 
     // 模拟 API 调用
     Call<ResponseBody> call = Calls.response(responseBody);

@@ -43,7 +43,7 @@
     </parent>
 
     <artifactId>coze-api</artifactId>
-    <version>0.2.8</version>
+    <version>0.2.9</version>
 
     <scm>
         <connection>scm:git:git://github.com/coze-dev/coze-java.git</connection>
@@ -68,7 +68,7 @@
         <jackson.version>2.14.2</jackson.version>
         <jwt.version>0.11.5</jwt.version>
         <junit.version>5.10.2</junit.version>
-        <okhttp.version>4.8.1</okhttp.version>
+        <okhttp.version>3.14.9</okhttp.version>
     </properties>
 
     <dependencies>
@@ -280,7 +280,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.2.5</version>
                 <configuration>
                     <includes>
                         <include>**/*Test.java</include>
@@ -288,9 +288,12 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <forkCount>1</forkCount>
                     <reuseForks>true</reuseForks>
-                    <argLine>@{argLine} -Djava.security.egd=file:/dev/./urandom</argLine>
+                    <argLine>@{argLine}</argLine>
                     <systemPropertyVariables>
-                        <okhttp.platform>jdk</okhttp.platform>
+                        <okhttp.platform>jdk-8</okhttp.platform>
+                        <java.security.egd>file:/dev/urandom</java.security.egd>
+                        <javax.net.ssl.trustStore>${java.home}/lib/security/cacerts</javax.net.ssl.trustStore>
+                        <javax.net.ssl.trustStorePassword>changeit</javax.net.ssl.trustStorePassword>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

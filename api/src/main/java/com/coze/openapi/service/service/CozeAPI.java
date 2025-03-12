@@ -18,12 +18,14 @@ import com.coze.openapi.service.service.conversation.ConversationService;
 import com.coze.openapi.service.service.dataset.DatasetService;
 import com.coze.openapi.service.service.file.FileService;
 import com.coze.openapi.service.service.template.TemplateService;
+import com.coze.openapi.service.service.websocket.WebsocketsClient;
 import com.coze.openapi.service.service.workflow.WorkflowService;
 import com.coze.openapi.service.service.workspace.WorkspaceService;
 import com.coze.openapi.service.utils.UserAgentInterceptor;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.lang.Strings;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -44,6 +46,7 @@ public class CozeAPI {
   private final ChatService chatAPI;
   private final AudioService audioAPI;
   private final TemplateService templateAPI;
+  private final WebsocketsClient websocket;
 
   private CozeAPI(
       String baseURL,
@@ -57,7 +60,8 @@ public class CozeAPI {
       WorkflowService workflowAPI,
       ChatService chatAPI,
       AudioService audioAPI,
-      TemplateService templateAPI) {
+      TemplateService templateAPI,
+      WebsocketsClient websocket) {
     this.baseURL = baseURL;
     this.executorService = executorService;
     this.auth = auth;
@@ -70,6 +74,7 @@ public class CozeAPI {
     this.chatAPI = chatAPI;
     this.audioAPI = audioAPI;
     this.templateAPI = templateAPI;
+    this.websocket = websocket;
   }
 
   public WorkspaceService workspaces() {
@@ -106,6 +111,10 @@ public class CozeAPI {
 
   public TemplateService templates() {
     return this.templateAPI;
+  }
+
+  public WebsocketsClient websockets() {
+    return this.websocket;
   }
 
   public void shutdownExecutor() {
@@ -166,7 +175,7 @@ public class CozeAPI {
         this.baseURL = Consts.COZE_COM_BASE_URL;
       }
 
-      ObjectMapper mapper = Utils.defaultObjectMapper();
+      ObjectMapper mapper = Utils.getMapper();
       Retrofit retrofit = defaultRetrofit(client, mapper, this.baseURL);
       ExecutorService executorService = client.dispatcher().executorService();
       WorkspaceService workspaceAPI = new WorkspaceService(retrofit.create(WorkspaceAPI.class));
@@ -192,8 +201,12 @@ public class CozeAPI {
           new AudioService(
               retrofit.create(AudioVoiceAPI.class),
               retrofit.create(AudioRoomAPI.class),
-              retrofit.create(AudioSpeechAPI.class));
+              retrofit.create(AudioSpeechAPI.class),
+              retrofit.create(AudioTranscriptionAPI.class));
       TemplateService templateAPI = new TemplateService(retrofit.create(TemplateAPI.class));
+      WebsocketsClient websocket =
+          new WebsocketsClient(
+              this.client, Strings.replace(this.baseURL, "https://api", "wss://ws"));
       return new CozeAPI(
           this.baseURL,
           executorService,
@@ -206,7 +219,8 @@ public class CozeAPI {
           workflowAPI,
           chatAPI,
           audioAPI,
-          templateAPI);
+          templateAPI,
+          websocket);
     }
 
     // 确保加上了 Auth 拦截器
@@ -228,7 +242,7 @@ public class CozeAPI {
       if (hasAuthInterceptor && hasTimeoutInterceptor && hasUserAgentInterceptor) {
         return client;
       }
-      OkHttpClient.Builder builder = new OkHttpClient.Builder(client);
+      OkHttpClient.Builder builder = client.newBuilder();
       if (!hasAuthInterceptor) {
         builder.addInterceptor(new AuthenticationInterceptor(this.auth));
       }

@@ -1,7 +1,5 @@
 package com.coze.openapi.service.auth;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.client.auth.GrantType;
 import com.coze.openapi.client.auth.LoadAuthConfig;
 import com.coze.openapi.client.auth.OAuthConfig;
@@ -23,13 +21,12 @@ public class WebOAuthClient extends OAuthClient {
   }
 
   @Override
-  public String getOAuthURL(@NotNull String redirectURI, String state) {
+  public String getOAuthURL(String redirectURI, String state) {
     return super.getOAuthURL(redirectURI, state);
   }
 
   @Override
-  public String getOAuthURL(
-      @NotNull String redirectURI, String state, @NotNull String workspaceID) {
+  public String getOAuthURL(String redirectURI, String state, String workspaceID) {
     return super.getOAuthURL(redirectURI, state, workspaceID);
   }
 

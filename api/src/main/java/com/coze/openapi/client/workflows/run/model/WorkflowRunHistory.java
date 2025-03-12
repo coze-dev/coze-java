@@ -75,7 +75,7 @@ public class WorkflowRunHistory {
    * failed. You can determine the detailed reason for the error through the error_message field.
    */
   @JsonProperty("error_code")
-  private int errorCode;
+  private String errorCode;
 
   /** Status message. You can get detailed error information when the API call fails. */
   @JsonProperty("error_message")

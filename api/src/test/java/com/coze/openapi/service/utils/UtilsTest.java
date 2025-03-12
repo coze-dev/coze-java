@@ -13,9 +13,11 @@ import com.coze.openapi.client.common.BaseResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.Headers;
+import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response.Builder;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -25,7 +27,7 @@ public class UtilsTest {
 
   @BeforeEach
   public void setUp() {
-    objectMapper = Utils.defaultObjectMapper();
+    objectMapper = Utils.getMapper();
   }
 
   public static class TestResponse extends BaseResp {}
@@ -104,7 +106,7 @@ public class UtilsTest {
             .message("Bad Request")
             .build();
 
-    Response<BaseResp> response = Response.error(400, okhttp3.ResponseBody.create("", null));
+    Response<BaseResp> response = Response.error(400, ResponseBody.create(MediaType.parse(""), ""));
     when(call.execute()).thenReturn(response);
 
     // 执行测试，应该抛出异常
@@ -131,6 +133,7 @@ public class UtilsTest {
 
   @Test
   public void testGenRandomSign() {
+
     // 测试生成16位随机字符串
     String sign = Utils.genRandomSign(16);
     assertNotNull(sign);
