@@ -50,30 +50,23 @@ public class BotPublishExample {
     System.out.println(avatarInfo);
 
     // Configuration for the bot's plugins
-    BotPluginIdInfo pluginIdInfo = BotPluginIdInfo.builder()
+    BotPluginIdInfo pluginIdInfo =
+        BotPluginIdInfo.builder()
             .apiId(System.getenv("PLUGIN_API_ID"))
             .pluginId(System.getenv("PLUGIN_ID"))
             .build();
     BotPluginIdList pluginIdList =
-        BotPluginIdList.builder()
-            .idList(Collections.singletonList(pluginIdInfo))
-            .build();
+        BotPluginIdList.builder().idList(Collections.singletonList(pluginIdInfo)).build();
 
     // Configuration for the bot's workflows
     BotWorkflowIdInfo workflowIdInfo =
-        BotWorkflowIdInfo.builder()
-                .id(System.getenv("WORKFLOW_ID"))
-                .build();
+        BotWorkflowIdInfo.builder().id(System.getenv("WORKFLOW_ID")).build();
     BotWorkflowIdList workflowIdList =
-        BotWorkflowIdList.builder()
-            .ids(Collections.singletonList(workflowIdInfo))
-            .build();
+        BotWorkflowIdList.builder().ids(Collections.singletonList(workflowIdInfo)).build();
 
     // Configuration for the bot's model
     BotModelInfoConfig modelInfoConfig =
-        BotModelInfoConfig.builder()
-                .modelId(System.getenv("MODEL_ID"))
-                .build();
+        BotModelInfoConfig.builder().modelId(System.getenv("MODEL_ID")).build();
 
     // build the request
     CreateBotReq createReq =

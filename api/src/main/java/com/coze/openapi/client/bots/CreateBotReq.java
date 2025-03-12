@@ -1,11 +1,13 @@
 package com.coze.openapi.client.bots;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.coze.openapi.client.bots.model.*;
 import com.coze.openapi.client.common.BaseReq;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.jetbrains.annotations.NotNull;
 
 @Data
 @SuperBuilder
@@ -33,21 +35,15 @@ public class CreateBotReq extends BaseReq {
   @JsonProperty("onboarding_info")
   BotOnboardingInfo onboardingInfo;
 
-  /**
-   * 智能体的插件配置
-   */
+  /** 智能体的插件配置 */
   @JsonProperty("plugin_id_list")
   private BotPluginIdList pluginIdList;
 
-  /**
-   * 智能体的工作流配置
-   */
+  /** 智能体的工作流配置 */
   @JsonProperty("workflow_id_list")
   private BotWorkflowIdList workflowIdList;
 
-  /**
-   * 智能体的模型配置
-   */
+  /** 智能体的模型配置 */
   @JsonProperty("model_info_config")
   private BotModelInfoConfig modelInfoConfig;
 }
