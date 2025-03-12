@@ -849,6 +849,28 @@ public class WebsocketsChatClientTest {
   }
 
   @Test
+  public void testHandleInputAudioBufferSpeechStarted() {
+    // event_type: conversation.cleared
+    String json = "{\"event_type\":\"input_audio_buffer.speech_started\"}";
+
+    client.handleEvent(mockWebSocket, json);
+
+    verify(mockCallbackHandler)
+        .onInputAudioBufferSpeechStarted(eq(client), any(InputAudioBufferSpeechStartedEvent.class));
+  }
+
+  @Test
+  public void testHandleInputAudioBufferSpeechStopped() {
+    // event_type: conversation.cleared
+    String json = "{\"event_type\":\"input_audio_buffer.speech_stopped\"}";
+
+    client.handleEvent(mockWebSocket, json);
+
+    verify(mockCallbackHandler)
+        .onInputAudioBufferSpeechStopped(eq(client), any(InputAudioBufferSpeechStoppedEvent.class));
+  }
+
+  @Test
   void testInputAudioBufferAppendWithString() {
     String audioData = "base64EncodedAudioData";
 

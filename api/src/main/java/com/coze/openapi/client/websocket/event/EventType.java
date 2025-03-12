@@ -85,4 +85,8 @@ public class EventType {
   // connection
   public static final String CONVERSATION_CHAT_REQUIRES_ACTION =
       "conversation.chat.requires_action"; // need plugin submit
+  public static final String INPUT_AUDIO_BUFFER_SPEECH_STARTED =
+      "input_audio_buffer.speech_started";
+  public static final String INPUT_AUDIO_BUFFER_SPEECH_STOPPED =
+      "input_audio_buffer.speech_stopped";
 }

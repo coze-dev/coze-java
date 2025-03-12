@@ -1,22 +1,6 @@
 package com.coze.openapi.service.service.websocket.chat;
 
-import com.coze.openapi.client.websocket.event.downstream.ChatCreatedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ChatUpdatedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationAudioCompletedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationAudioDeltaEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationAudioTranscriptCompletedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationAudioTranscriptUpdateEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationChatCanceledEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationChatCompletedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationChatCreatedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationChatFailedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationChatInProgressEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationChatRequiresActionEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationClearedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationMessageCompletedEvent;
-import com.coze.openapi.client.websocket.event.downstream.ConversationMessageDeltaEvent;
-import com.coze.openapi.client.websocket.event.downstream.InputAudioBufferClearedEvent;
-import com.coze.openapi.client.websocket.event.downstream.InputAudioBufferCompletedEvent;
+import com.coze.openapi.client.websocket.event.downstream.*;
 import com.coze.openapi.service.service.websocket.common.BaseCallbackHandler;
 
 public abstract class WebsocketsChatCallbackHandler
@@ -87,4 +71,12 @@ public abstract class WebsocketsChatCallbackHandler
   // 端插件事件 (conversation.chat.requires_action)
   public void onConversationChatRequiresAction(
       WebsocketsChatClient client, ConversationChatRequiresActionEvent event) {}
+
+  // 服务端检测到开始说话事件（input_audio_buffer.speech_started）
+  public void onInputAudioBufferSpeechStarted(
+      WebsocketsChatClient client, InputAudioBufferSpeechStartedEvent event) {}
+
+  // 服务端检测到停止说话事件（input_audio_buffer.speech_stopped）
+  public void onInputAudioBufferSpeechStopped(
+      WebsocketsChatClient client, InputAudioBufferSpeechStoppedEvent event) {}
 }
