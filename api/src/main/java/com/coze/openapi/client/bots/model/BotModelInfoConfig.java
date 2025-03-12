@@ -1,12 +1,8 @@
 package com.coze.openapi.client.bots.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.internal.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -34,7 +30,7 @@ public class BotModelInfoConfig {
    *
    * <p>示例：1706077826
    */
-  @NotNull
+  @NonNull
   @JsonProperty("model_id")
   private String modelId;
 
