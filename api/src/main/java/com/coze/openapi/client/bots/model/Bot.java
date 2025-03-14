@@ -49,4 +49,13 @@ public class Bot {
 
   @JsonProperty("model_info")
   private BotModelInfo modelInfo;
+
+  @JsonProperty("knowledge")
+  private BotCommonKnowledge knowledge;
+
+  @JsonProperty("shortcut_commands")
+  private List<BotShortcutCommandInfo> shortcutCommands;
+
+  @JsonProperty("workflow_info_list")
+  private List<BotWorkflowInfo> workflowInfoList;
 }
