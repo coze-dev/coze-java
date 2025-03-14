@@ -70,7 +70,7 @@ public class BotModelInfoConfig {
    * 示例：text
    */
   @JsonProperty("response_format")
-  private String responseFormat;
+  private BotResponseFormat responseFormat;
 
   /**
    * 重复主题惩罚。
