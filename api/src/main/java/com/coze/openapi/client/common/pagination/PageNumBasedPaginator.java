@@ -31,7 +31,7 @@ public class PageNumBasedPaginator<T> implements Iterator<T> {
       currentIterator = currentPage.getData().iterator();
       currentPageNum++;
     } catch (Exception e) {
-      throw new RuntimeException("Failed to fetch page", e);
+      throw e;
     }
   }
 

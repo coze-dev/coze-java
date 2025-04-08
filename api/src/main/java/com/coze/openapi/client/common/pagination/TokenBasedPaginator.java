@@ -29,7 +29,7 @@ public class TokenBasedPaginator<T> implements Iterator<T> {
       currentIterator = currentPage.getData().iterator();
       pageToken = currentPage.getPageToken();
     } catch (Exception e) {
-      throw new RuntimeException("Failed to fetch page", e);
+      throw e;
     }
   }
 

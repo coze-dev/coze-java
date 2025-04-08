@@ -56,6 +56,9 @@ public class JWTOAuth extends Auth {
   }
 
   private long getRefreshBefore() {
+    if (ttl == null) {
+      return 0;
+    }
     if (ttl >= 600) {
       return 30;
     } else if (ttl >= 60) {

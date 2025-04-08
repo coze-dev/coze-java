@@ -3,6 +3,7 @@ package com.coze.openapi.service.service;
 import java.io.IOException;
 import java.util.Objects;
 
+import com.coze.openapi.client.common.BaseReq;
 import com.coze.openapi.service.auth.Auth;
 
 import okhttp3.Interceptor;
@@ -19,12 +20,28 @@ public class AuthenticationInterceptor implements Interceptor {
 
   @Override
   public Response intercept(Chain chain) throws IOException {
-    Request request =
-        chain
-            .request()
+    Request request = chain.request();
+    Object tag = request.tag(BaseReq.class);
+    if (!(tag instanceof BaseReq)) {
+      return chain.proceed(
+          request
+              .newBuilder()
+              .header("Authorization", auth.tokenType() + " " + auth.token())
+              .build());
+    }
+
+    BaseReq baseReq = (BaseReq) tag;
+    if (baseReq.getCustomerToken() != null) {
+      return chain.proceed(
+          request
+              .newBuilder()
+              .header("Authorization", "Bearer " + baseReq.getCustomerToken())
+              .build());
+    }
+    return chain.proceed(
+        request
             .newBuilder()
             .header("Authorization", auth.tokenType() + " " + auth.token())
-            .build();
-    return chain.proceed(request);
+            .build());
   }
 }

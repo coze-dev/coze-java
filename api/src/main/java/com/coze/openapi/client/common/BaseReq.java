@@ -13,4 +13,5 @@ public class BaseReq {
   @JsonIgnore private Integer connectTimeout;
   @JsonIgnore private Integer readTimeout;
   @JsonIgnore private Integer writeTimeout;
+  @JsonIgnore private String customerToken;
 }
