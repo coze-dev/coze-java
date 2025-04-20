@@ -2,8 +2,6 @@ package com.coze.openapi.service.service.audio;
 
 import java.io.File;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.api.AudioVoiceAPI;
 import com.coze.openapi.client.audio.voices.CloneVoiceReq;
 import com.coze.openapi.client.audio.voices.CloneVoiceResp;
@@ -29,28 +27,29 @@ public class VoiceService {
   }
 
   public CloneVoiceResp clone(CloneVoiceReq req) {
-    RequestBody voiceName = RequestBody.create(req.getVoiceName(), MediaType.parse("text/plain"));
-    RequestBody audioFormat =
-        RequestBody.create(req.getAudioFormat().getValue(), MediaType.parse("text/plain"));
+    MediaType textPlainType = MediaType.parse("text/plain");
+    RequestBody voiceName = RequestBody.create(textPlainType, req.getVoiceName());
+    RequestBody audioFormat = RequestBody.create(textPlainType, req.getAudioFormat().getValue());
 
     RequestBody language = null;
     if (req.getLanguage() != null) {
-      language = RequestBody.create(req.getLanguage().getValue(), MediaType.parse("text/plain"));
+      language = RequestBody.create(textPlainType, req.getLanguage().getValue());
     }
     RequestBody voiceID = null;
     if (req.getVoiceID() != null) {
-      voiceID = RequestBody.create(req.getVoiceID(), MediaType.parse("text/plain"));
+      voiceID = RequestBody.create(textPlainType, req.getVoiceID());
     }
     RequestBody previewText = null;
     if (req.getPreviewText() != null) {
-      previewText = RequestBody.create(req.getPreviewText(), MediaType.parse("text/plain"));
+      previewText = RequestBody.create(textPlainType, req.getPreviewText());
     }
     RequestBody text = null;
     if (req.getText() != null) {
-      text = RequestBody.create(req.getText(), MediaType.parse("text/plain"));
+      text = RequestBody.create(textPlainType, req.getText());
     }
     File file = new File(req.getFilePath());
-    RequestBody fileBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
+    MediaType formDataType = MediaType.parse("multipart/form-data");
+    RequestBody fileBody = RequestBody.create(formDataType, file);
     MultipartBody.Part filePart =
         MultipartBody.Part.createFormData("file", file.getName(), fileBody);
 
@@ -59,7 +58,7 @@ public class VoiceService {
         .getData();
   }
 
-  public PageResp<Voice> list(@NotNull ListVoiceReq req) {
+  public PageResp<Voice> list(ListVoiceReq req) {
     if (req == null) {
       throw new IllegalArgumentException("req is required");
     }

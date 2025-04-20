@@ -18,6 +18,7 @@ import com.coze.openapi.api.WorkflowRunHistoryAPI;
 import com.coze.openapi.client.workflows.run.RunWorkflowReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowResp;
 import com.coze.openapi.client.workflows.run.model.WorkflowEvent;
+import com.coze.openapi.client.workflows.run.model.WorkflowEventType;
 import com.coze.openapi.utils.Utils;
 
 import io.reactivex.subscribers.TestSubscriber;
@@ -52,7 +53,7 @@ public class WorkFlowRunServiceTest {
           + "\n"
           + "id: 5\n"
           + "event: Message\n"
-          + "data: {\"content\":\"{\\\"output\\\":\\\"为什么小明要带一把尺子去看电影？因为他听说电影很长，怕坐不下！\\\"}\",\"cost\":\"0.00\",\"node_is_finish\":true,\"node_seq_id\":\"0\",\"node_title\":\"\",\"token\":0}\n"
+          + "data: {\"content\":\"{\\\"output\\\":\\\"为什么小明要带一把尺子去看电影？因为他听说电影很长，怕坐不下！\\\"}\",\"cost\":\"0.00\",\"node_is_finish\":true,\"node_seq_id\":\"0\",\"node_title\":\"\",\"token\":1230}\n"
           + "\n"
           + "id: 0\n"
           + "event: Error\n"
@@ -68,7 +69,7 @@ public class WorkFlowRunServiceTest {
           + "\n"
           + "id: 6\n"
           + "event: Done\n"
-          + "data: {}";
+          + "data: {\"debug_url\":\"https://www.coze.cn/work_flow?***\"}";
 
   @Mock private WorkflowRunAPI workflowRunAPI;
 
@@ -84,13 +85,10 @@ public class WorkFlowRunServiceTest {
 
   @Test
   void parseStreamEventTest() {
-    // 准备请求数据
-    RunWorkflowReq req = RunWorkflowReq.builder().workflowID("test-id").build();
-
     // 准备 SSE 格式的响应数据
     // 使用 okio 的 Buffer 创建模拟的响应流
     ResponseBody responseBody =
-        ResponseBody.create(eventData, MediaType.parse("text/event-stream; charset=utf-8"));
+        ResponseBody.create(MediaType.parse("text/event-stream; charset=utf-8"), eventData);
 
     // 模拟 API 调用
     Call<ResponseBody> call = Calls.response(responseBody);
@@ -101,6 +99,20 @@ public class WorkFlowRunServiceTest {
 
     testSubscriber.assertNoErrors();
     testSubscriber.assertValueCount(10);
+    testSubscriber
+        .assertValueAt(
+            5,
+            event ->
+                event.getEvent().equals(WorkflowEventType.MESSAGE)
+                    && event.getMessage().getToken().equals(1230))
+        .assertValueAt(
+            9,
+            event ->
+                event.getEvent().equals(WorkflowEventType.DONE)
+                    && event
+                        .getDebugUrl()
+                        .getDebugURL()
+                        .equals("https://www.coze.cn/work_flow?***"));
   }
 
   @Test

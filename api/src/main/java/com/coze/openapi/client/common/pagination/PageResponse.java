@@ -24,7 +24,9 @@ public class PageResponse<T> {
 
   private String lastID;
 
-  private String nextID;
+  private String firstID;
+
+  private String pageToken;
 
   private String logID;
 }

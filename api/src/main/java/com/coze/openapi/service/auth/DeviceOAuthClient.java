@@ -2,7 +2,6 @@ package com.coze.openapi.service.auth;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import com.coze.openapi.client.auth.*;
@@ -32,7 +31,7 @@ public class DeviceOAuthClient extends OAuthClient {
     return resp;
   }
 
-  public DeviceAuthResp getDeviceCode(@NotNull String workspaceID) {
+  public DeviceAuthResp getDeviceCode(String workspaceID) {
     DeviceAuthReq req = DeviceAuthReq.builder().clientID(this.clientID).build();
     DeviceAuthResp resp = execute(this.api.device(workspaceID, req));
     resp.setVerificationURL(resp.getVerificationURI() + "?user_code=" + resp.getUserCode());

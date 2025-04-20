@@ -1,5 +1,6 @@
 package com.coze.openapi.client.connversations.message.model;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,19 @@ public class Message {
 
   @JsonProperty("updated_at")
   private Long updatedAt;
+
+  @JsonProperty("reasoning_content")
+  private String reasoningContent;
+
+  public byte[] getAudio() {
+    if (this.contentType == MessageContentType.AUDIO) {
+      if (this.content == null) {
+        return new byte[0];
+      }
+      return Base64.getDecoder().decode(this.content);
+    }
+    return new byte[0];
+  }
 
   public static Message buildUserQuestionText(String content) {
     return buildUserQuestionText(content, null);

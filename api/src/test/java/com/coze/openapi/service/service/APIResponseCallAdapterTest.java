@@ -74,7 +74,7 @@ public class APIResponseCallAdapterTest {
           // 准备错误响应
           String errorJson = "{\"code\":400,\"msg\":\"Bad Request\"}";
           ResponseBody errorBody =
-              ResponseBody.create(errorJson, MediaType.parse("application/json"));
+              ResponseBody.create(MediaType.parse("application/json"), errorJson);
 
           Request request = new Request.Builder().url("https://api.test.com").build();
 

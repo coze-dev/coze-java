@@ -34,6 +34,9 @@ public class WorkflowEventMessage {
   @JsonProperty("node_is_finish")
   private boolean nodeIsFinish;
 
+  @JsonProperty("token")
+  private Integer token;
+
   /** Additional fields. */
   @JsonProperty("ext")
   private Map<String, Object> ext;

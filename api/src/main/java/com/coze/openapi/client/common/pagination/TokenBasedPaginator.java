@@ -18,7 +18,6 @@ public class TokenBasedPaginator<T> implements Iterator<T> {
   public TokenBasedPaginator(PageFetcher<T> pageFetcher, int pageSize) {
     this.pageFetcher = pageFetcher;
     this.pageSize = pageSize;
-    this.fetchNextPage();
   }
 
   private void fetchNextPage() {
@@ -28,14 +27,24 @@ public class TokenBasedPaginator<T> implements Iterator<T> {
       logger.info(
           "Fetched page: " + pageToken + " success, got" + currentPage.getData().size() + " items");
       currentIterator = currentPage.getData().iterator();
-      pageToken = currentPage.getNextID();
+      pageToken = currentPage.getPageToken();
     } catch (Exception e) {
       throw new RuntimeException("Failed to fetch page", e);
     }
   }
 
+  public void setCurrentPage(PageResponse<T> currentPage) {
+    this.currentPage = currentPage;
+    this.pageToken = currentPage.getPageToken();
+    this.currentIterator = currentPage.getData().iterator();
+  }
+
   @Override
   public boolean hasNext() {
+    if (currentIterator == null) {
+      fetchNextPage();
+      return currentIterator.hasNext();
+    }
     if (currentIterator.hasNext()) {
       return true;
     }

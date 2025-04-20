@@ -1,10 +1,10 @@
 package example.bot;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import com.coze.openapi.client.bots.*;
-import com.coze.openapi.client.bots.model.BotOnboardingInfo;
-import com.coze.openapi.client.bots.model.BotPromptInfo;
+import com.coze.openapi.client.bots.model.*;
 import com.coze.openapi.client.files.UploadFileReq;
 import com.coze.openapi.client.files.UploadFileResp;
 import com.coze.openapi.service.auth.TokenAuth;
@@ -49,6 +49,25 @@ public class BotPublishExample {
     UploadFileResp avatarInfo = coze.files().upload(UploadFileReq.of(avatarPath));
     System.out.println(avatarInfo);
 
+    // Configuration for the bot's plugins
+    BotPluginIdInfo pluginIdInfo =
+        BotPluginIdInfo.builder()
+            .apiId(System.getenv("PLUGIN_API_ID"))
+            .pluginId(System.getenv("PLUGIN_ID"))
+            .build();
+    BotPluginIdList pluginIdList =
+        BotPluginIdList.builder().idList(Collections.singletonList(pluginIdInfo)).build();
+
+    // Configuration for the bot's workflows
+    BotWorkflowIdInfo workflowIdInfo =
+        BotWorkflowIdInfo.builder().id(System.getenv("WORKFLOW_ID")).build();
+    BotWorkflowIdList workflowIdList =
+        BotWorkflowIdList.builder().ids(Collections.singletonList(workflowIdInfo)).build();
+
+    // Configuration for the bot's model
+    BotModelInfoConfig modelInfoConfig =
+        BotModelInfoConfig.builder().modelId(System.getenv("MODEL_ID")).build();
+
     // build the request
     CreateBotReq createReq =
         CreateBotReq.builder()
@@ -57,6 +76,9 @@ public class BotPublishExample {
             .name("the name of your bot")
             .promptInfo(promptInfo)
             .onboardingInfo(onboardingInfo)
+            .pluginIdList(pluginIdList)
+            .workflowIdList(workflowIdList)
+            .modelInfoConfig(modelInfoConfig)
             .iconFileID(avatarInfo.getFileInfo().getID())
             .build();
 

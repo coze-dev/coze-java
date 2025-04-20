@@ -24,7 +24,10 @@ public class JWTOAuth extends Auth {
     this.ttl = client.getTtl();
   }
 
-  @Override
+  protected boolean needRefresh() {
+    return accessToken == null || System.currentTimeMillis() / 1000 > refreshAt;
+  }
+
   public String token() {
     if (!this.needRefresh()) {
       return accessToken;
@@ -32,6 +35,18 @@ public class JWTOAuth extends Auth {
     OAuthToken resp = this.jwtClient.getAccessToken(this.ttl, this.scope, this.sessionName);
     this.accessToken = resp.getAccessToken();
     this.expiresIn = resp.getExpiresIn();
+    this.refreshAt = this.expiresIn - getRefreshBefore();
     return this.accessToken;
+  }
+
+  private long getRefreshBefore() {
+    if (ttl >= 600) {
+      return 30;
+    } else if (ttl >= 60) {
+      return 10;
+    } else if (ttl >= 30) {
+      return 5;
+    }
+    return 0;
   }
 }

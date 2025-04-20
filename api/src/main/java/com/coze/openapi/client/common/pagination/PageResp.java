@@ -17,6 +17,7 @@ public class PageResp<T> {
   private List<T> items;
   private Iterator<T> iterator;
   private Boolean hasMore;
-  private String lastID;
+  private String lastID; //  当前页最后一条数据的 id
+  private String firstID; // 当前页第一条数据的 id
   private String logID;
 }

@@ -1,7 +1,5 @@
 package com.coze.openapi.service.service.dataset;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.coze.openapi.api.DatasetDocumentAPI;
 import com.coze.openapi.client.common.pagination.PageFetcher;
 import com.coze.openapi.client.common.pagination.PageNumBasedPaginator;
@@ -58,7 +56,7 @@ public class DocumentService {
       docs en: https://www.coze.com/docs/developer_guides/list_knowledge_files
       docs zh: https://www.coze.cn/docs/developer_guides/list_knowledge_files
   * */
-  public PageResp<Document> list(@NotNull ListDocumentReq req) {
+  public PageResp<Document> list(ListDocumentReq req) {
     if (req == null || req.getDatasetID() == null) {
       throw new IllegalArgumentException("req is required");
     }
