@@ -49,40 +49,52 @@ public class JWTOAuthClient extends OAuthClient {
   }
 
   public OAuthToken getAccessToken() {
-    return doGetAccessToken(this.ttl, null, null);
+    return doGetAccessToken(GetJWTAccessTokenReq.builder().ttl(this.ttl).build());
   }
 
   public OAuthToken getAccessToken(Integer ttl) {
-    return doGetAccessToken(ttl, null, null);
+    return doGetAccessToken(GetJWTAccessTokenReq.builder().ttl(ttl).build());
   }
 
   public OAuthToken getAccessToken(Scope scope) {
-    return doGetAccessToken(this.ttl, scope, null);
+    return doGetAccessToken(GetJWTAccessTokenReq.builder().scope(scope).ttl(ttl).build());
   }
 
   public OAuthToken getAccessToken(Integer ttl, Scope scope) {
-    return doGetAccessToken(ttl, scope, null);
+    return doGetAccessToken(GetJWTAccessTokenReq.builder().scope(scope).ttl(ttl).build());
   }
 
   public OAuthToken getAccessToken(String sessionName) {
-    return doGetAccessToken(this.ttl, null, sessionName);
+    return doGetAccessToken(
+        GetJWTAccessTokenReq.builder().sessionName(sessionName).ttl(ttl).build());
   }
 
   public OAuthToken getAccessToken(Integer ttl, String sessionName) {
-    return doGetAccessToken(ttl, null, sessionName);
+    return doGetAccessToken(
+        GetJWTAccessTokenReq.builder().sessionName(sessionName).ttl(ttl).build());
   }
 
   public OAuthToken getAccessToken(Scope scope, String sessionName) {
-    return doGetAccessToken(this.ttl, scope, sessionName);
+    return doGetAccessToken(
+        GetJWTAccessTokenReq.builder().sessionName(sessionName).scope(scope).ttl(ttl).build());
   }
 
   public OAuthToken getAccessToken(Integer ttl, Scope scope, String sessionName) {
-    return doGetAccessToken(ttl, scope, sessionName);
+    return doGetAccessToken(
+        GetJWTAccessTokenReq.builder().sessionName(sessionName).scope(scope).ttl(ttl).build());
   }
 
-  private OAuthToken doGetAccessToken(Integer ttl, Scope scope, String sessionName) {
+  public OAuthToken getAccessToken(GetJWTAccessTokenReq req) {
+    return doGetAccessToken(req);
+  }
+
+  private OAuthToken doGetAccessToken(GetJWTAccessTokenReq req) {
     GetAccessTokenReq.GetAccessTokenReqBuilder builder = GetAccessTokenReq.builder();
-    builder.grantType(GrantType.JWT_CODE.getValue()).durationSeconds(ttl).scope(scope);
+    Integer ttl = this.ttl;
+    if (req.getTtl() != null) {
+      ttl = req.getTtl();
+    }
+    builder.grantType(GrantType.JWT_CODE.getValue()).durationSeconds(ttl).scope(req.getScope());
     Map<String, Object> header = new HashMap<>();
     header.put("alg", "RS256");
     header.put("typ", "JWT");
@@ -93,13 +105,20 @@ public class JWTOAuthClient extends OAuthClient {
         JWTPayload.builder()
             .iss(this.clientID)
             .aud(this.hostName)
-            .exp(new Date((now + this.ttl) * 1000))
+            .exp(new Date((now + ttl) * 1000))
             .iat(new Date(now * 1000))
-            .sessionName(sessionName)
+            .sessionName(req.getSessionName())
             .jti(Utils.genRandomSign(16))
+            .sessionContext(req.getSessionContext())
             .build();
-    return getAccessToken(
-        this.jwtBuilder.generateJWT(privateKey, header, payload), builder.build());
+    String jwtToken = this.jwtBuilder.generateJWT(privateKey, header, payload);
+    if (req.getAccountID() != null) {
+      return getAccountAccessToken(jwtToken, String.valueOf(req.getAccountID()), builder.build());
+    }
+    if (req.getEnterpriseID() != null) {
+      return getEnterpriseAccessToken(jwtToken, req.getEnterpriseID(), builder.build());
+    }
+    return getAccessToken(jwtToken, builder.build());
   }
 
   private PrivateKey parsePrivateKey(String privateKeyPEM) throws Exception {

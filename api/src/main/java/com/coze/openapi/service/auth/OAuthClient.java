@@ -175,6 +175,24 @@ public abstract class OAuthClient {
     return execute(this.api.retrieve(headers, req));
   }
 
+  protected OAuthToken getAccountAccessToken(
+      String secret, String accountID, GetAccessTokenReq req) {
+    Map<String, String> headers = new HashMap<>();
+    if (secret != null) {
+      headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
+    }
+    return execute(this.api.account(headers, accountID, req));
+  }
+
+  protected OAuthToken getEnterpriseAccessToken(
+      String secret, String enterpriseID, GetAccessTokenReq req) {
+    Map<String, String> headers = new HashMap<>();
+    if (secret != null) {
+      headers.put(AuthorizeHeader, String.format("Bearer %s", secret));
+    }
+    return execute(this.api.enterprise(headers, enterpriseID, req));
+  }
+
   protected OAuthToken refreshAccessToken(String refreshToken, String clientSecret) {
     return request(null, clientSecret, GrantType.REFRESH_TOKEN, refreshToken, null);
   }
