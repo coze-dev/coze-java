@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.coze.openapi.client.auth.GetJWTAccessTokenReq;
 import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.model.SessionContext;
 
 @ExtendWith(MockitoExtension.class)
 class JWTOAuthTest {
@@ -30,6 +31,19 @@ class JWTOAuthTest {
   void testConstructorWithValidClient() {
     when(jwtClient.getTtl()).thenReturn(600);
     jwtOAuth = new JWTOAuth(jwtClient);
+    assertNotNull(jwtOAuth);
+  }
+
+  @Test
+  void testBuilder() {
+    when(jwtClient.getTtl()).thenReturn(600);
+    jwtOAuth =
+        JWTOAuth.builder()
+            .jwtClient(jwtClient)
+            .enterpriseID("mock id")
+            .accountID(1234L)
+            .sessionContext(new SessionContext())
+            .build();
     assertNotNull(jwtOAuth);
   }
 

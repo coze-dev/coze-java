@@ -9,8 +9,8 @@ import lombok.Data;
 @Builder
 public class DeviceInfo {
   @JsonProperty("device_id")
-  private String DeviceID;
+  private String deviceID;
 
   @JsonProperty("custom_consumer")
-  private String CustomConsumer;
+  private String customConsumer;
 }

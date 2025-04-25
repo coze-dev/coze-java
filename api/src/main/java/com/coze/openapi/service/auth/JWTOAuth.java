@@ -10,7 +10,7 @@ import com.coze.openapi.client.auth.scope.Scope;
 import lombok.*;
 
 @Getter
-@Builder(builderClassName = "JWTOAuthBuilder")
+@Builder(builderClassName = "OAuthJWTBuilder")
 @Setter(AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -66,7 +66,7 @@ public class JWTOAuth extends Auth {
     return 0;
   }
 
-  public static class JWTOAuthBuilder {
+  public static class OAuthJWTBuilder {
     public JWTOAuth build() {
       JWTOAuth jwt = new JWTOAuth();
       if (this.jwtClient == null) {
