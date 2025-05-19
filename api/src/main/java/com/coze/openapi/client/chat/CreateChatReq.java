@@ -72,7 +72,7 @@ public class CreateChatReq extends BaseReq {
   private Map<String, String> metaData;
 
   /*
-   * The customized parameters
+   * The customized parameters to workflow.
    * */
   @JsonProperty("parameters")
   private Map<String, Object> parameters;
