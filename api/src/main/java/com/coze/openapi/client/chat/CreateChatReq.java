@@ -71,6 +71,12 @@ public class CreateChatReq extends BaseReq {
   @JsonProperty("meta_data")
   private Map<String, String> metaData;
 
+  /*
+   * The customized parameters
+   * */
+  @JsonProperty("parameters")
+  private Map<String, Object> parameters;
+
   public void enableStream() {
     this.stream = true;
   }
