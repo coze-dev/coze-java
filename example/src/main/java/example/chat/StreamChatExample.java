@@ -57,7 +57,10 @@ public class StreamChatExample {
                 System.out.print(event.getMessage().getContent());
               }
               if (ChatEventType.CONVERSATION_CHAT_COMPLETED.equals(event.getEvent())) {
+                System.out.println(event.getMessage().getContent());
                 System.out.println("Token usage:" + event.getChat().getUsage().getTokenCount());
+              }
+              if (ChatEventType.DONE.equals(event.getEvent())) {
                 coze.shutdownExecutor();
               }
             },
