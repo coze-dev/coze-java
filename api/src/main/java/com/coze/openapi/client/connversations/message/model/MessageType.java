@@ -3,9 +3,11 @@ package com.coze.openapi.client.connversations.message.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
+@EqualsAndHashCode
 public class MessageType {
   /** User input content. */
   public static final MessageType QUESTION = new MessageType("question");
