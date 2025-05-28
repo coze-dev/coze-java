@@ -17,7 +17,7 @@ public class TurnDetection {
   @JsonProperty("prefix_padding_ms")
   private Integer prefixPaddingMs;
 
-  @JsonProperty("suffix_duration_ms")
+  @JsonProperty("silence_duration_ms")
   private Integer silenceDurationMs;
 
   @JsonProperty("interrupt_config")
