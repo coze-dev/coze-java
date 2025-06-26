@@ -3,7 +3,13 @@ package com.coze.openapi.service.utils;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class VersionUtils {
+
+  private static final Logger logger = LoggerFactory.getLogger(VersionUtils.class);
+
   private static final String VERSION = readVersion();
 
   private static String readVersion() {
@@ -12,12 +18,12 @@ public class VersionUtils {
         VersionUtils.class.getClassLoader().getResourceAsStream("version.properties")) {
       if (input != null) {
         prop.load(input);
-        return prop.getProperty("sdk.version", "unknown");
+        return prop.getProperty("sdk.version", "");
       }
     } catch (Exception e) {
-      // ignore
+      logger.error("Failed to read version.properties->ex:{}", e.getMessage());
     }
-    return "unknown";
+    return "";
   }
 
   public static String getVersion() {
