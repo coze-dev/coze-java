@@ -21,7 +21,7 @@ public class VersionUtils {
         return prop.getProperty("sdk.version", "");
       }
     } catch (Exception e) {
-      logger.error("Failed to read version.properties->ex:{}", e.getMessage());
+      logger.error("Failed to read version.properties: {}", e.getMessage());
     }
     return "";
   }
