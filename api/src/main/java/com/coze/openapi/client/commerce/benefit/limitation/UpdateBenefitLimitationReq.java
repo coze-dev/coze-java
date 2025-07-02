@@ -23,13 +23,13 @@ public class UpdateBenefitLimitationReq extends BaseReq {
   @NonNull @JsonIgnore private String benefitID;
 
   @JsonProperty("started_at")
-  private long startedAt;
+  private Long startedAt;
 
   @JsonProperty("ended_at")
-  private long endedAt;
+  private Long endedAt;
 
   @JsonProperty("limit")
-  private int limit;
+  private Integer limit;
 
   @JsonProperty("status")
   private BenefitStatus status;

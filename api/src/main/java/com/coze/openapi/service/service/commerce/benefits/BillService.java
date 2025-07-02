@@ -59,7 +59,7 @@ public class BillService {
                       api.list(req.getTaskIds(), request.getPageNum(), request.getPageSize(), req))
                   .getData();
           return PageResponse.<BillTaskInfo>builder()
-              .hasMore(resp.getTaskInfos().size() == request.getPageSize())
+              .hasMore(resp.getTaskInfos().size() >= request.getPageSize())
               .data(resp.getTaskInfos())
               .pageNum(request.getPageNum())
               .total(resp.getTotal())

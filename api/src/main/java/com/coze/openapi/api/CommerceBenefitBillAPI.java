@@ -21,7 +21,7 @@ public interface CommerceBenefitBillAPI {
   @Headers({"Content-Type: application/json", "Agw-Js-Conv: str"})
   @GET("/v1/commerce/benefit/bill_tasks")
   Call<BaseResponse<ListBillDownloadTaskResp>> list(
-      @Path("task_ids") List<String> taskIDs,
+      @Query("task_ids") List<String> taskIDs,
       @Query("page_num") Integer pageNum,
       @Query("page_size") Integer pageSize,
       @Tag BaseReq baseReq);

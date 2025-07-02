@@ -1,5 +1,6 @@
 package com.coze.openapi.client.commerce.benefit.common;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class BenefitType {
@@ -9,6 +10,11 @@ public class BenefitType {
 
   private BenefitType(String value) {
     this.value = value;
+  }
+
+  @JsonCreator
+  public static BenefitType from(String value) {
+    return new BenefitType(value);
   }
 
   @JsonValue

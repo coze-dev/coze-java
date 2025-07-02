@@ -19,7 +19,7 @@ public class VariableEntity {
   private String keyword; // 用户变量的名称
 
   @JsonProperty("create_time")
-  private Long description;
+  private Long createTime;
 
   @JsonProperty("update_time")
   private Long updateTime;
