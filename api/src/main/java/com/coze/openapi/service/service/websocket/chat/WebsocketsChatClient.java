@@ -186,6 +186,11 @@ public class WebsocketsChatClient extends BaseWebsocketsClient {
               objectMapper.treeToValue(jsonNode, InputAudioBufferSpeechStoppedEvent.class);
           handler.onInputAudioBufferSpeechStopped(this, speechStoppedEvent);
           break;
+        case EventType.CONVERSATION_AUDIO_SENTENCE_START:
+          ConversationAudioSentenceStartEvent sentenceStartEvent =
+              objectMapper.treeToValue(jsonNode, ConversationAudioSentenceStartEvent.class);
+          handler.onConversationAudioSentenceStart(this, sentenceStartEvent);
+          break;
         case EventType.ERROR:
           ErrorEvent errorEvent = objectMapper.treeToValue(jsonNode, ErrorEvent.class);
           handler.onError(this, errorEvent);

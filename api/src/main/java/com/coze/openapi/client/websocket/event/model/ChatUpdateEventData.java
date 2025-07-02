@@ -24,4 +24,7 @@ public class ChatUpdateEventData {
 
   @JsonProperty("turn_detection")
   private TurnDetection turnDetection;
+
+  @JsonProperty("asr_config")
+  private AsrConfig asrConfig;
 }

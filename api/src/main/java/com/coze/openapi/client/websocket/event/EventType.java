@@ -89,4 +89,6 @@ public class EventType {
       "input_audio_buffer.speech_started";
   public static final String INPUT_AUDIO_BUFFER_SPEECH_STOPPED =
       "input_audio_buffer.speech_stopped";
+  public static final String CONVERSATION_AUDIO_SENTENCE_START =
+      "conversation.audio.sentence_start";
 }

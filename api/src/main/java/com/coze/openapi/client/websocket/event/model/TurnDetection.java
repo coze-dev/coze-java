@@ -22,7 +22,4 @@ public class TurnDetection {
 
   @JsonProperty("interrupt_config")
   private InterruptConfig interruptConfig;
-
-  @JsonProperty("asr_config")
-  private AsrConfig asrConfig;
 }

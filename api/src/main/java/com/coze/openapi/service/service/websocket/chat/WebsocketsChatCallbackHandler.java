@@ -79,4 +79,8 @@ public abstract class WebsocketsChatCallbackHandler
   // 服务端检测到停止说话事件（input_audio_buffer.speech_stopped）
   public void onInputAudioBufferSpeechStopped(
       WebsocketsChatClient client, InputAudioBufferSpeechStoppedEvent event) {}
+
+  // 增量语音新句子开始（conversation.audio.sentence_start）
+  public void onConversationAudioSentenceStart(
+      WebsocketsChatClient client, ConversationAudioSentenceStartEvent event) {}
 }

@@ -354,7 +354,7 @@ public abstract class OAuthClient {
 
     protected OkHttpClient defaultClient(Duration readTimeout, Duration connectTimeout) {
       return new OkHttpClient.Builder()
-          .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
+          .connectionPool(new ConnectionPool(10, 5, TimeUnit.MINUTES))
           .readTimeout(readTimeout.toMillis(), TimeUnit.MILLISECONDS)
           .connectTimeout(connectTimeout.toMillis(), TimeUnit.MILLISECONDS)
           .addInterceptor(new UserAgentInterceptor())
