@@ -238,7 +238,7 @@ public class CozeAPI {
       VariablesService variablesAPI = new VariablesService(retrofit.create(VariablesAPI.class));
       ConnectorService connectorService =
           new ConnectorService(
-              retrofit.create(ConnectorAPI.class), retrofit.create(ConnectorBotAPI.class));
+              retrofit.create(ConnectorAPI.class));
       return new CozeAPI(
           this.baseURL,
           executorService,

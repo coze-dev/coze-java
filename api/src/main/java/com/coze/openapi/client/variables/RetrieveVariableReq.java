@@ -3,7 +3,8 @@ package com.coze.openapi.client.variables;
 import java.util.List;
 
 import com.coze.openapi.client.common.BaseReq;
-import com.coze.openapi.client.variables.model.VariableEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
@@ -12,9 +13,10 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UpdateVariablesReq extends BaseReq {
+public class RetrieveVariableReq extends BaseReq {
   @JsonProperty("app_id")
   private String appID;
 
@@ -25,11 +27,8 @@ public class UpdateVariablesReq extends BaseReq {
   @Builder.Default
   private String connectorID = "1024";
 
-  @NonNull
   @JsonProperty("connector_uid")
   private String connectorUID;
 
-  @NonNull
-  @JsonProperty("data")
-  private List<VariableEntity> data;
+  @JsonIgnore private List<String> keywords;
 }

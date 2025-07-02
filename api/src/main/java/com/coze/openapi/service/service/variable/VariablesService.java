@@ -1,10 +1,10 @@
 package com.coze.openapi.service.service.variable;
 
 import com.coze.openapi.api.VariablesAPI;
-import com.coze.openapi.client.variables.RetrieveVariablesReq;
-import com.coze.openapi.client.variables.RetrieveVariablesResp;
-import com.coze.openapi.client.variables.UpdateVariablesReq;
-import com.coze.openapi.client.variables.UpdateVariablesResp;
+import com.coze.openapi.client.variables.RetrieveVariableReq;
+import com.coze.openapi.client.variables.RetrieveVariableResp;
+import com.coze.openapi.client.variables.UpdateVariableReq;
+import com.coze.openapi.client.variables.UpdateVariableResp;
 import com.coze.openapi.service.utils.Utils;
 
 public class VariablesService {
@@ -15,7 +15,7 @@ public class VariablesService {
     this.VariablesAPI = VariablesAPI;
   }
 
-  public RetrieveVariablesResp retrieve(RetrieveVariablesReq req) {
+  public RetrieveVariableResp retrieve(RetrieveVariableReq req) {
     String keywords = "";
     if (req.getKeywords() != null) {
       keywords = String.join(",", req.getKeywords());
@@ -32,7 +32,7 @@ public class VariablesService {
         .getData();
   }
 
-  public UpdateVariablesResp update(UpdateVariablesReq req) {
+  public UpdateVariableResp update(UpdateVariableReq req) {
     return Utils.execute(VariablesAPI.update(req, req)).getData();
   }
 }

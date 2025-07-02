@@ -1,6 +1,10 @@
 package com.coze.openapi.client.variables;
 
+import java.util.List;
+
 import com.coze.openapi.client.common.BaseResp;
+import com.coze.openapi.client.variables.model.VariableValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,4 +17,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UpdateVariablesResp extends BaseResp {}
+public class RetrieveVariableResp extends BaseResp {
+  @JsonProperty("items")
+  private List<VariableValue> items;
+}

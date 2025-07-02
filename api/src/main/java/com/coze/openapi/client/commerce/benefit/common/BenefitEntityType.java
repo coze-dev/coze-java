@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class BenefitEntityType {
-  public static final BenefitEntityType BENEFIT_ENTITY_TYPE_ALL_DEVICE =
+  public static final BenefitEntityType BENEFIT_ENTITY_TYPE_ENTERPRISE_ALL_DEVICE =
       new BenefitEntityType("enterprise_all_devices");
 
-  public static final BenefitEntityType BENEFIT_ENTITY_TYPE_ALL_IDENTIFIER =
+  public static final BenefitEntityType BENEFIT_ENTITY_TYPE_ENTERPRISE_ALL_IDENTIFIER =
       new BenefitEntityType("enterprise_all_identifiers");
 
   public static final BenefitEntityType BENEFIT_ENTITY_TYPE_SINGLE_DEVICE =
@@ -29,8 +29,8 @@ public class BenefitEntityType {
   @JsonCreator
   public static BenefitEntityType fromString(String value) {
     BenefitEntityType[] types = {
-      BENEFIT_ENTITY_TYPE_ALL_DEVICE,
-      BENEFIT_ENTITY_TYPE_ALL_IDENTIFIER,
+            BENEFIT_ENTITY_TYPE_ENTERPRISE_ALL_DEVICE,
+            BENEFIT_ENTITY_TYPE_ENTERPRISE_ALL_IDENTIFIER,
       BENEFIT_ENTITY_TYPE_SINGLE_DEVICE,
       BENEFIT_ENTITY_TYPE_SINGLE_IDENTIFIER
     };

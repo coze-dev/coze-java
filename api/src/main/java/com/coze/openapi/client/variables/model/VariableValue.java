@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VariableEntity {
+public class VariableValue {
   @JsonProperty("value")
   private String value; // 用户变量的值
 

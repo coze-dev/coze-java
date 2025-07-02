@@ -1,7 +1,6 @@
-package com.coze.openapi.client.connectors.bots;
+package com.coze.openapi.client.variables;
 
 import com.coze.openapi.client.common.BaseResp;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +11,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class AuditResp extends BaseResp {}
+public class UpdateVariableResp extends BaseResp {}
