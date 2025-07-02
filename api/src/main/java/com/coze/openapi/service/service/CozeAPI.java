@@ -236,9 +236,7 @@ public class CozeAPI {
               retrofit.create(CommerceBenefitLimitationAPI.class),
               retrofit.create(CommerceBenefitBillAPI.class));
       VariablesService variablesAPI = new VariablesService(retrofit.create(VariablesAPI.class));
-      ConnectorService connectorService =
-          new ConnectorService(
-              retrofit.create(ConnectorAPI.class));
+      ConnectorService connectorService = new ConnectorService(retrofit.create(ConnectorAPI.class));
       return new CozeAPI(
           this.baseURL,
           executorService,

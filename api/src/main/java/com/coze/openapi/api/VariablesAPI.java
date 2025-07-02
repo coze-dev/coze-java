@@ -12,8 +12,7 @@ import retrofit2.http.*;
 public interface VariablesAPI {
   @Headers({"Content-Type: application/json"})
   @PUT("/v1/variables")
-  Call<BaseResponse<UpdateVariableResp>> update(
-          @Body UpdateVariableReq req, @Tag BaseReq baseReq);
+  Call<BaseResponse<UpdateVariableResp>> update(@Body UpdateVariableReq req, @Tag BaseReq baseReq);
 
   @Headers({"Content-Type: application/json"})
   @GET("/v1/variables")
