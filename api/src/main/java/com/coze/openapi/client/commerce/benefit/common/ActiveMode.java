@@ -1,7 +1,7 @@
 package com.coze.openapi.client.commerce.benefit.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,7 +14,7 @@ public class ActiveMode {
 
   private ActiveMode(String value) {
     if (value == null) {
-           throw new IllegalArgumentException("ActiveMode value cannot be null");
+      throw new IllegalArgumentException("ActiveMode value cannot be null");
     }
     this.value = value;
   }
