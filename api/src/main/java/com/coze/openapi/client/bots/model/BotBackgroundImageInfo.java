@@ -41,9 +41,13 @@ public class BotBackgroundImageInfo {
   @NoArgsConstructor
   @AllArgsConstructor
   public static class CanvasPosition {
+    @JsonProperty("top")
     private Double top;
+    @JsonProperty("left")
     private Double left;
+    @JsonProperty("width")
     private Double width;
+    @JsonProperty("height")
     private Double height;
   }
 
@@ -52,7 +56,9 @@ public class BotBackgroundImageInfo {
   @NoArgsConstructor
   @AllArgsConstructor
   public static class GradientPosition {
+    @JsonProperty("left")
     private Double left;
+    @JsonProperty("right")
     private Double right;
   }
 }

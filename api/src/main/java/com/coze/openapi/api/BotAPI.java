@@ -41,7 +41,7 @@ public interface BotAPI {
   @GET("/v1/bot/get_online_info")
   Call<BaseResponse<Bot>> retrieve(@Query("bot_id") String botID, @Tag BaseReq baseReq);
 
-  @GET("v1/bots/{bot_id}")
+  @GET("/v1/bots/{bot_id}")
   Call<BaseResponse<Bot>> retrieve(@Path("bot_id") String botID, @Query("is_published") Boolean isPublished,
       @Tag BaseReq baseReq);
 
