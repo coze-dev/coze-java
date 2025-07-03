@@ -39,6 +39,13 @@ public class DocumentBase {
         .build();
   }
 
+  public static DocumentBase buildLocalFile(String name, byte[] content, String fileType) {
+    return DocumentBase.builder()
+        .name(name)
+        .sourceInfo(DocumentSourceInfo.buildLocalFile(content, fileType))
+        .build();
+  }
+
   public static DocumentBase buildLocalFile(String name, String content, String fileType) {
     return DocumentBase.builder()
         .name(name)

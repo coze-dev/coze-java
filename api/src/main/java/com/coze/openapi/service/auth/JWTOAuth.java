@@ -2,20 +2,27 @@ package com.coze.openapi.service.auth;
 
 import java.util.Objects;
 
+import com.coze.openapi.client.auth.GetJWTAccessTokenReq;
 import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.model.SessionContext;
 import com.coze.openapi.client.auth.scope.Scope;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NonNull;
+import lombok.*;
 
-@Builder
+@Getter
+@Builder(builderClassName = "OAuthJWTBuilder")
+@Setter(AccessLevel.PRIVATE)
 @AllArgsConstructor
+@NoArgsConstructor
 public class JWTOAuth extends Auth {
 
   private Integer ttl;
   private String sessionName;
   private Scope scope;
+  private String enterpriseID;
+  private Long accountID;
+  private SessionContext sessionContext;
+
   @NonNull private JWTOAuthClient jwtClient;
 
   public JWTOAuth(JWTOAuthClient client) {
@@ -32,7 +39,16 @@ public class JWTOAuth extends Auth {
     if (!this.needRefresh()) {
       return accessToken;
     }
-    OAuthToken resp = this.jwtClient.getAccessToken(this.ttl, this.scope, this.sessionName);
+    GetJWTAccessTokenReq req =
+        GetJWTAccessTokenReq.builder()
+            .enterpriseID(enterpriseID)
+            .scope(scope)
+            .ttl(ttl)
+            .sessionName(sessionName)
+            .sessionContext(sessionContext)
+            .accountID(accountID)
+            .build();
+    OAuthToken resp = this.jwtClient.getAccessToken(req);
     this.accessToken = resp.getAccessToken();
     this.expiresIn = resp.getExpiresIn();
     this.refreshAt = this.expiresIn - getRefreshBefore();
@@ -48,5 +64,26 @@ public class JWTOAuth extends Auth {
       return 5;
     }
     return 0;
+  }
+
+  public static class OAuthJWTBuilder {
+    public JWTOAuth build() {
+      JWTOAuth jwt = new JWTOAuth();
+      if (this.jwtClient == null) {
+        throw new IllegalStateException("jwtClient is required");
+      }
+      jwt.setJwtClient(this.jwtClient);
+      if (this.ttl != null) {
+        jwt.ttl = this.ttl;
+      } else {
+        jwt.setTtl(this.jwtClient.getTtl());
+      }
+      jwt.setSessionName(this.sessionName);
+      jwt.setSessionContext(this.sessionContext);
+      jwt.setAccountID(this.accountID);
+      jwt.setEnterpriseID(this.enterpriseID);
+      jwt.setScope(this.scope);
+      return jwt;
+    }
   }
 }

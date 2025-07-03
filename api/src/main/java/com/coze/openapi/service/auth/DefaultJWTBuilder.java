@@ -26,6 +26,9 @@ public class DefaultJWTBuilder implements JWTBuilder {
       if (payload.getSessionName() != null) {
         jwtBuilder.claim("session_name", payload.getSessionName());
       }
+      if (payload.getSessionContext() != null) {
+        jwtBuilder.claim("session_context", payload.getSessionContext());
+      }
       return jwtBuilder.compact();
 
     } catch (Exception e) {

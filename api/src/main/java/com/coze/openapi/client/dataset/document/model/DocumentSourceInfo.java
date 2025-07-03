@@ -41,6 +41,14 @@ public class DocumentSourceInfo {
     return info;
   }
 
+  public static DocumentSourceInfo buildLocalFile(byte[] content, String fileType) {
+    String encodedContent = Base64.getEncoder().encodeToString(content);
+    DocumentSourceInfo info = new DocumentSourceInfo();
+    info.setFileBase64(encodedContent);
+    info.setFileType(fileType);
+    return info;
+  }
+
   public static DocumentSourceInfo buildWebPage(String url) {
     DocumentSourceInfo info = new DocumentSourceInfo();
     info.setWebUrl(url);

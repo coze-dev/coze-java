@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,7 +14,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Scope {
+  @JsonProperty("account_permission")
   private ScopeAccountPermission accountPermission;
+
+  @JsonProperty("attribute_constraint")
   private ScopeAttributeConstraint attributeConstraint;
 
   public Map<String, Object> toMap() {

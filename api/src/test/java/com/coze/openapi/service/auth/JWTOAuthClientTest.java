@@ -10,8 +10,10 @@ import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.api.CozeAuthAPI;
 import com.coze.openapi.client.auth.GetAccessTokenReq;
+import com.coze.openapi.client.auth.GetJWTAccessTokenReq;
 import com.coze.openapi.client.auth.GrantType;
 import com.coze.openapi.client.auth.OAuthToken;
+import com.coze.openapi.client.auth.model.SessionContext;
 import com.coze.openapi.client.auth.scope.Scope;
 
 import io.reactivex.Single;
@@ -112,6 +114,94 @@ class JWTOAuthClientTest {
   }
 
   @Test
+  void testGetEnterpriseAccessToken() {
+    // 准备测试数据
+    OAuthToken mockToken = new OAuthToken();
+    mockToken.setAccessToken("access_token");
+    mockToken.setExpiresIn(900);
+
+    Response<OAuthToken> response =
+        Response.success(
+            mockToken,
+            new okhttp3.Response.Builder()
+                .request(new Request.Builder().url("https://test.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200)
+                .message("OK")
+                .headers(Headers.of("X-Log-Id", "test_log_id"))
+                .build());
+
+    // 设置模拟行为
+    when(mockApi.enterprise(anyMap(), any(), any(GetAccessTokenReq.class)))
+        .thenReturn(Single.just(response));
+
+    // 执行测试
+    OAuthToken result =
+        client.getAccessToken(GetJWTAccessTokenReq.builder().enterpriseID("213123123").build());
+
+    // 验证结果
+    assertNotNull(result);
+    assertEquals("access_token", result.getAccessToken());
+    assertEquals(Integer.valueOf(900), result.getExpiresIn());
+
+    // 验证请求参数
+    verify(mockApi)
+        .enterprise(
+            anyMap(),
+            any(),
+            argThat(
+                req -> {
+                  assertEquals(GrantType.JWT_CODE.getValue(), req.getGrantType());
+                  assertEquals(900, req.getDurationSeconds());
+                  return true;
+                }));
+  }
+
+  @Test
+  void testGetAccountAccessToken() {
+    // 准备测试数据
+    OAuthToken mockToken = new OAuthToken();
+    mockToken.setAccessToken("access_token");
+    mockToken.setExpiresIn(900);
+
+    Response<OAuthToken> response =
+        Response.success(
+            mockToken,
+            new okhttp3.Response.Builder()
+                .request(new Request.Builder().url("https://test.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200)
+                .message("OK")
+                .headers(Headers.of("X-Log-Id", "test_log_id"))
+                .build());
+
+    // 设置模拟行为
+    when(mockApi.account(anyMap(), any(), any(GetAccessTokenReq.class)))
+        .thenReturn(Single.just(response));
+
+    // 执行测试
+    OAuthToken result =
+        client.getAccessToken(GetJWTAccessTokenReq.builder().accountID(1235L).build());
+
+    // 验证结果
+    assertNotNull(result);
+    assertEquals("access_token", result.getAccessToken());
+    assertEquals(Integer.valueOf(900), result.getExpiresIn());
+
+    // 验证请求参数
+    verify(mockApi)
+        .account(
+            anyMap(),
+            any(),
+            argThat(
+                req -> {
+                  assertEquals(GrantType.JWT_CODE.getValue(), req.getGrantType());
+                  assertEquals(900, req.getDurationSeconds());
+                  return true;
+                }));
+  }
+
+  @Test
   void testGetAccessTokenWithCustomTTL() {
     // 准备测试数据
     OAuthToken mockToken = new OAuthToken();
@@ -178,7 +268,12 @@ class JWTOAuthClientTest {
     // 执行测试
     Scope testScope = mock(Scope.class);
     when(testScope.toString()).thenReturn("test.scope");
-    OAuthToken result = client.getAccessToken(testScope);
+    OAuthToken result =
+        client.getAccessToken(
+            GetJWTAccessTokenReq.builder()
+                .scope(testScope)
+                .sessionContext(new SessionContext())
+                .build());
 
     // 验证结果
     assertNotNull(result);

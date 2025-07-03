@@ -44,4 +44,10 @@ public class GetAccessTokenReq extends BaseReq {
 
   @JsonProperty("scope")
   private Scope scope;
+
+  @JsonProperty("account_id")
+  private Long accountID;
+
+  @JsonProperty("enterprise_id")
+  private String enterpriseID;
 }

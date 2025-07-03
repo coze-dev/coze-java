@@ -6,6 +6,7 @@ import com.coze.openapi.client.chat.CreateChatReq;
 import com.coze.openapi.client.chat.model.ChatEvent;
 import com.coze.openapi.client.chat.model.ChatEventType;
 import com.coze.openapi.client.connversations.message.model.Message;
+import com.coze.openapi.client.connversations.message.model.MessageType;
 import com.coze.openapi.service.auth.TokenAuth;
 import com.coze.openapi.service.service.CozeAPI;
 
@@ -57,7 +58,13 @@ public class StreamChatExample {
                 System.out.print(event.getMessage().getContent());
               }
               if (ChatEventType.CONVERSATION_CHAT_COMPLETED.equals(event.getEvent())) {
-                System.out.println("Token usage:" + event.getChat().getUsage().getTokenCount());
+                if (MessageType.FOLLOW_UP.equals(event.getMessage().getType())) {
+                  System.out.println(event.getMessage().getContent());
+                } else {
+                  System.out.println("Token usage:" + event.getChat().getUsage().getTokenCount());
+                }
+              }
+              if (ChatEventType.DONE.equals(event.getEvent())) {
                 coze.shutdownExecutor();
               }
             },
