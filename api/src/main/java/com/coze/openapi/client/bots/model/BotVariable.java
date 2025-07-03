@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BotVeriable {
+public class BotVariable {
   @JsonProperty("enable")
   private Boolean enable;
 

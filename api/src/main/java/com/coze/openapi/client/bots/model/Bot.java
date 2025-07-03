@@ -53,8 +53,8 @@ public class Bot {
   @JsonProperty("knowledge")
   private BotCommonKnowledge knowledge;
 
-  @JsonProperty("veriables")
-  private List<BotVeriable> veriables;
+  @JsonProperty("variables")
+  private List<BotVariable> variables;
 
   @JsonProperty("owner_user_id")
   private String ownerUserId;
@@ -72,5 +72,5 @@ public class Bot {
   private BotBackgroundImageInfo backgroundImageInfo;
 
   @JsonProperty("default_user_input_type")
-  private String defaultUserInputType​;
+  private String defaultUserInputType;
 }
