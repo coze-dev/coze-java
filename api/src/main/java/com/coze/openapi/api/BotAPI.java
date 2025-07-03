@@ -32,7 +32,7 @@ public interface BotAPI {
   Call<BaseResponse<ListBotV2Resp>> list(
       @Query("workspace_id") String workspaceID,
       @Query("publish_status") String publishStatus,
-      @Query("connector") String connectorID,
+      @Query("connector_id") String connectorID,
       @Query("page_index") Integer page,
       @Query("page_size") Integer pageSize, 
       @Tag BaseReq baseReq);
