@@ -9,8 +9,8 @@ public class ConnectorService {
 
   private final ConnectorAPI ConnectorAPI;
 
-  public ConnectorService(ConnectorAPI ConnectorAPI) {
-    this.ConnectorAPI = ConnectorAPI;
+  public ConnectorService(ConnectorAPI connectorAPI) {
+    this.ConnectorAPI = connectorAPI;
   }
 
   public InstallConnectorResp install(InstallConnectorReq req) {
