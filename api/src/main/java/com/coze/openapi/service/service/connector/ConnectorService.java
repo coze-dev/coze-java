@@ -7,13 +7,13 @@ import com.coze.openapi.service.utils.Utils;
 
 public class ConnectorService {
 
-  private final ConnectorAPI ConnectorAPI;
+  private final ConnectorAPI connectorAPI;
 
   public ConnectorService(ConnectorAPI connectorAPI) {
-    this.ConnectorAPI = connectorAPI;
+    this.connectorAPI = connectorAPI;
   }
 
   public InstallConnectorResp install(InstallConnectorReq req) {
-    return Utils.execute(ConnectorAPI.install(req.getConnectorID(), req, req)).getData();
+    return Utils.execute(connectorAPI.install(req.getConnectorID(), req, req)).getData();
   }
 }
