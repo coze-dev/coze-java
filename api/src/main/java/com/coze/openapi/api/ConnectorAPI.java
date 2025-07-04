@@ -12,7 +12,7 @@ public interface ConnectorAPI {
   @Headers({"Content-Type: application/json"})
   @POST("v1/connectors/{connector_id}/install")
   Call<BaseResponse<InstallConnectorResp>> install(
-      @Path("connector_id") String connectorId,
+      @Path("connector_id") String connectorID,
       @Body InstallConnectorReq req,
       @Tag BaseReq baseReq);
 }
