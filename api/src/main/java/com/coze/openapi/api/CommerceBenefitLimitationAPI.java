@@ -19,17 +19,17 @@ import retrofit2.http.Query;
 import retrofit2.http.Tag;
 
 public interface CommerceBenefitLimitationAPI {
-  @Headers({"Content-Type: application/json", "Agw-Js-Conv: str"})
+  @Headers({"Content-Type: application/json"})
   @POST("/v1/commerce/benefit/limitations")
   Call<BaseResponse<CreateBenefitLimitationResp>> create(
       @Body CreateBenefitLimitationReq req, @Tag BaseReq baseReq);
 
-  @Headers({"Content-Type: application/json", "Agw-Js-Conv: str"})
+  @Headers({"Content-Type: application/json"})
   @PUT("/v1/commerce/benefit/limitations/{benefit_id}")
   Call<BaseResponse<UpdateBenefitLimitationResp>> update(
       @Path("benefit_id") String id, @Body UpdateBenefitLimitationReq req, @Tag BaseReq baseReq);
 
-  @Headers({"Content-Type: application/json", "Agw-Js-Conv: str"})
+  @Headers({"Content-Type: application/json"})
   @GET("/v1/commerce/benefit/limitations")
   Call<BaseResponse<ListBenefitLimitationResp>> list(
       @Query("entity_type") String entityType,

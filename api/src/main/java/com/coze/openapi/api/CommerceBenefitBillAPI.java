@@ -13,12 +13,12 @@ import retrofit2.Call;
 import retrofit2.http.*;
 
 public interface CommerceBenefitBillAPI {
-  @Headers({"Content-Type: application/json", "Agw-Js-Conv: str"})
+  @Headers({"Content-Type: application/json"})
   @POST("/v1/commerce/benefit/bill_tasks")
   Call<BaseResponse<BillTaskInfo>> create(
       @Body CreateBillDownloadTaskReq req, @Tag BaseReq baseReq);
 
-  @Headers({"Content-Type: application/json", "Agw-Js-Conv: str"})
+  @Headers({"Content-Type: application/json"})
   @GET("/v1/commerce/benefit/bill_tasks")
   Call<BaseResponse<ListBillDownloadTaskResp>> list(
       @Query("task_ids") List<String> taskIDs,
