@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = true)
 public class ListBenefitLimitationReq extends BaseReq {
-  @JsonProperty("entity_id")
+  @JsonProperty("entity_type")
   private BenefitEntityType entityType;
 
   @JsonProperty("entity_id")

@@ -28,7 +28,7 @@ public class ConversationAudioSentenceStartEvent extends BaseEvent {
   @NoArgsConstructor
   @AllArgsConstructor
   public static class Data {
-    @JsonProperty("content")
-    private String content;
+    @JsonProperty("text")
+    private String text;
   }
 }
