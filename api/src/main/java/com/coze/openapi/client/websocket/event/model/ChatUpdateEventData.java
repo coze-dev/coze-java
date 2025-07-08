@@ -25,6 +25,12 @@ public class ChatUpdateEventData {
   @JsonProperty("turn_detection")
   private TurnDetection turnDetection;
 
+  @JsonProperty("need_play_prologue")
+  private Boolean needPlayPrologue;
+
+  @JsonProperty("prologue_content")
+  private String prologueContent;
+
   @JsonProperty("asr_config")
   private AsrConfig asrConfig;
 }
