@@ -21,6 +21,12 @@ public class BotRetrieveV2Example {
     // Get an access_token through personal access token or oauth.
     String token = System.getenv("COZE_API_TOKEN");
     String botID = System.getenv("COZE_BOT_ID");
+    if (token == null || token.isEmpty()) {
+      throw new IllegalArgumentException("COZE_API_TOKEN environment variable is required");
+    }
+    if (botID == null || botID.isEmpty()) {
+      throw new IllegalArgumentException("COZE_BOT_ID environment variable is required");
+    }
     TokenAuth authCli = new TokenAuth(token);
 
     // Init the Coze client through the access_token.
