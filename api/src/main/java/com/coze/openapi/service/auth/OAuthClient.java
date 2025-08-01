@@ -332,7 +332,7 @@ public abstract class OAuthClient {
       }
 
       if (this.readTimeout == 0) {
-        this.readTimeout = 5000;
+        this.readTimeout = 50000;
       }
 
       if (this.connectTimeout == 0) {
