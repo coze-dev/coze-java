@@ -151,7 +151,7 @@ public class CozeAPI {
     private String baseURL = Consts.COZE_COM_BASE_URL;
     private Auth auth;
     private OkHttpClient client;
-    private int readTimeout = 600000;
+    private int readTimeout = 633000;
     private int connectTimeout = 5000;
 
     public Builder logger(Logger logger) {
