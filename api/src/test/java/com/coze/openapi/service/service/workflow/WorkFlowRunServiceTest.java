@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.api.WorkflowRunAPI;
 import com.coze.openapi.api.WorkflowRunHistoryAPI;
+import com.coze.openapi.client.chat.model.ChatUsage;
 import com.coze.openapi.client.workflows.run.RunWorkflowReq;
 import com.coze.openapi.client.workflows.run.RunWorkflowResp;
 import com.coze.openapi.client.workflows.run.model.WorkflowEvent;
@@ -53,7 +54,7 @@ public class WorkFlowRunServiceTest {
           + "\n"
           + "id: 5\n"
           + "event: Message\n"
-          + "data: {\"content\":\"{\\\"output\\\":\\\"为什么小明要带一把尺子去看电影？因为他听说电影很长，怕坐不下！\\\"}\",\"cost\":\"0.00\",\"node_is_finish\":true,\"node_seq_id\":\"0\",\"node_title\":\"\",\"token\":1230}\n"
+          + "data: {\"content\":\"{\\\"output\\\":\\\"为什么小明要带一把尺子去看电影？因为他听说电影很长，怕坐不下！\\\"}\",\"cost\":\"0.00\",\"node_is_finish\":true,\"node_seq_id\":\"0\",\"node_title\":\"\",\"token\":1230,\"usage\":{\"token_count\":1230,\"input_count\":615,\"output_count\":615}}\n"
           + "\n"
           + "id: 0\n"
           + "event: Error\n"
@@ -104,7 +105,11 @@ public class WorkFlowRunServiceTest {
             5,
             event ->
                 event.getEvent().equals(WorkflowEventType.MESSAGE)
-                    && event.getMessage().getToken().equals(1230))
+                    && event.getMessage().getToken().equals(1230)
+                    && event.getMessage().getUsage() != null
+                    && event.getMessage().getUsage().getTokenCount() == 1230
+                    && event.getMessage().getUsage().getInputCount() == 615
+                    && event.getMessage().getUsage().getOutputCount() == 615)
         .assertValueAt(
             9,
             event ->
@@ -123,6 +128,8 @@ public class WorkFlowRunServiceTest {
 
     RunWorkflowReq req = RunWorkflowReq.builder().workflowID(workflowID).build();
 
+    ChatUsage usage = ChatUsage.builder().tokenCount(100).inputCount(50).outputCount(50).build();
+
     RunWorkflowResp baseResponse =
         RunWorkflowResp.builder()
             .code(0)
@@ -130,6 +137,7 @@ public class WorkFlowRunServiceTest {
             .executeID(executeID)
             .logID(Utils.TEST_LOG_ID)
             .data("data")
+            .usage(usage)
             .build();
 
     // 创建 mock Call 对象
@@ -143,6 +151,10 @@ public class WorkFlowRunServiceTest {
     // 验证结果
     assertNotNull(result);
     assertEquals(executeID, result.getExecuteID());
+    assertNotNull(result.getUsage());
+    assertEquals(100, result.getUsage().getTokenCount());
+    assertEquals(50, result.getUsage().getInputCount());
+    assertEquals(50, result.getUsage().getOutputCount());
   }
 
   @Test

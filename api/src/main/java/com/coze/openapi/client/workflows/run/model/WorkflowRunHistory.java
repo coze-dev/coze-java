@@ -1,5 +1,6 @@
 package com.coze.openapi.client.workflows.run.model;
 
+import com.coze.openapi.client.chat.model.ChatUsage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -87,4 +88,8 @@ public class WorkflowRunHistory {
    */
   @JsonProperty("debug_url")
   private String debugUrl;
+
+  /** Token usage information for the workflow execution. */
+  @JsonProperty("usage")
+  private ChatUsage usage;
 }

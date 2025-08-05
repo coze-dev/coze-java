@@ -2,6 +2,7 @@ package com.coze.openapi.client.workflows.run.model;
 
 import java.util.Map;
 
+import com.coze.openapi.client.chat.model.ChatUsage;
 import com.coze.openapi.service.utils.Utils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -40,6 +41,10 @@ public class WorkflowEventMessage {
   /** Additional fields. */
   @JsonProperty("ext")
   private Map<String, Object> ext;
+
+  /** Token usage information for the workflow execution. */
+  @JsonProperty("usage")
+  private ChatUsage usage;
 
   public static WorkflowEventMessage fromJson(String data) {
     return Utils.fromJson(data, WorkflowEventMessage.class);

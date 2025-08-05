@@ -1,5 +1,6 @@
 package com.coze.openapi.client.workflows.run;
 
+import com.coze.openapi.client.chat.model.ChatUsage;
 import com.coze.openapi.client.common.BaseResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -36,4 +37,8 @@ public class RunWorkflowResp extends BaseResponse<String> {
 
   @JsonProperty("cost")
   private String cost;
+
+  /** Token usage information for the workflow execution. */
+  @JsonProperty("usage")
+  private ChatUsage usage;
 }

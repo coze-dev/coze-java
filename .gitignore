@@ -40,3 +40,7 @@ replay_pid*
 # BlueJ files
 *.ctxt
 **/target
+
+# ai
+.serena/
+CLAUDE.md

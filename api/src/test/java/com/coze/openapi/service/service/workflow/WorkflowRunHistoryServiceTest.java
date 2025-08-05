@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.coze.openapi.api.WorkflowRunHistoryAPI;
+import com.coze.openapi.client.chat.model.ChatUsage;
 import com.coze.openapi.client.common.BaseResponse;
 import com.coze.openapi.client.workflows.run.RetrieveRunHistoryReq;
 import com.coze.openapi.client.workflows.run.RetrieveRunHistoryResp;
@@ -44,10 +45,14 @@ class WorkflowRunHistoryServiceTest {
     RetrieveRunHistoryReq req =
         RetrieveRunHistoryReq.builder().workflowID(workflowId).executeID(executeId).build();
 
+    ChatUsage usage1 = ChatUsage.builder().tokenCount(150).inputCount(75).outputCount(75).build();
+
+    ChatUsage usage2 = ChatUsage.builder().tokenCount(200).inputCount(100).outputCount(100).build();
+
     List<WorkflowRunHistory> histories =
         Arrays.asList(
-            WorkflowRunHistory.builder().executeID("node1").build(),
-            WorkflowRunHistory.builder().executeID("node2").build());
+            WorkflowRunHistory.builder().executeID("node1").usage(usage1).build(),
+            WorkflowRunHistory.builder().executeID("node2").usage(usage2).build());
 
     BaseResponse<List<WorkflowRunHistory>> baseResponse =
         BaseResponse.<List<WorkflowRunHistory>>builder()
@@ -71,5 +76,13 @@ class WorkflowRunHistoryServiceTest {
     assertEquals(2, result.getHistories().size());
     assertEquals("node1", result.getHistories().get(0).getExecuteID());
     assertEquals(Utils.TEST_LOG_ID, result.getLogID());
+    assertNotNull(result.getHistories().get(0).getUsage());
+    assertEquals(150, result.getHistories().get(0).getUsage().getTokenCount());
+    assertEquals(75, result.getHistories().get(0).getUsage().getInputCount());
+    assertEquals(75, result.getHistories().get(0).getUsage().getOutputCount());
+    assertNotNull(result.getHistories().get(1).getUsage());
+    assertEquals(200, result.getHistories().get(1).getUsage().getTokenCount());
+    assertEquals(100, result.getHistories().get(1).getUsage().getInputCount());
+    assertEquals(100, result.getHistories().get(1).getUsage().getOutputCount());
   }
 }
