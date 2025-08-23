@@ -19,32 +19,18 @@ public class RoomConfig {
     return RoomConfig.builder().audioConfig(RoomAudioConfig.builder().codec(codec).build()).build();
   }
 
+  @JsonProperty("room_mode")
   private String room_mode = "";
 
+  @JsonProperty("translate_config")
   private TranslateConfig translate_config;
 
-   @lombok.Data
-   @lombok.NoArgsConstructor
+   @Data
+   @NoArgsConstructor
    public static class TranslateConfig {
     @JsonProperty("from")
     private String from = "";
     @JsonProperty("to")
     private String to = "";
-  }
-
-  public String getRoom_mode() {
-    return room_mode;
-  }
-
-  public void setRoom_mode(String room_mode) {
-    this.room_mode = room_mode;
-  }
-
-  public TranslateConfig getTranslate_config() {
-    return translate_config;
-  }
-
-  public void setTranslate_config(TranslateConfig translate_config) {
-    this.translate_config = translate_config;
   }
 }
