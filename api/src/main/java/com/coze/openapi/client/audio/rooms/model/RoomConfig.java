@@ -23,25 +23,13 @@ public class RoomConfig {
 
   private TranslateConfig translate_config;
 
-  class TranslateConfig {
+   @lombok.Data
+   @lombok.NoArgsConstructor
+   public static class TranslateConfig {
+    @JsonProperty("from")
     private String from = "";
+    @JsonProperty("to")
     private String to = "";
-
-    public String getFrom() {
-      return from;
-    }
-
-    public void setFrom(String from) {
-      this.from = from;
-    }
-
-    public String getTo() {
-      return to;
-    }
-
-    public void setTo(String to) {
-      this.to = to;
-    }
   }
 
   public String getRoom_mode() {
