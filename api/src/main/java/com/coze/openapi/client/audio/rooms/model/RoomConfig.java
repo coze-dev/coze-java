@@ -20,18 +20,8 @@ public class RoomConfig {
   }
 
   @JsonProperty("room_mode")
-  private String room_mode = "";
+  private String roomMode = "";
 
   @JsonProperty("translate_config")
-  private TranslateConfig translate_config;
-
-  @Data
-  @NoArgsConstructor
-  public static class TranslateConfig {
-    @JsonProperty("from")
-    private String from = "";
-    
-    @JsonProperty("to")
-    private String to = "";
-  }
+  private TranslateConfig translateConfig;
 }
