@@ -30,6 +30,7 @@ public class RoomConfig {
   public static class TranslateConfig {
     @JsonProperty("from")
     private String from = "";
+    
     @JsonProperty("to")
     private String to = "";
   }
