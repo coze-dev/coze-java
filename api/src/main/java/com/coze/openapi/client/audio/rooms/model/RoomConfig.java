@@ -25,9 +25,9 @@ public class RoomConfig {
   @JsonProperty("translate_config")
   private TranslateConfig translate_config;
 
-   @Data
-   @NoArgsConstructor
-   public static class TranslateConfig {
+  @Data
+  @NoArgsConstructor
+  public static class TranslateConfig {
     @JsonProperty("from")
     private String from = "";
     @JsonProperty("to")
