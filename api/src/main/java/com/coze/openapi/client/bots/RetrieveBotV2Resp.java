@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-@Deprecated
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RetrieveBotResp extends BaseResp {
+public class RetrieveBotV2Resp extends BaseResp {
   private Bot bot;
 }
