@@ -33,7 +33,7 @@ public class CreateTranscriptionsReq extends BaseReq {
   }
 
   public static CreateTranscriptionsReq of(File file) {
-    return CreateTranscriptionsReq.builder().file(file).build();
+    return CreateTranscriptionsReq.builder().file(file).fileName(file.getName()).build();
   }
 
   public static CreateTranscriptionsReq of(String filePath) {
