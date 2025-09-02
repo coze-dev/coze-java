@@ -9,17 +9,19 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Deprecated
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class RetrieveBotReq extends BaseReq {
+public class RetrieveBotV2Req extends BaseReq {
   @JsonProperty("bot_id")
   private String botID;
 
-  public static RetrieveBotReq of(String botID) {
-    return RetrieveBotReq.builder().botID(botID).build();
+  @JsonProperty("is_published")
+  private Boolean isPublished;
+
+  public static RetrieveBotV2Req of(String botID, Boolean isPublished) {
+    return RetrieveBotV2Req.builder().botID(botID).isPublished(isPublished).build();
   }
 }

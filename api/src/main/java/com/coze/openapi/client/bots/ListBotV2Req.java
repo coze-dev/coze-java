@@ -9,17 +9,20 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Deprecated
 @Data
 @SuperBuilder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class RetrieveBotReq extends BaseReq {
-  @JsonProperty("bot_id")
-  private String botID;
-
-  public static RetrieveBotReq of(String botID) {
-    return RetrieveBotReq.builder().botID(botID).build();
-  }
+public class ListBotV2Req extends BaseReq {
+  @JsonProperty("workspace_id")
+  private String workspaceID;
+  @JsonProperty("publish_status")
+  private String publishStatus;
+  @JsonProperty("connector_id")
+  private String connectorID;
+  @JsonProperty("page_num")
+  private Integer pageNum;
+  @JsonProperty("page_size")
+  private Integer pageSize;
 }
