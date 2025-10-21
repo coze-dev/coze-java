@@ -216,6 +216,7 @@ public class CozeAPI {
               retrofit.create(DatasetImageAPI.class));
       WorkflowService workflowAPI =
           new WorkflowService(
+              retrofit.create(WorkflowAPI.class),
               retrofit.create(WorkflowRunAPI.class),
               retrofit.create(WorkflowRunHistoryAPI.class),
               retrofit.create(WorkflowChatAPI.class));
