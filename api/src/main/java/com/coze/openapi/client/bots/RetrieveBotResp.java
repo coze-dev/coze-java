@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+@Deprecated
 @Data
 @SuperBuilder
 @NoArgsConstructor

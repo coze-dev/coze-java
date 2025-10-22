@@ -53,9 +53,24 @@ public class Bot {
   @JsonProperty("knowledge")
   private BotCommonKnowledge knowledge;
 
+  @JsonProperty("variables")
+  private List<BotVariable> variables;
+
+  @JsonProperty("owner_user_id")
+  private String ownerUserId;
+
+  @JsonProperty("voice_info_list")
+  private List<BotVoice> voiceInfoList;
+
   @JsonProperty("shortcut_commands")
   private List<BotShortcutCommandInfo> shortcutCommands;
 
   @JsonProperty("workflow_info_list")
   private List<BotWorkflowInfo> workflowInfoList;
+
+  @JsonProperty("background_image_info")
+  private BotBackgroundImageInfo backgroundImageInfo;
+
+  @JsonProperty("default_user_input_type")
+  private String defaultUserInputType;
 }
