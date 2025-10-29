@@ -58,7 +58,7 @@ public class StreamChatExample {
                 System.out.print(event.getMessage().getContent());
               }
               if (ChatEventType.CONVERSATION_CHAT_COMPLETED.equals(event.getEvent())) {
-                if (MessageType.FOLLOW_UP.equals(event.getMessage().getType())) {
+                if (event.getMessage() != null && MessageType.FOLLOW_UP.equals(event.getMessage().getType())) {
                   System.out.println(event.getMessage().getContent());
                 } else {
                   System.out.println("Token usage:" + event.getChat().getUsage().getTokenCount());
