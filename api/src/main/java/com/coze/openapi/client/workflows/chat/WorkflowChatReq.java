@@ -49,4 +49,9 @@ public class WorkflowChatReq extends BaseReq {
 
   @JsonProperty("ext")
   private Map<String, String> ext;
+
+  // The version of the workflow to run. If not specified, the latest published version will be
+  // used.
+  @JsonProperty("workflow_version")
+  private String workflowVersion;
 }

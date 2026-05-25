@@ -55,4 +55,10 @@ public class RunWorkflowReq extends BaseReq {
    * */
   @JsonProperty("app_id")
   private String appID;
+
+  /*
+   * The version of the workflow to run. If not specified, the latest published version will be used.
+   * */
+  @JsonProperty("workflow_version")
+  private String workflowVersion;
 }
